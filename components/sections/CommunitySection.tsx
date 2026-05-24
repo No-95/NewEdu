@@ -34,13 +34,12 @@ export const CommunitySection: React.FC<CommunitySectionProps> = ({ pageNumber, 
       <div className="relative z-10 w-full max-w-7xl px-8 py-12 pt-28">
         <div className="grid md:grid-cols-2 gap-14 items-center">
           {/* Left: Image */}
-          <div className="order-2 md:order-1 animate-fade-in">
-            <div className="relative w-full rounded-xl overflow-hidden min-h-[500px]">
+          <div className="order-2 md:order-1 animate-fade-in md:h-full">
+            <div className="relative w-full h-80 md:h-full rounded-xl overflow-hidden">
               <Image
                 src="/homepage/section6.png"
                 alt="Community"
-                width={400}
-                height={300}
+                fill
                 className="w-full h-full object-cover rounded-xl"
               />
             </div>

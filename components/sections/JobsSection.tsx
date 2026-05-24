@@ -71,13 +71,12 @@ export const JobsSection: React.FC<JobsSectionProps> = ({ pageNumber, totalPages
           </div>
 
           {/* Right: Image */}
-          <div className="animate-fade-in" style={{ animationDelay: '0.3s' }}>
-            <div className="relative w-full rounded-xl overflow-hidden min-h-[500px]">
+          <div className="animate-fade-in md:h-full" style={{ animationDelay: '0.3s' }}>
+            <div className="relative w-full h-80 md:h-full rounded-xl overflow-hidden">
               <Image
                 src="/homepage/section5.png"
                 alt="Career Opportunities"
-                width={400}
-                height={300}
+                fill
                 className="w-full h-full object-cover rounded-xl"
               />
             </div>
