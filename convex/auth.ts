@@ -191,6 +191,9 @@ export const createOrUpdateUser = mutation({
       agreeToTerms: args.agreeToTerms,
       emailVerified: true,
       role: 'student',
+      username: null,
+      avatarUrl: null,
+      balance: 0,
       createdAt: now,
       updatedAt: now,
     });
@@ -208,8 +211,11 @@ export const getUserByEmail = query({
       _id: v.string(),
       email: v.string(),
       fullName: v.string(),
+      username: v.optional(v.string()),
+      avatarUrl: v.optional(v.string()),
       phone: v.optional(v.string()),
       passwordHash: v.optional(v.string()),
+      balance: v.optional(v.number()),
       agreeToTerms: v.boolean(),
       emailVerified: v.boolean(),
       role: v.string(),
@@ -229,8 +235,11 @@ export const getUserByEmail = query({
           _id: user._id.toString(),
           email: user.email,
           fullName: user.fullName ?? '',
+          username: user.username ?? null,
+          avatarUrl: user.avatarUrl ?? null,
           phone: user.phone,
           passwordHash: user.passwordHash,
+          balance: user.balance ?? 0,
           agreeToTerms: user.agreeToTerms ?? false,
           emailVerified: user.emailVerified ?? false,
           role: user.role ?? 'student',
@@ -238,5 +247,51 @@ export const getUserByEmail = query({
           updatedAt: user.updatedAt ?? 0,
         }
       : null;
+  },
+});
+
+export const updateUserProfile = mutation({
+  args: {
+    email: v.string(),
+    username: v.optional(v.string()),
+    avatarUrl: v.optional(v.string()),
+  },
+  returns: v.object({ success: v.boolean() }),
+  handler: async (ctx, args) => {
+    const normalizedEmail = args.email.trim().toLowerCase();
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_email', (q) => q.eq('email', normalizedEmail))
+      .first();
+
+    if (!user) throw new Error('User not found');
+
+    const patch: Record<string, any> = { updatedAt: Date.now() };
+    if (args.username !== undefined) patch.username = args.username;
+    if (args.avatarUrl !== undefined) patch.avatarUrl = args.avatarUrl;
+
+    await ctx.db.patch(user._id, patch);
+    return { success: true };
+  },
+});
+
+export const addDeposit = mutation({
+  args: { email: v.string(), amount: v.number() },
+  returns: v.object({ success: v.boolean(), balance: v.number() }),
+  handler: async (ctx, args) => {
+    const normalizedEmail = args.email.trim().toLowerCase();
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_email', (q) => q.eq('email', normalizedEmail))
+      .first();
+
+    if (!user) throw new Error('User not found');
+    if (args.amount <= 0) throw new Error('Amount must be positive');
+
+    const current = user.balance ?? 0;
+    const next = current + args.amount;
+
+    await ctx.db.patch(user._id, { balance: next, updatedAt: Date.now() });
+    return { success: true, balance: next };
   },
 });

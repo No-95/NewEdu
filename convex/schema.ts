@@ -5,6 +5,8 @@ export default defineSchema({
   users: defineTable({
     email: v.string(),
     fullName: v.optional(v.string()),
+    username: v.optional(v.string()),
+    avatarUrl: v.optional(v.string()),
     name: v.optional(v.string()),
     phone: v.optional(v.string()),
     passwordHash: v.optional(v.string()),
@@ -13,6 +15,7 @@ export default defineSchema({
     role: v.string(),
     createdAt: v.optional(v.number()),
     updatedAt: v.optional(v.number()),
+    balance: v.optional(v.number()),
   })
     .index('by_email', ['email'])
     .index('by_role', ['role']),

@@ -2,6 +2,8 @@ import { redirect } from 'next/navigation';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { Header } from '@/components/Header';
 import { ParticleBackground } from '@/components/ParticleBackground';
+import ProfileSettingsClient from '@/components/dashboard/ProfileSettingsClient';
+import DepositClient from '@/components/dashboard/DepositClient';
 
 export default async function DashboardPage() {
   const user = await getAuthenticatedUser();
@@ -16,24 +18,8 @@ export default async function DashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Sidebar */}
           <aside className="lg:col-span-1 space-y-4">
-            <div className="glass p-6 rounded-lg flex flex-col items-start gap-4">
-              <div className="w-full flex items-center gap-4">
-                <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center text-xl font-semibold text-foreground">{(user.fullName || 'U').charAt(0)}</div>
-                <div>
-                  <h3 className="text-lg font-semibold">{user.fullName ?? 'Student'}</h3>
-                  <p className="text-sm text-muted-foreground">{user.email}</p>
-                </div>
-              </div>
-
-              <div className="w-full">
-                <h4 className="text-sm font-semibold text-muted-foreground mb-2">Quick Links</h4>
-                <ul className="space-y-2 text-sm">
-                  <li><a className="text-primary hover:underline" href="/dashboard">Overview</a></li>
-                  <li><a className="hover:underline" href="/dashboard#account">Account</a></li>
-                  <li><a className="hover:underline" href="/dashboard#security">Security</a></li>
-                  <li><a className="hover:underline" href="/dashboard#billing">Billing</a></li>
-                </ul>
-              </div>
+            <div className="glass p-6 rounded-lg">
+              <ProfileSettingsClient />
             </div>
 
             <div className="glass p-6 rounded-lg">
@@ -71,6 +57,9 @@ export default async function DashboardPage() {
               <div id="billing" className="glass p-6 rounded-lg">
                 <h2 className="font-semibold">Billing</h2>
                 <p className="text-sm text-muted-foreground">Payment methods and invoices.</p>
+                <div className="mt-4">
+                  <DepositClient />
+                </div>
               </div>
             </div>
           </section>
