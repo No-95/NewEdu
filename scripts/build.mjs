@@ -2,8 +2,10 @@ import { spawnSync } from 'node:child_process';
 
 const isCloudflarePages = process.env.CF_PAGES === '1';
 const isCi = process.env.CI === 'true';
-const forceOpenNext = process.env.OPENNEXT_BUILD === '1';
-const shouldBuildOpenNext = isCloudflarePages || isCi || forceOpenNext;
+const isOpenNextBuild = process.env.OPENNEXT_BUILD === '1';
+const forceOpenNext = process.env.FORCE_OPENNEXT === '1';
+// Prevent infinite recursion: if already inside OpenNext, just run next build
+const shouldBuildOpenNext = !isOpenNextBuild && (isCloudflarePages || isCi || forceOpenNext);
 
 const command = shouldBuildOpenNext
   ? 'pnpm exec opennextjs-cloudflare build'
