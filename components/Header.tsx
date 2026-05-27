@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { useState } from 'react';
 import Image from 'next/image';
@@ -14,11 +14,25 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const pathname = usePathname();
   const { language, setLanguage, t } = useLanguage();
 
   React.useEffect(() => {
     setMounted(true);
+
+    (async () => {
+      try {
+        const res = await fetch('/api/auth/me', { credentials: 'same-origin' });
+        if (res.ok) {
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (e) {
+        setIsAuthenticated(false);
+      }
+    })();
   }, []);
 
   const languages: { code: Language; label: string; flag: string }[] = [
@@ -31,7 +45,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
     { label: t('common.courses'), href: '/courses', section: 'courses' },
     { label: t('common.jobs'), href: '/jobs', section: 'jobs' },
     { label: t('common.books'), href: '/books', section: 'books' },
-    { label: t('common.community'), href: '/community', section: 'community' },
+    { label: t('common.community'), href: 'https://skylink.hdpedu.com', section: 'community' },
     { label: t('common.contactUs'), href: '/contact-us', section: 'contact' },
     { label: t('common.teachWithUs'), href: '/teacher-applicant', section: 'teach' },
   ] : [];
@@ -57,19 +71,32 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.section}
-                href={item.href}
-                className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
-                  isActive(item.href)
-                    ? 'text-primary bg-primary/10'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navItems.map((item) => {
+              const external = item.href.startsWith('http');
+              const activeClass = isActive(item.href)
+                ? 'text-primary bg-primary/10'
+                : 'text-muted-foreground hover:text-foreground hover:bg-muted/50';
+
+              return external ? (
+                <a
+                  key={item.section}
+                  href={item.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${activeClass}`}
+                >
+                  {item.label}
+                </a>
+              ) : (
+                <Link
+                  key={item.section}
+                  href={item.href}
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${activeClass}`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Language Switcher & Auth Buttons */}
@@ -113,20 +140,29 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
             )}
 
             {mounted && (
-              <>
+              isAuthenticated ? (
                 <Link
-                  href="/auth"
-                  className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-all"
-                >
-                  {t('common.signIn')}
-                </Link>
-                <Link
-                  href="/auth"
+                  href="/dashboard"
                   className="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all"
                 >
-                  {t('common.signUp')}
+                  Dashboard
                 </Link>
-              </>
+              ) : (
+                <>
+                  <Link
+                    href="/auth"
+                    className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-all"
+                  >
+                    {t('common.signIn')}
+                  </Link>
+                  <Link
+                    href="/auth"
+                    className="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all"
+                  >
+                    {t('common.signUp')}
+                  </Link>
+                </>
+              )
             )}
           </div>
 
@@ -149,20 +185,32 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
         {mobileMenuOpen && (
           <div className="md:hidden py-4 border-t border-border/50">
             <nav className="flex flex-col gap-1">
-              {navItems.map((item) => (
-                <Link
-                  key={item.section}
-                  href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`px-4 py-3 text-sm font-medium rounded-lg transition-all text-left ${
-                    isActive(item.href)
-                      ? 'text-primary bg-primary/10'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              ))}
+              {navItems.map((item) => {
+                const external = item.href.startsWith('http');
+                const active = isActive(item.href) ? 'text-primary bg-primary/10' : 'text-muted-foreground hover:text-foreground hover:bg-muted/50';
+
+                return external ? (
+                  <a
+                    key={item.section}
+                    href={item.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`px-4 py-3 text-sm font-medium rounded-lg transition-all text-left ${active}`}
+                  >
+                    {item.label}
+                  </a>
+                ) : (
+                  <Link
+                    key={item.section}
+                    href={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`px-4 py-3 text-sm font-medium rounded-lg transition-all text-left ${active}`}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
               <div className="mt-4 pt-4 border-t border-border/50 space-y-2">
                 {/* Mobile Language Switcher */}
                 <div className="space-y-2">
