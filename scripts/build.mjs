@@ -1,7 +1,11 @@
 import { spawnSync } from 'node:child_process';
 
 const isCloudflarePages = process.env.CF_PAGES === '1';
-const command = isCloudflarePages
+const isCi = process.env.CI === 'true';
+const forceOpenNext = process.env.OPENNEXT_BUILD === '1';
+const shouldBuildOpenNext = isCloudflarePages || isCi || forceOpenNext;
+
+const command = shouldBuildOpenNext
   ? 'pnpm exec opennextjs-cloudflare build'
   : 'pnpm exec next build';
 
