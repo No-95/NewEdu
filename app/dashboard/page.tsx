@@ -4,6 +4,7 @@ import { Header } from '@/components/Header';
 import { ParticleBackground } from '@/components/ParticleBackground';
 import ProfileSettingsClient from '@/components/dashboard/ProfileSettingsClient';
 import DepositClient from '@/components/dashboard/DepositClient';
+import ConfigurationClient from '@/components/dashboard/ConfigurationClient';
 
 export default async function DashboardPage() {
   const user = await getAuthenticatedUser();
@@ -42,6 +43,9 @@ export default async function DashboardPage() {
               <div id="account" className="glass p-6 rounded-lg">
                 <h2 className="font-semibold">Account</h2>
                 <p className="text-sm text-muted-foreground">Profile and subscription details.</p>
+                <div className="mt-4">
+                  <ProfileSettingsClient />
+                </div>
               </div>
 
               <div id="security" className="glass p-6 rounded-lg">
@@ -49,9 +53,9 @@ export default async function DashboardPage() {
                 <p className="text-sm text-muted-foreground">Change password, manage sessions.</p>
               </div>
 
-              <div id="notifications" className="glass p-6 rounded-lg">
-                <h2 className="font-semibold">Notifications</h2>
-                <p className="text-sm text-muted-foreground">Email and push preferences.</p>
+              <div id="configuration" className="glass p-6 rounded-lg">
+                <h2 className="font-semibold">Configuration</h2>
+                <ConfigurationClient username={user.username ?? null} />
               </div>
 
               <div id="billing" className="glass p-6 rounded-lg">
