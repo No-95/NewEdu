@@ -1,10 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useMutation, useQuery } from 'convex/react';
 import { Header } from '@/components/Header';
 import { ParticleBackground } from '@/components/ParticleBackground';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { ClientOnly } from '@/lib/hooks/useClientOnly';
+import { api } from '@/convex/_generated/api';
 
 interface FormData {
   fullName: string;
@@ -20,6 +22,8 @@ interface FormData {
 
 function TeacherApplicantContent() {
   const { t } = useLanguage();
+  const recentApplications = useQuery(api.teacherApplications.listRecentTeacherApplications, { limit: 3 });
+  const submitTeacherApplication = useMutation(api.teacherApplications.submitTeacherApplication);
   const [formData, setFormData] = useState<FormData>({
     fullName: '',
     email: '',
@@ -46,8 +50,9 @@ function TeacherApplicantContent() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    await submitTeacherApplication(formData);
     setSubmitted(true);
     setTimeout(() => setSubmitted(false), 3000);
   };
@@ -299,6 +304,21 @@ function TeacherApplicantContent() {
               By submitting this form, you agree to our Terms of Service and Privacy Policy.
             </p>
           </div>
+
+          {recentApplications && recentApplications.length > 0 && (
+            <div className="mt-8 glass rounded-xl p-6 border border-border/50">
+              <h2 className="text-xl font-bold mb-3">Recent Applications</h2>
+              <div className="space-y-3">
+                {recentApplications.map((application) => (
+                  <div key={application._id} className="rounded-lg border border-border/50 bg-muted/30 p-3 text-sm">
+                    <p className="font-medium">{application.fullName}</p>
+                    <p className="text-muted-foreground">{application.email}</p>
+                    <p className="text-muted-foreground">{application.specialization}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </main>
     </div>

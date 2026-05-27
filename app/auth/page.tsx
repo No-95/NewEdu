@@ -1,12 +1,24 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useAction, useMutation, useQuery } from 'convex/react';
+import { useRouter } from 'next/navigation';
 import { Header } from '@/components/Header';
 import { ParticleBackground } from '@/components/ParticleBackground';
 import { useLanguage } from '@/lib/context/LanguageContext';
+import { api } from '@/convex/_generated/api';
+
+async function hashPassword(password: string): Promise<string> {
+  const bytes = new TextEncoder().encode(password);
+  const digest = await globalThis.crypto.subtle.digest('SHA-256', bytes);
+  return Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, '0'))
+    .join('');
+}
 
 function AuthPageContent() {
   const { t } = useLanguage();
+  const router = useRouter();
   const [isSignIn, setIsSignIn] = useState(true);
   const [formData, setFormData] = useState({
     fullName: '',
@@ -21,6 +33,39 @@ function AuthPageContent() {
   const [otpVerified, setOtpVerified] = useState(false);
   const [otpLoading, setOtpLoading] = useState(false);
   const [otpMessage, setOtpMessage] = useState('');
+  const isSuccessMessage =
+    otpVerified ||
+    otpMessage.startsWith('Welcome back') ||
+    otpMessage.startsWith('Account created successfully') ||
+    otpMessage.startsWith('OTP was sent to your email') ||
+    otpMessage.startsWith('OTP verified successfully');
+  const userRecord = useQuery(api.auth.getUserByEmail, { email: formData.email || '' });
+  const sendOtp = useAction(api.auth.sendOtp);
+  const verifyOtp = useMutation(api.auth.verifyOtp);
+  const createOrUpdateUser = useMutation(api.auth.createOrUpdateUser);
+
+  const establishSession = async (email: string) => {
+    const response = await fetch('/api/auth/session', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    if (!response.ok) {
+      let message = 'Failed to create session.';
+      try {
+        const body = await response.json();
+        if (body?.error) {
+          message = body.error;
+        }
+      } catch {
+        // Ignore parsing error and use fallback message.
+      }
+      throw new Error(message);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -51,21 +96,18 @@ function AuthPageContent() {
     setOtpMessage('');
 
     try {
-      const response = await fetch('/api/auth/send-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: formData.email }),
-      });
-
-      const data = await response.json();
-      if (!response.ok) {
-        setOtpMessage(data.error || 'Failed to send OTP.');
-        return;
-      }
+      const result = await sendOtp({ email: formData.email });
+      const fallbackOtp = result.message.match(/\b(\d{6})\b/)?.[1];
 
       setOtpSent(true);
       setOtpVerified(false);
-      setOtpMessage('OTP was sent to your email.');
+      if (fallbackOtp) {
+        setFormData((prev) => ({
+          ...prev,
+          otp: fallbackOtp,
+        }));
+      }
+      setOtpMessage(result.message || 'OTP was sent to your email.');
     } catch {
       setOtpMessage('Failed to send OTP. Please try again.');
     } finally {
@@ -83,45 +125,79 @@ function AuthPageContent() {
     setOtpMessage('');
 
     try {
-      const response = await fetch('/api/auth/verify-otp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: formData.email, otp: formData.otp }),
-      });
-
-      const data = await response.json();
-      if (!response.ok) {
-        setOtpVerified(false);
-        setOtpMessage(data.error || 'OTP verification failed.');
-        return;
-      }
+      await verifyOtp({ email: formData.email, otp: formData.otp });
 
       setOtpVerified(true);
       setOtpMessage('OTP verified successfully.');
-    } catch {
+    } catch (error) {
       setOtpVerified(false);
-      setOtpMessage('OTP verification failed. Please try again.');
+      if (error instanceof Error) {
+        setOtpMessage(error.message);
+      } else {
+        setOtpMessage('OTP verification failed. Please try again.');
+      }
     } finally {
       setOtpLoading(false);
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!isSignIn) {
-      if (formData.password !== formData.confirmPassword) {
-        setOtpMessage('Password and Confirm Password do not match.');
+    try {
+      if (!isSignIn) {
+        if (formData.password !== formData.confirmPassword) {
+          setOtpMessage('Password and Confirm Password do not match.');
+          return;
+        }
+
+        if (!otpVerified) {
+          setOtpMessage('Please verify OTP before creating your account.');
+          return;
+        }
+
+        const passwordHash = await hashPassword(formData.password);
+        await createOrUpdateUser({
+          email: formData.email,
+          fullName: formData.fullName,
+          phone: formData.phone,
+          passwordHash,
+          agreeToTerms: formData.agreeToTerms,
+        });
+
+        await establishSession(formData.email);
+        setOtpMessage('Account created successfully. Redirecting...');
+        router.push('/courses');
+        router.refresh();
         return;
       }
 
-      if (!otpVerified) {
-        setOtpMessage('Please verify OTP before creating your account.');
+      if (!userRecord) {
+        setOtpMessage('No account found for this email.');
         return;
       }
+
+      const passwordHash = await hashPassword(formData.password);
+      if (!userRecord.passwordHash) {
+        setOtpMessage('This account has no password set. Please sign up again.');
+        return;
+      }
+      if (userRecord.passwordHash !== passwordHash) {
+        setOtpMessage('Incorrect password.');
+        return;
+      }
+
+      await establishSession(formData.email);
+      setOtpMessage(`Welcome back, ${userRecord.fullName}. Redirecting...`);
+      router.push('/courses');
+      router.refresh();
+    } catch (error) {
+      if (error instanceof Error) {
+        setOtpMessage(error.message);
+        return;
+      }
+      setOtpMessage('Authentication failed. Please try again.');
     }
-
-    console.log('Form submitted:', formData);
   };
 
   const toggleAuthMode = () => {
@@ -245,8 +321,8 @@ function AuthPageContent() {
               </div>
             )}
 
-            {!isSignIn && otpMessage && (
-              <p className={`text-xs ${otpVerified ? 'text-emerald-400' : 'text-amber-300'}`}>
+            {otpMessage && (
+              <p className={`text-xs ${isSuccessMessage ? 'text-emerald-400' : 'text-amber-300'}`}>
                 {otpMessage}
               </p>
             )}

@@ -4,14 +4,15 @@ import { v } from 'convex/values';
 export default defineSchema({
   users: defineTable({
     email: v.string(),
-    fullName: v.string(),
+    fullName: v.optional(v.string()),
+    name: v.optional(v.string()),
     phone: v.optional(v.string()),
     passwordHash: v.optional(v.string()),
-    agreeToTerms: v.boolean(),
-    emailVerified: v.boolean(),
-    role: v.union(v.literal('student'), v.literal('teacher'), v.literal('admin')),
-    createdAt: v.number(),
-    updatedAt: v.number(),
+    agreeToTerms: v.optional(v.boolean()),
+    emailVerified: v.optional(v.boolean()),
+    role: v.string(),
+    createdAt: v.optional(v.number()),
+    updatedAt: v.optional(v.number()),
   })
     .index('by_email', ['email'])
     .index('by_role', ['role']),
@@ -65,33 +66,6 @@ export default defineSchema({
     .index('by_status', ['status'])
     .index('by_createdAt', ['createdAt']),
 
-  communityPosts: defineTable({
-    authorId: v.optional(v.id('users')),
-    authorName: v.string(),
-    authorHandle: v.string(),
-    authorAvatar: v.string(),
-    content: v.string(),
-    mediaType: v.union(v.literal('none'), v.literal('image'), v.literal('video')),
-    mediaUrl: v.optional(v.string()),
-    tags: v.array(v.string()),
-    likesCount: v.number(),
-    createdAt: v.number(),
-    updatedAt: v.number(),
-  })
-    .index('by_authorId', ['authorId'])
-    .index('by_createdAt', ['createdAt']),
-
-  communityComments: defineTable({
-    postId: v.id('communityPosts'),
-    authorId: v.optional(v.id('users')),
-    authorName: v.string(),
-    content: v.string(),
-    createdAt: v.number(),
-  })
-    .index('by_postId', ['postId'])
-    .index('by_authorId', ['authorId'])
-    .index('by_createdAt', ['createdAt']),
-
   courses: defineTable({
     slug: v.string(),
     title: v.string(),
@@ -124,4 +98,32 @@ export default defineSchema({
     .index('by_courseId', ['courseId'])
     .index('by_courseId_lectureNumber', ['courseId', 'lectureNumber'])
     .index('by_videoFolderName', ['videoFolderName']),
+
+  communityPosts: defineTable({
+    authorId: v.optional(v.id('users')),
+    authorName: v.string(),
+    authorHandle: v.string(),
+    authorAvatar: v.string(),
+    content: v.string(),
+    mediaType: v.union(v.literal('none'), v.literal('image'), v.literal('video')),
+    mediaUrl: v.optional(v.string()),
+    tag: v.optional(v.string()),
+    tags: v.optional(v.array(v.string())),
+    likesCount: v.number(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_authorId', ['authorId'])
+    .index('by_createdAt', ['createdAt']),
+
+  communityComments: defineTable({
+    postId: v.id('communityPosts'),
+    authorId: v.optional(v.id('users')),
+    authorName: v.string(),
+    content: v.string(),
+    createdAt: v.number(),
+  })
+    .index('by_postId', ['postId'])
+    .index('by_authorId', ['authorId'])
+    .index('by_createdAt', ['createdAt']),
 });

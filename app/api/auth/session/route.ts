@@ -11,22 +11,31 @@ export async function POST(request: Request) {
     }
 
     const normalizedEmail = email.trim().toLowerCase();
-
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
-      return NextResponse.json({ error: 'Invalid email format.' }, { status: 400 });
-    }
-
     const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
     if (!convexUrl) {
       return NextResponse.json({ error: 'NEXT_PUBLIC_CONVEX_URL is missing.' }, { status: 500 });
     }
 
     const convex = new ConvexHttpClient(convexUrl);
-    const result = await convex.action(api.auth.sendOtp, { email: normalizedEmail });
+    const user = await convex.query(api.auth.getUserByEmail, { email: normalizedEmail });
+    if (!user) {
+      return NextResponse.json({ error: 'No account found for this email.' }, { status: 404 });
+    }
 
-    return NextResponse.json(result);
+    const response = NextResponse.json({ ok: true });
+    response.cookies.set({
+      name: 'user_email',
+      value: normalizedEmail,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 60 * 60 * 24 * 30,
+    });
+
+    return response;
   } catch (error) {
-    console.error('send-otp error', error);
-    return NextResponse.json({ error: 'Failed to send OTP.' }, { status: 500 });
+    console.error('session route error', error);
+    return NextResponse.json({ error: 'Failed to create session.' }, { status: 500 });
   }
 }

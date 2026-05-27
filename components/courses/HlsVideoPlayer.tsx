@@ -3,6 +3,8 @@
 import Hls from 'hls.js';
 import { useEffect, useRef, useState } from 'react';
 
+import { markLectureCompleted } from '@/hooks/useCourseProgress';
+
 interface HlsVideoPlayerProps {
   courseId: string;
   videoId: string;
@@ -22,6 +24,10 @@ export function HlsVideoPlayer({ courseId, videoId, title }: HlsVideoPlayerProps
     let hls: Hls | null = null;
     let isMounted = true;
 
+    const handleEnded = () => {
+      markLectureCompleted(courseId, videoId);
+    };
+
     async function setupPlayer() {
       setIsLoading(true);
       setError(null);
@@ -40,12 +46,40 @@ export function HlsVideoPlayer({ courseId, videoId, title }: HlsVideoPlayerProps
           return;
         }
 
+        videoElement.addEventListener('ended', handleEnded);
+
+        // Probe the playlist URL first so API errors are shown directly in UI.
+        const playlistProbe = await fetch(data.streamUrl);
+        if (!playlistProbe.ok) {
+          const contentType = playlistProbe.headers.get('content-type') || '';
+          let details = 'Khong the tai playlist video tu may chu.';
+
+          if (contentType.includes('application/json')) {
+            const payload = (await playlistProbe.json()) as { error?: string };
+            if (payload?.error) {
+              details = payload.error;
+            }
+          }
+
+          throw new Error(details);
+        }
+
         const hlsMimeType = 'application/vnd.apple.mpegurl';
 
         if (Hls.isSupported()) {
           hls = new Hls({
             enableWorker: true,
             lowLatencyMode: true,
+          });
+
+          hls.on(Hls.Events.ERROR, (_event, data) => {
+            if (!isMounted || !data.fatal) {
+              return;
+            }
+
+            const details = data.details ? ` (${data.details})` : '';
+            setError(`Khong the phat HLS stream${details}.`);
+            setIsLoading(false);
           });
 
           hls.loadSource(data.streamUrl);
@@ -69,6 +103,11 @@ export function HlsVideoPlayer({ courseId, videoId, title }: HlsVideoPlayerProps
 
     return () => {
       isMounted = false;
+
+      const videoElement = videoRef.current;
+      if (videoElement) {
+        videoElement.removeEventListener('ended', handleEnded);
+      }
 
       if (hls) {
         hls.destroy();

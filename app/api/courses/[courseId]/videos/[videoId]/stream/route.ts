@@ -1,16 +1,9 @@
-import { getCourseById, getLectureById } from '@/lib/data/courses';
+import { ConvexHttpClient } from 'convex/browser';
 import { NextResponse } from 'next/server';
+import { api } from '@/convex/_generated/api';
 
-function buildStreamUrl(videoFolderName: string): string {
-  const configuredBaseUrl = process.env.R2_PUBLIC_BASE_URL;
-
-  if (!configuredBaseUrl) {
-    throw new Error('Missing R2_PUBLIC_BASE_URL environment variable.');
-  }
-
-  const normalizedBaseUrl = configuredBaseUrl.replace(/\/$/, '');
-
-  return `${normalizedBaseUrl}/${videoFolderName}/playlist.m3u8`;
+function buildStreamUrl(courseId: string, videoId: string): string {
+  return `/api/courses/${courseId}/videos/${videoId}/hls/playlist.m3u8`;
 }
 
 export async function GET(
@@ -19,20 +12,23 @@ export async function GET(
 ) {
   const { courseId, videoId } = await context.params;
 
-  const course = getCourseById(courseId);
-
-  if (!course) {
-    return NextResponse.json({ error: 'Course not found.' }, { status: 404 });
-  }
-
-  const lecture = getLectureById(courseId, videoId);
-
-  if (!lecture) {
-    return NextResponse.json({ error: 'Video not found.' }, { status: 404 });
-  }
-
   try {
-    const streamUrl = buildStreamUrl(lecture.videoFolderName);
+    const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
+    if (!convexUrl) {
+      return NextResponse.json({ error: 'NEXT_PUBLIC_CONVEX_URL is missing.' }, { status: 500 });
+    }
+
+    const convex = new ConvexHttpClient(convexUrl);
+    const result = await convex.query(api.courses.getLectureByCourseAndVideoId, {
+      slug: courseId,
+      videoId,
+    });
+
+    if (!result) {
+      return NextResponse.json({ error: 'Video not found.' }, { status: 404 });
+    }
+
+    const streamUrl = buildStreamUrl(courseId, result.lecture.videoFolderName);
 
     return NextResponse.json(
       {

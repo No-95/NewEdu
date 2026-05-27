@@ -1,9 +1,11 @@
 'use client';
 
 import React, { useMemo, useState } from 'react';
+import { useMutation, useQuery } from 'convex/react';
 import { Header } from '@/components/Header';
 import { ParticleBackground } from '@/components/ParticleBackground';
 import { ClientOnly } from '@/lib/hooks/useClientOnly';
+import { api } from '@/convex/_generated/api';
 
 type ContactForm = {
   fullName: string;
@@ -25,8 +27,9 @@ const initialForm: ContactForm = {
 
 function ContactUsContent() {
   const [form, setForm] = useState<ContactForm>(initialForm);
-  const [submitted, setSubmitted] = useState<ContactForm[]>([]);
   const [submittedMessage, setSubmittedMessage] = useState('');
+  const recentSubmissions = useQuery(api.contact.listRecentContactSubmissions, { limit: 3 });
+  const submitContactSubmission = useMutation(api.contact.submitContactSubmission);
 
   const completion = useMemo(() => {
     const fields = [form.fullName, form.email, form.phone, form.organization, form.role, form.feedback];
@@ -39,9 +42,9 @@ function ContactUsContent() {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted((prev) => [form, ...prev].slice(0, 3));
+    await submitContactSubmission(form);
     setSubmittedMessage('Thanks. Your information and feedback have been submitted.');
     setForm(initialForm);
   };
@@ -214,12 +217,12 @@ function ContactUsContent() {
                 </div>
               </section>
 
-              {submitted.length > 0 && (
+              {recentSubmissions && recentSubmissions.length > 0 && (
                 <section className="glass rounded-xl border border-border/50 p-6">
                   <h2 className="text-xl font-bold mb-3">Recent Submissions</h2>
                   <div className="space-y-3">
-                    {submitted.map((entry, index) => (
-                      <div key={`${entry.email}-${index}`} className="rounded-lg border border-border/50 bg-muted/30 p-3">
+                    {recentSubmissions.map((entry) => (
+                      <div key={entry._id} className="rounded-lg border border-border/50 bg-muted/30 p-3">
                         <p className="font-medium text-sm">{entry.fullName}</p>
                         <p className="text-xs text-muted-foreground">{entry.email}</p>
                         <p className="text-xs text-muted-foreground">{entry.phone}</p>
