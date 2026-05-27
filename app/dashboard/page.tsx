@@ -1,5 +1,7 @@
 import { redirect } from 'next/navigation';
 import { getAuthenticatedUser } from '@/lib/auth';
+import { Header } from '@/components/Header';
+import { ParticleBackground } from '@/components/ParticleBackground';
 
 export default async function DashboardPage() {
   const user = await getAuthenticatedUser();
