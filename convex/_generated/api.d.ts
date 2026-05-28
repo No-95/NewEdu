@@ -12,7 +12,10 @@ import type * as auth from "../auth.js";
 import type * as community from "../community.js";
 import type * as contact from "../contact.js";
 import type * as courses from "../courses.js";
+import type * as homeworks from "../homeworks.js";
+import type * as progress from "../progress.js";
 import type * as teacherApplications from "../teacherApplications.js";
+import type * as transactions from "../transactions.js";
 
 import type {
   ApiFromModules,
@@ -25,7 +28,10 @@ declare const fullApi: ApiFromModules<{
   community: typeof community;
   contact: typeof contact;
   courses: typeof courses;
+  homeworks: typeof homeworks;
+  progress: typeof progress;
   teacherApplications: typeof teacherApplications;
+  transactions: typeof transactions;
 }>;
 
 /**

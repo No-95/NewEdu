@@ -8,7 +8,7 @@ export async function GET() {
 
     return NextResponse.json({
       id: user._id ?? null,
-      fullName: user.fullName ?? user.name ?? null,
+      fullName: user.fullName ?? null,
       email: user.email ?? null,
     });
   } catch (err) {

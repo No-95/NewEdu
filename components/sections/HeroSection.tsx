@@ -43,7 +43,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ pageNumber, totalPages
             </div>
             
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight text-balance">
-              {t('home.hero.title')} <span className="neon-text">Korean</span>
+              {t('home.hero.title')}
             </h1>
 
             <p className="text-lg text-muted-foreground max-w-lg mx-auto lg:mx-0">

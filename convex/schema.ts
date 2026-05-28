@@ -129,4 +129,39 @@ export default defineSchema({
     .index('by_postId', ['postId'])
     .index('by_authorId', ['authorId'])
     .index('by_createdAt', ['createdAt']),
+
+  transactions: defineTable({
+    userId: v.id('users'),
+    type: v.union(v.literal('deposit'), v.literal('purchase')),
+    amount: v.number(),
+    description: v.string(),
+    createdAt: v.number(),
+  })
+    .index('by_userId', ['userId'])
+    .index('by_userId_createdAt', ['userId', 'createdAt']),
+
+  homeworks: defineTable({
+    assignedTo: v.id('users'),
+    assignedBy: v.optional(v.id('users')),
+    courseId: v.optional(v.id('courses')),
+    title: v.string(),
+    description: v.optional(v.string()),
+    status: v.union(v.literal('pending'), v.literal('in-progress'), v.literal('completed')),
+    dueDate: v.optional(v.number()),
+    createdAt: v.number(),
+    updatedAt: v.optional(v.number()),
+  })
+    .index('by_assignedTo', ['assignedTo'])
+    .index('by_status', ['status'])
+,
+
+  userCourseProgress: defineTable({
+    userId: v.id('users'),
+    courseId: v.id('courses'),
+    completedLectures: v.number(),
+    totalLectures: v.number(),
+    lastUpdated: v.number(),
+  })
+    .index('by_userId', ['userId'])
+    .index('by_user_course', ['userId', 'courseId']),
 });

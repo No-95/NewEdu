@@ -191,8 +191,8 @@ export const createOrUpdateUser = mutation({
       agreeToTerms: args.agreeToTerms,
       emailVerified: true,
       role: 'student',
-      username: null,
-      avatarUrl: null,
+      username: undefined,
+      avatarUrl: undefined,
       balance: 0,
       createdAt: now,
       updatedAt: now,
@@ -235,8 +235,8 @@ export const getUserByEmail = query({
           _id: user._id.toString(),
           email: user.email,
           fullName: user.fullName ?? '',
-          username: user.username ?? null,
-          avatarUrl: user.avatarUrl ?? null,
+          username: user.username ?? undefined,
+          avatarUrl: user.avatarUrl ?? undefined,
           phone: user.phone,
           passwordHash: user.passwordHash,
           balance: user.balance ?? 0,
@@ -254,6 +254,7 @@ export const updateUserProfile = mutation({
   args: {
     email: v.string(),
     username: v.optional(v.string()),
+    fullName: v.optional(v.string()),
     avatarUrl: v.optional(v.string()),
   },
   returns: v.object({ success: v.boolean() }),
@@ -268,6 +269,7 @@ export const updateUserProfile = mutation({
 
     const patch: Record<string, any> = { updatedAt: Date.now() };
     if (args.username !== undefined) patch.username = args.username;
+    if (args.fullName !== undefined) patch.fullName = args.fullName;
     if (args.avatarUrl !== undefined) patch.avatarUrl = args.avatarUrl;
 
     await ctx.db.patch(user._id, patch);
@@ -292,6 +294,14 @@ export const addDeposit = mutation({
     const next = current + args.amount;
 
     await ctx.db.patch(user._id, { balance: next, updatedAt: Date.now() });
+    // record transaction
+    await ctx.db.insert('transactions', {
+      userId: user._id,
+      type: 'deposit',
+      amount: args.amount,
+      description: 'Deposit',
+      createdAt: Date.now(),
+    });
     return { success: true, balance: next };
   },
 });
