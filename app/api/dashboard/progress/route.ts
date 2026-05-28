@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { asConvexId } from '../../../../lib/convexHelpers';
 import { cookies } from 'next/headers';
 import { ConvexHttpClient } from 'convex/browser';
 import { api } from '@/convex/_generated/api';
@@ -17,7 +16,7 @@ export async function GET() {
     const user = await convex.query(api.auth.getUserByEmail, { email });
     if (!user) return NextResponse.json({ progress: [] });
 
-    const progress = await convex.query(api.progress.listProgressForUser, { userId: asConvexId(user._id) });
+    const progress = await convex.query(api.progress.listProgressForUser, { userId: user._id as any });
     return NextResponse.json({ progress });
   } catch (err) {
     console.error('Error in /api/dashboard/progress:', err);

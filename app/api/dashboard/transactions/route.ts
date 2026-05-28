@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { ConvexHttpClient } from 'convex/browser';
 import { api } from '@/convex/_generated/api';
-import { asConvexId } from '../../../../lib/convexHelpers';
 
 export async function GET() {
   const cookieStore = await cookies();
@@ -17,7 +16,7 @@ export async function GET() {
     const user = await convex.query(api.auth.getUserByEmail, { email });
     if (!user) return NextResponse.json({ transactions: [] });
 
-      const transactions = await convex.query(api.transactions.listTransactionsForUser, { userId: asConvexId(user._id) });
+      const transactions = await convex.query(api.transactions.listTransactionsForUser, { userId: user._id as any });
     return NextResponse.json({ transactions });
   } catch (err) {
     console.error('Error in /api/dashboard/transactions:', err);
