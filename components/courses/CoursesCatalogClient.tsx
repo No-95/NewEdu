@@ -66,7 +66,12 @@ export function CoursesCatalogClient() {
               </div>
               <div className="rounded-2xl border border-border/50 bg-background/70 p-4">
                 <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{text.accessModel}</p>
-                <p className="mt-1 text-2xl font-bold text-emerald-300">{hasFreeCourse ? text.free : text.mixed}</p>
+                <div className="mt-2">
+                  <Link href="/Classrooms" className="inline-flex items-center justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
+                    Online Classroom
+                  </Link>
+                </div>
+                <p className="mt-2 text-xs text-muted-foreground">{text.viewOnlineRooms ?? 'View available online classrooms'}</p>
               </div>
             </div>
           </div>
@@ -92,9 +97,11 @@ export function CoursesCatalogClient() {
               <div className="grid gap-0 md:grid-cols-[1.6fr_1fr]">
                 <div className="p-7 md:p-8">
                   <div className="mb-4 flex flex-wrap items-center gap-2">
-                    <span className="rounded-full border border-emerald-300/40 bg-emerald-400/15 px-3 py-1 text-xs font-semibold text-emerald-200">
-                      {course.isFree ? text.free : course.badge}
-                    </span>
+                    {!course.isFree && (
+                      <span className="rounded-full border border-emerald-300/40 bg-emerald-400/15 px-3 py-1 text-xs font-semibold text-emerald-200">
+                        {course.badge}
+                      </span>
+                    )}
                     <span className="rounded-full border border-border/60 bg-muted/40 px-3 py-1 text-xs font-semibold text-muted-foreground">
                       {text.teacherTeam}
                     </span>
@@ -104,6 +111,9 @@ export function CoursesCatalogClient() {
                     {course.title}
                   </h3>
                   <p className="mt-3 text-sm text-muted-foreground md:text-base">{course.subtitle}</p>
+                  {course.isFree && (
+                    <p className="mt-3 inline-block rounded-md bg-amber-100 px-4 py-1.5 text-base font-bold text-amber-900 border border-amber-200 shadow-md ring-1 ring-amber-200/60">Tặng sách khi mua khóa học này</p>
+                  )}
 
                   <div className="mt-6 grid gap-3 sm:grid-cols-2">
                     <div className="rounded-xl border border-border/50 bg-background/60 p-3">

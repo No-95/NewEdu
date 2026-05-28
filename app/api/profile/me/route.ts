@@ -13,7 +13,9 @@ export async function GET() {
 
   const convex = new ConvexHttpClient(convexUrl);
   try {
+    console.log('/api/profile/me - incoming', { envNextConvex: !!process.env.NEXT_PUBLIC_CONVEX_URL, email })
     const user = await convex.query(api.auth.getUserByEmail, { email });
+    console.log('/api/profile/me - query result', { found: !!user })
     return NextResponse.json(user || null);
   } catch (err) {
     console.error('Error in /api/profile/me:', err);

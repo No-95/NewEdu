@@ -35,17 +35,22 @@ export async function POST(req: Request) {
   }
 
   try {
+    console.log('/api/profile/update - incoming', { envNextConvex: !!process.env.NEXT_PUBLIC_CONVEX_URL, email })
+    console.log('/api/profile/update - payload', { username, fullName, hasAvatar: !!avatarUrl })
+
     await convex.mutation(api.auth.updateUserProfile, {
       email,
       username: username ?? undefined,
       fullName: fullName ?? undefined,
       avatarUrl,
     });
+    console.log('/api/profile/update - mutation complete')
 
     const user = await convex.query(api.auth.getUserByEmail, { email });
+    console.log('/api/profile/update - fetched user after update', { user: !!user })
     return NextResponse.json(user || null);
   } catch (err) {
-    console.error('Error in /api/profile/update:', err);
+    console.error('Error in /api/profile/update:', err?.message ?? err, err?.stack ?? '')
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

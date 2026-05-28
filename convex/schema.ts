@@ -140,6 +140,19 @@ export default defineSchema({
     .index('by_userId', ['userId'])
     .index('by_userId_createdAt', ['userId', 'createdAt']),
 
+  purchases: defineTable({
+    userId: v.string(),
+    courseId: v.string(),
+    provider: v.string(),
+    amount: v.number(),
+    currency: v.string(),
+    status: v.union(v.literal('pending'), v.literal('active'), v.literal('failed')),
+    metadata: v.optional(v.string()),
+    createdAt: v.number(),
+  })
+    .index('by_user_course', ['userId', 'courseId'])
+    .index('by_course_user', ['courseId', 'userId']),
+
   homeworks: defineTable({
     assignedTo: v.id('users'),
     assignedBy: v.optional(v.id('users')),

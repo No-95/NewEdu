@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, CardAction } from '@/components/ui/card'
 import { User, Camera, Check, Shield } from 'lucide-react'
 
 type ProfileForm = {
@@ -14,13 +15,25 @@ type ProfileForm = {
   username: string
   bio: string
   avatarUrl?: string | null
+  email?: string | null
+  title?: string | null
+  website?: string | null
+  githubUrl?: string | null
+  twitterHandle?: string | null
+  linkedinUrl?: string | null
 }
 
 const initialProfile: ProfileForm = {
   displayName: 'Alex Johnson',
   username: 'alex.johnson',
   bio: 'Learning is a journey of continuous growth and discovery.',
-  avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop',
+  avatarUrl: null,
+  email: null,
+  title: null,
+  website: null,
+  githubUrl: null,
+  twitterHandle: null,
+  linkedinUrl: null,
 }
 
 export default function ProfileClient(): React.ReactElement {
@@ -28,6 +41,7 @@ export default function ProfileClient(): React.ReactElement {
   const [avatarPreview, setAvatarPreview] = useState<string | null>(initialProfile.avatarUrl ?? null)
   const [avatarBase64, setAvatarBase64] = useState<string | null>(null)
   const [isSaving, setIsSaving] = useState(false)
+  const [debugMsg, setDebugMsg] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const toast = useToast()
 
@@ -39,7 +53,7 @@ export default function ProfileClient(): React.ReactElement {
     let mounted = true
     ;(async () => {
       try {
-        const res = await fetch('/api/profile/me')
+        const res = await fetch('/api/profile/me', { credentials: 'same-origin', cache: 'no-store' })
         if (!res.ok) return
         const data = await res.json()
         if (!mounted || !data) return
@@ -48,6 +62,12 @@ export default function ProfileClient(): React.ReactElement {
           displayName: data.fullName ?? s.displayName,
           username: data.username ?? s.username,
           avatarUrl: data.avatarUrl ?? s.avatarUrl,
+          email: data.email ?? s.email,
+          title: data.title ?? s.title,
+          website: data.website ?? s.website,
+          githubUrl: data.githubUrl ?? s.githubUrl,
+          twitterHandle: data.twitterHandle ?? s.twitterHandle,
+          linkedinUrl: data.linkedinUrl ?? s.linkedinUrl,
         }))
         setAvatarPreview(data.avatarUrl ?? null)
       } catch (err) {
@@ -130,12 +150,18 @@ export default function ProfileClient(): React.ReactElement {
 
   const handleSave = async () => {
     console.log('ProfileClient: handleSave start', { displayName: form.displayName, username: form.username })
+    setDebugMsg('handleSave start')
     setIsSaving(true)
     try {
       const payload = {
         fullName: form.displayName,
         username: form.username,
         avatarBase64: avatarBase64 ?? undefined,
+        title: form.title ?? undefined,
+        website: form.website ?? undefined,
+        githubUrl: form.githubUrl ?? undefined,
+        twitterHandle: form.twitterHandle ?? undefined,
+        linkedinUrl: form.linkedinUrl ?? undefined,
       }
 
       let res: Response | null = null
@@ -162,14 +188,16 @@ export default function ProfileClient(): React.ReactElement {
         }
         console.warn('ProfileClient: save failed', msg)
         toast.toast({ title: 'Error', description: msg })
+        setDebugMsg(`save failed: ${msg}`)
         return
       }
 
       toast.toast({ title: 'Saved', description: 'Profile updated successfully.' })
+      setDebugMsg('save ok, refreshing profile...')
 
       // refresh profile (best-effort)
       try {
-        const me = await fetch('/api/profile/me')
+        const me = await fetch('/api/profile/me', { credentials: 'same-origin', cache: 'no-store' })
         if (me.ok) {
           const data = await me.json()
           if (data) {
@@ -180,10 +208,12 @@ export default function ProfileClient(): React.ReactElement {
               avatarUrl: data.avatarUrl ?? s.avatarUrl,
             }))
             setAvatarPreview(data.avatarUrl ?? avatarPreview)
+            setDebugMsg(`refreshed: ${JSON.stringify({ fullName: data.fullName, username: data.username, avatarUrl: !!data.avatarUrl })}`)
           }
         }
       } catch (refreshErr) {
         console.warn('ProfileClient: could not refresh profile after save', refreshErr)
+        setDebugMsg(`refresh error: ${String(refreshErr)}`)
       }
     } finally {
       setIsSaving(false)
@@ -197,106 +227,135 @@ export default function ProfileClient(): React.ReactElement {
   }
 
   return (
-    <section className="w-full max-w-4xl mx-auto bg-card border border-border rounded-lg p-4 sm:p-6">
-      <header className="mb-4 flex items-center gap-3">
-        <User className="h-5 w-5 text-muted-foreground" />
-        <h3 className="text-lg font-semibold">Profile</h3>
-      </header>
+    <Card className="w-full max-w-4xl mx-auto glow-edge">
+      <CardHeader>
+        <div>
+          <CardTitle>Profile</CardTitle>
+          <CardDescription>Manage your personal information and avatar.</CardDescription>
+        </div>
+        <CardAction>
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" onClick={handleCancel}>Cancel</Button>
+            <Button onClick={handleSave} className="flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
+              <Check className="h-4 w-4" />
+              <span>{isSaving ? 'Saving...' : 'Save Changes'}</span>
+            </Button>
+          </div>
+        </CardAction>
+      </CardHeader>
 
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-        {/* Avatar (centered) */}
-        <div className="sm:col-start-2 sm:col-span-1 flex justify-center items-start">
-          <div className="relative group">
-            <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden ring-2 ring-border shadow-sm bg-muted flex items-center justify-center">
-              {avatarPreview ? (
-                <Avatar className="w-full h-full">
-                  <AvatarImage src={avatarPreview} alt={form.displayName} />
-                  <AvatarFallback>{form.displayName.split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase()}</AvatarFallback>
-                </Avatar>
-              ) : (
-                <div className="text-muted-foreground">
-                  <User className="h-10 w-10" />
-                </div>
-              )}
-            </div>
+      <CardContent>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+          <div className="sm:col-span-1 flex flex-col items-center">
+            <div className="relative">
+              <div className="w-36 h-36 rounded-full overflow-hidden ring-2 ring-border shadow bg-muted flex items-center justify-center">
+                {avatarPreview ? (
+                  <Avatar className="w-full h-full">
+                    <AvatarImage src={avatarPreview} alt={form.displayName} />
+                    <AvatarFallback>{form.displayName.split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase()}</AvatarFallback>
+                  </Avatar>
+                ) : (
+                  <div className="text-muted-foreground">
+                    <User className="h-12 w-12" />
+                  </div>
+                )}
+              </div>
 
-            <label
-              htmlFor="avatar"
-              className="absolute inset-0 flex cursor-pointer items-end justify-center bg-black/0 group-hover:bg-black/20 transition-colors"
-              aria-hidden
-            >
-              <div className="mb-3 hidden items-center gap-2 rounded-full bg-white/90 px-3 py-1 text-sm text-muted-foreground shadow sm:flex">
+              <label htmlFor="avatar" className="absolute -bottom-2 right-0 inline-flex items-center gap-2 rounded-full bg-white px-2 py-1 text-xs shadow cursor-pointer">
                 <Camera className="h-4 w-4" />
-                <span>Change Photo</span>
-              </div>
-            </label>
+                <span>Change</span>
+              </label>
+              <input id="avatar" ref={fileInputRef} type="file" accept="image/*" className="sr-only" onChange={handleFile} />
+            </div>
 
-            <input
-              id="avatar"
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              className="sr-only"
-              onChange={handleFile}
-            />
+            <div className="mt-4 text-center">
+              <p className="text-sm font-semibold">{form.displayName}</p>
+              <p className="text-xs text-muted-foreground">@{form.username}</p>
+            </div>
           </div>
 
-          <div className="mt-3 w-full text-center">
-            <p className="text-sm font-medium">{form.displayName}</p>
-            <p className="text-xs text-muted-foreground">@{form.username}</p>
-          </div>
-        </div>
+          <div className="sm:col-span-2">
+            <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); handleSave() }}>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div>
+                  <Label htmlFor="displayName" className="text-sm">Display Name</Label>
+                  <div className="mt-1">
+                    <Input id="displayName" value={form.displayName} onChange={handleChange('displayName')} className="input-edge" />
+                  </div>
+                </div>
 
-        {/* Form Column */}
-        <div className="sm:col-span-2">
-          <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); handleSave() }}>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <div>
-                <Label htmlFor="displayName" className="text-sm">Display Name</Label>
-                <Input
-                  id="displayName"
-                  value={form.displayName}
-                  onChange={handleChange('displayName')}
-                  className="mt-1 w-full focus-visible:ring-1 focus-visible:ring-ring"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="username" className="text-sm">Username</Label>
-                <div className="mt-1 flex items-center">
-                  <span className="inline-flex items-center rounded-l-md border border-border bg-muted px-3 text-sm text-muted-foreground">@</span>
-                  <Input
-                    id="username"
-                    value={form.username}
-                    onChange={handleChange('username')}
-                    className="w-full rounded-l-none focus-visible:ring-1 focus-visible:ring-ring"
-                  />
+                <div>
+                  <Label htmlFor="username" className="text-sm">Username</Label>
+                  <div className="mt-1 flex items-center">
+                    <span className="inline-flex items-center rounded-l-md border border-border bg-muted px-3 text-sm text-muted-foreground">@</span>
+                    <div className="flex-1">
+                      <Input id="username" value={form.username} onChange={handleChange('username')} className="input-edge w-full rounded-l-none" />
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div>
-              <Label htmlFor="bio" className="text-sm">Bio</Label>
-              <Textarea
-                id="bio"
-                value={form.bio}
-                onChange={handleChange('bio')}
-                rows={4}
-                className="mt-1 w-full focus-visible:ring-1 focus-visible:ring-ring"
-                placeholder="Short bio — what would you like others to know?"
-              />
-            </div>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div>
+                  <Label htmlFor="title" className="text-sm">Title</Label>
+                  <div className="mt-1">
+                    <Input id="title" value={form.title ?? ''} onChange={handleChange('title')} className="input-edge" placeholder="e.g., Product Designer" />
+                  </div>
+                </div>
 
-            <div className="pt-2 border-t border-border flex flex-col-reverse gap-3 sm:flex-row sm:justify-end sm:items-center">
-              <Button type="button" variant="ghost" onClick={handleCancel} className="w-full sm:w-auto">Cancel</Button>
-              <Button type="submit" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
-                <Check className="h-4 w-4" />
-                <span>{isSaving ? 'Saving...' : 'Save Changes'}</span>
-              </Button>
-            </div>
-          </form>
+                <div>
+                  <Label htmlFor="website" className="text-sm">Website</Label>
+                  <div className="mt-1">
+                    <Input id="website" value={form.website ?? ''} onChange={handleChange('website')} className="input-edge" placeholder="https://" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                <div>
+                  <Label htmlFor="githubUrl" className="text-sm">GitHub</Label>
+                  <div className="mt-1">
+                    <Input id="githubUrl" value={form.githubUrl ?? ''} onChange={handleChange('githubUrl')} className="input-edge" placeholder="username" />
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor="twitterHandle" className="text-sm">Twitter</Label>
+                  <div className="mt-1">
+                    <Input id="twitterHandle" value={form.twitterHandle ?? ''} onChange={handleChange('twitterHandle')} className="input-edge" placeholder="@handle" />
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor="linkedinUrl" className="text-sm">LinkedIn</Label>
+                  <div className="mt-1">
+                    <Input id="linkedinUrl" value={form.linkedinUrl ?? ''} onChange={handleChange('linkedinUrl')} className="input-edge" placeholder="profile URL" />
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <Label htmlFor="bio" className="text-sm">Bio</Label>
+                <div className="mt-1">
+                  <Textarea id="bio" value={form.bio} onChange={handleChange('bio')} rows={4} className="input-edge" placeholder="Short bio — what would you like others to know?" />
+                </div>
+              </div>
+
+              {debugMsg && (
+                <div className="mt-2 p-2 text-xs text-muted-foreground bg-muted rounded">Debug: {debugMsg}</div>
+              )}
+            </form>
+          </div>
         </div>
-      </div>
-    </section>
+      </CardContent>
+
+      <CardFooter>
+        <div className="flex w-full justify-end gap-2">
+          <Button variant="ghost" onClick={handleCancel}>Cancel</Button>
+          <Button onClick={handleSave} className="flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
+            <Check className="h-4 w-4" />
+            <span>{isSaving ? 'Saving...' : 'Save Changes'}</span>
+          </Button>
+        </div>
+      </CardFooter>
+    </Card>
   )
 }

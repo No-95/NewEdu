@@ -2,6 +2,7 @@ import { ConvexHttpClient } from 'convex/browser';
 import { NextResponse } from 'next/server';
 import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { api } from '@/convex/_generated/api';
+import { cookies } from 'next/headers';
 
 function getRequiredConvexUrl(): string {
   const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
@@ -112,6 +113,19 @@ export async function GET(
 
     if (!lectureResult) {
       return NextResponse.json({ error: 'Video not found.' }, { status: 404 });
+    }
+
+    // Server-side access guard: allow if course is free, otherwise require an active purchase
+    if (!lectureResult.course.isFree) {
+      const cookieStore = await cookies();
+      const email = cookieStore.get('user_email')?.value;
+      if (!email) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+      const user = await convex.query(api.auth.getUserByEmail, { email });
+      if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+      const hasAccess = await convex.query(api.purchases.hasAccess, { userId: user._id, courseId: lectureResult.course.slug });
+      if (!hasAccess) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     const key = `${lectureResult.lecture.videoFolderName}/${path}`;
