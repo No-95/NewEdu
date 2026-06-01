@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface ImageCubeProps {
   images?: string[];
@@ -25,6 +25,15 @@ export const ImageCube: React.FC<ImageCubeProps> = ({
   const handleHover = () => {
     setCurrentFace((prev) => (prev + 1) % 4);
   };
+
+  // Auto-rotate cube every 5 seconds
+  useEffect(() => {
+    const id = setInterval(() => {
+      setCurrentFace((prev) => (prev + 1) % 4);
+    }, 5000);
+
+    return () => clearInterval(id);
+  }, []);
   
   const getRotation = () => {
     switch (currentFace) {
