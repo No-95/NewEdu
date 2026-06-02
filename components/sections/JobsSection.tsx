@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Section } from '@/components/Section';
 import { useLanguage } from '@/lib/context/LanguageContext';
 
@@ -65,9 +66,12 @@ export const JobsSection: React.FC<JobsSectionProps> = ({ pageNumber, totalPages
               </div>
             </div>
 
-            <button className="w-full px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white text-base font-semibold rounded-lg hover:shadow-glow-cyan transition-all">
+            <Link
+              href="/jobs"
+              className="block w-full px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white text-base font-semibold rounded-lg hover:shadow-glow-cyan transition-all text-center"
+            >
               {t('home.jobs.viewCareerBoard')}
-            </button>
+            </Link>
           </div>
 
           {/* Right: Image */}

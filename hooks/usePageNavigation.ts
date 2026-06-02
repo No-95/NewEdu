@@ -33,8 +33,32 @@ export const usePageNavigation = (totalPages: number) => {
   }, [goToPage]);
 
   useEffect(() => {
+    const isEditableElement = (element: EventTarget | Element | null) => {
+      if (!(element instanceof Element)) {
+        return false;
+      }
+
+      if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
+        return true;
+      }
+
+      if ((element as HTMLElement).isContentEditable) {
+        return true;
+      }
+
+      return Boolean(element.closest('input, textarea, [contenteditable="true"], [role="textbox"]'));
+    };
+
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight' || e.key === ' ') {
+      const activeElement = document.activeElement;
+
+      if (isEditableElement(e.target) || isEditableElement(activeElement)) {
+        return;
+      }
+
+      const isSpace = e.key === ' ' || e.code === 'Space';
+
+      if (e.key === 'ArrowRight' || isSpace) {
         e.preventDefault();
         goToPage(currentPageRef.current + 1);
       } else if (e.key === 'ArrowLeft') {

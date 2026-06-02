@@ -177,4 +177,35 @@ export default defineSchema({
   })
     .index('by_userId', ['userId'])
     .index('by_user_course', ['userId', 'courseId']),
+
+  liveClassrooms: defineTable({
+    roomID: v.string(),
+    title: v.string(),
+    hostName: v.string(),
+    roomPassword: v.optional(v.string()),
+    status: v.union(v.literal('live'), v.literal('ended')),
+    startedAt: v.number(),
+    lastActiveAt: v.number(),
+  })
+    .index('by_roomID', ['roomID'])
+    .index('by_status_lastActiveAt', ['status', 'lastActiveAt']),
+
+  bookOrders: defineTable({
+    fullName: v.string(),
+    phone: v.string(),
+    address: v.string(),
+    note: v.optional(v.string()),
+    createdAt: v.number(),
+  })
+    .index('by_createdAt', ['createdAt'])
+    .index('by_phone', ['phone']),
+
+  supportDailyUsage: defineTable({
+    identifier: v.string(),
+    dateKey: v.string(),
+    count: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_identifier_dateKey', ['identifier', 'dateKey'])
+    .index('by_dateKey', ['dateKey']),
 });

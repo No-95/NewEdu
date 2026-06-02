@@ -46,15 +46,17 @@ export function CourseDetailClient({ courseSlug }: CourseDetailClientProps) {
             <div className="rounded-2xl border border-border/50 bg-background/70 p-6 backdrop-blur-sm">
               <div className="mb-3 flex flex-wrap items-center gap-3">
                 <h1 className="text-3xl font-bold text-foreground md:text-4xl">{course.title}</h1>
-                <span className="rounded-full border border-emerald-300/40 bg-emerald-400/15 px-3 py-1 text-xs font-semibold text-emerald-200">
-                  {course.badge}
-                </span>
+                {!course.isFree && course.badge ? (
+                  <span className="rounded-full border border-emerald-300/40 bg-emerald-400/15 px-3 py-1 text-xs font-semibold text-emerald-200">
+                    {course.badge}
+                  </span>
+                ) : null}
               </div>
               <p className="text-muted-foreground">{course.subtitle}</p>
               <p className="mt-2 text-sm text-muted-foreground/90">{course.description}</p>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-3">
+            <div className={`grid gap-4 ${course.isFree ? 'sm:grid-cols-2' : 'sm:grid-cols-3'}`}>
               <div className="rounded-2xl border border-border/50 bg-background/60 p-4">
                 <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{text.totalUnits}</p>
                 <p className="mt-2 text-2xl font-bold text-foreground">15</p>
@@ -63,10 +65,12 @@ export function CourseDetailClient({ courseSlug }: CourseDetailClientProps) {
                 <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{text.totalVideos}</p>
                 <p className="mt-2 text-2xl font-bold text-foreground">{course.totalVideos}</p>
               </div>
-              <div className="rounded-2xl border border-border/50 bg-background/60 p-4">
-                <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{text.access}</p>
-                <p className="mt-2 text-2xl font-bold text-emerald-300">{text.free}</p>
-              </div>
+              {!course.isFree ? (
+                <div className="rounded-2xl border border-border/50 bg-background/60 p-4">
+                  <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{text.access}</p>
+                  <p className="mt-2 text-2xl font-bold text-emerald-300">{text.free}</p>
+                </div>
+              ) : null}
             </div>
 
             <div className="rounded-2xl border border-border/50 bg-background/60 p-6">

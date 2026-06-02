@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Section } from '@/components/Section';
 import { useLanguage } from '@/lib/context/LanguageContext';
 
@@ -72,9 +73,12 @@ export const CTASection: React.FC<CTASectionProps> = ({ pageNumber, totalPages }
                     </div>
                   ))}
                 </div>
-                <button className="px-8 py-3 bg-primary text-primary-foreground font-semibold text-base rounded-lg hover:shadow-glow-cyan transition-all duration-300">
+                <Link
+                  href="/auth"
+                  className="inline-block px-8 py-3 bg-primary text-primary-foreground font-semibold text-base rounded-lg hover:shadow-glow-cyan transition-all duration-300"
+                >
                   {t('home.cta.startLearningFree')}
-                </button>
+                </Link>
               </div>
             )}
 
@@ -91,9 +95,12 @@ export const CTASection: React.FC<CTASectionProps> = ({ pageNumber, totalPages }
                     </div>
                   ))}
                 </div>
-                <button className="px-8 py-3 bg-secondary text-white font-semibold text-base rounded-lg hover:shadow-glow-blue transition-all duration-300">
+                <Link
+                  href="/teacher-applicant"
+                  className="inline-block px-8 py-3 bg-secondary text-white font-semibold text-base rounded-lg hover:shadow-glow-blue transition-all duration-300"
+                >
                   {t('home.cta.applyTeach')}
-                </button>
+                </Link>
               </div>
             )}
 
@@ -106,9 +113,12 @@ export const CTASection: React.FC<CTASectionProps> = ({ pageNumber, totalPages }
                   placeholder="your@email.com"
                   className="flex-1 px-4 py-3 text-base bg-input text-foreground rounded-lg border border-border focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all"
                 />
-                <button className="px-5 py-3 bg-muted text-foreground text-base font-medium rounded-lg hover:bg-muted/80 transition-all">
+                <Link
+                  href="/contact-us"
+                  className="inline-block px-5 py-3 bg-muted text-foreground text-base font-medium rounded-lg hover:bg-muted/80 transition-all"
+                >
                   {t('home.cta.subscribe')}
-                </button>
+                </Link>
               </div>
             </div>
           </div>

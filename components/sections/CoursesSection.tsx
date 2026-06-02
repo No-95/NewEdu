@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Section } from '@/components/Section';
 import { useLanguage } from '@/lib/context/LanguageContext';
 
@@ -92,9 +93,12 @@ export const CoursesSection: React.FC<CoursesSectionProps> = ({ pageNumber, tota
               ))}
             </div>
 
-            <button className="w-full px-6 py-3 bg-primary text-primary-foreground text-base font-semibold rounded-lg hover:shadow-glow-cyan transition-all">
+            <Link
+              href="/courses"
+              className="block w-full px-6 py-3 bg-primary text-primary-foreground text-base font-semibold rounded-lg hover:shadow-glow-cyan transition-all text-center"
+            >
               {t('home.courses.viewAllCourses')}
-            </button>
+            </Link>
           </div>
         </div>
       </div>

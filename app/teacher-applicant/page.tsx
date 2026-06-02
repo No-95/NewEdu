@@ -146,7 +146,7 @@ function TeacherApplicantContent() {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 rounded-lg bg-muted border border-border/50 text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
-                    placeholder="Your full name"
+                    placeholder={t('teacherApplicant.placeholders.fullName')}
                   />
                 </div>
 
@@ -162,14 +162,14 @@ function TeacherApplicantContent() {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 rounded-lg bg-muted border border-border/50 text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
-                    placeholder="your.email@example.com"
+                    placeholder={t('teacherApplicant.placeholders.email')}
                   />
                 </div>
 
                 {/* Phone */}
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
-                    Phone Number *
+                    {t('teacherApplicant.phone')} *
                   </label>
                   <input
                     type="tel"
@@ -178,14 +178,14 @@ function TeacherApplicantContent() {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 rounded-lg bg-muted border border-border/50 text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
-                    placeholder="+1 (555) 123-4567"
+                    placeholder={t('teacherApplicant.placeholders.phone')}
                   />
                 </div>
 
                 {/* Experience Years */}
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
-                    Years of Teaching Experience *
+                    {t('teacherApplicant.experienceYears')} *
                   </label>
                   <select
                     name="experienceYears"
@@ -194,18 +194,18 @@ function TeacherApplicantContent() {
                     required
                     className="w-full px-4 py-3 rounded-lg bg-muted border border-border/50 text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
                   >
-                    <option value="">Select experience level</option>
-                    <option value="0-1">0-1 years</option>
-                    <option value="1-3">1-3 years</option>
-                    <option value="3-5">3-5 years</option>
-                    <option value="5+">5+ years</option>
+                    <option value="">{t('teacherApplicant.options.experiencePlaceholder')}</option>
+                    <option value="0-1">{t('teacherApplicant.options.experience0to1')}</option>
+                    <option value="1-3">{t('teacherApplicant.options.experience1to3')}</option>
+                    <option value="3-5">{t('teacherApplicant.options.experience3to5')}</option>
+                    <option value="5+">{t('teacherApplicant.options.experience5plus')}</option>
                   </select>
                 </div>
 
                 {/* Specialization */}
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
-                    Teaching Specialization *
+                    {t('teacherApplicant.specialization')} *
                   </label>
                   <select
                     name="specialization"
@@ -214,19 +214,19 @@ function TeacherApplicantContent() {
                     required
                     className="w-full px-4 py-3 rounded-lg bg-muted border border-border/50 text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
                   >
-                    <option value="">Select specialization</option>
-                    <option value="general">General Korean</option>
-                    <option value="business">Business Korean</option>
-                    <option value="conversation">Conversation</option>
-                    <option value="grammar">Grammar & Writing</option>
-                    <option value="culture">Culture & Immersion</option>
+                    <option value="">{t('teacherApplicant.options.specializationPlaceholder')}</option>
+                    <option value="general">{t('teacherApplicant.options.specializationGeneral')}</option>
+                    <option value="business">{t('teacherApplicant.options.specializationBusiness')}</option>
+                    <option value="conversation">{t('teacherApplicant.options.specializationConversation')}</option>
+                    <option value="grammar">{t('teacherApplicant.options.specializationGrammar')}</option>
+                    <option value="culture">{t('teacherApplicant.options.specializationCulture')}</option>
                   </select>
                 </div>
 
                 {/* Native Language */}
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
-                    Native Language(s) *
+                    {t('teacherApplicant.nativeLanguage')} *
                   </label>
                   <input
                     type="text"
@@ -235,14 +235,14 @@ function TeacherApplicantContent() {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 rounded-lg bg-muted border border-border/50 text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
-                    placeholder="e.g., English, Spanish"
+                    placeholder={t('teacherApplicant.placeholders.nativeLanguage')}
                   />
                 </div>
 
                 {/* Certifications */}
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
-                    Certifications
+                    {t('teacherApplicant.certifications')}
                   </label>
                   <input
                     type="text"
@@ -250,14 +250,14 @@ function TeacherApplicantContent() {
                     value={formData.certifications}
                     onChange={handleChange}
                     className="w-full px-4 py-3 rounded-lg bg-muted border border-border/50 text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
-                    placeholder="e.g., TEFL, TESOL, Korean teaching certificate"
+                    placeholder={t('teacherApplicant.placeholders.certifications')}
                   />
                 </div>
 
                 {/* Hours Available */}
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
-                    Hours Available per Week *
+                    {t('teacherApplicant.hoursAvailable')} *
                   </label>
                   <select
                     name="hoursAvailable"
@@ -266,11 +266,11 @@ function TeacherApplicantContent() {
                     required
                     className="w-full px-4 py-3 rounded-lg bg-muted border border-border/50 text-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
                   >
-                    <option value="">Select availability</option>
-                    <option value="5-10">5-10 hours</option>
-                    <option value="10-20">10-20 hours</option>
-                    <option value="20-30">20-30 hours</option>
-                    <option value="30+">30+ hours</option>
+                    <option value="">{t('teacherApplicant.options.hoursPlaceholder')}</option>
+                    <option value="5-10">{t('teacherApplicant.options.hours5to10')}</option>
+                    <option value="10-20">{t('teacherApplicant.options.hours10to20')}</option>
+                    <option value="20-30">{t('teacherApplicant.options.hours20to30')}</option>
+                    <option value="30+">{t('teacherApplicant.options.hours30plus')}</option>
                   </select>
                 </div>
               </div>
@@ -278,7 +278,7 @@ function TeacherApplicantContent() {
               {/* Bio */}
               <div>
                 <label className="block text-sm font-medium text-foreground mb-2">
-                  Tell us about yourself *
+                  {t('teacherApplicant.bio')} *
                 </label>
                 <textarea
                   name="bio"
@@ -287,7 +287,7 @@ function TeacherApplicantContent() {
                   required
                   rows={5}
                   className="w-full px-4 py-3 rounded-lg bg-muted border border-border/50 text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all resize-none"
-                  placeholder="Share your teaching philosophy, experience with Korean language, and why you want to teach with HDP EDU..."
+                  placeholder={t('teacherApplicant.placeholders.bio')}
                 />
               </div>
 
@@ -296,18 +296,18 @@ function TeacherApplicantContent() {
                 type="submit"
                 className="w-full px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:shadow-glow-cyan transition-all duration-300"
               >
-                Submit Application
+                {t('teacherApplicant.submitForm')}
               </button>
             </form>
 
             <p className="text-xs text-muted-foreground text-center mt-6">
-              By submitting this form, you agree to our Terms of Service and Privacy Policy.
+              {t('teacherApplicant.termsNotice')}
             </p>
           </div>
 
           {recentApplications && recentApplications.length > 0 && (
             <div className="mt-8 glass rounded-xl p-6 border border-border/50">
-              <h2 className="text-xl font-bold mb-3">Recent Applications</h2>
+              <h2 className="text-xl font-bold mb-3">{t('teacherApplicant.recentApplications')}</h2>
               <div className="space-y-3">
                 {recentApplications.map((application) => (
                   <div key={application._id} className="rounded-lg border border-border/50 bg-muted/30 p-3 text-sm">

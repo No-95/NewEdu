@@ -43,8 +43,8 @@ export function CoursesCatalogClient() {
 
       <main className="relative z-10 mx-auto max-w-6xl px-6 pb-20 pt-24">
         <section className="relative overflow-hidden rounded-3xl border border-border/60 bg-gradient-to-br from-background/90 via-background/75 to-cyan-500/10 p-8 shadow-[0_20px_60px_-35px_rgba(56,189,248,0.8)] backdrop-blur-md md:p-10">
-          <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-cyan-400/20 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-24 left-1/3 h-48 w-48 rounded-full bg-emerald-400/15 blur-3xl" />
+          <div className="courses-decor-circle pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-cyan-400/20 blur-3xl" />
+          <div className="courses-decor-circle pointer-events-none absolute -bottom-24 left-1/3 h-48 w-48 rounded-full bg-emerald-400/15 blur-3xl" />
 
           <div className="relative space-y-5">
             <p className="inline-flex items-center rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-primary">
@@ -69,7 +69,7 @@ export function CoursesCatalogClient() {
               <div className="rounded-2xl border border-border/50 bg-background/70 p-4">
                 <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{text.accessModel}</p>
                 <div className="mt-2">
-                  <Link href="/Classrooms" className="inline-flex items-center justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
+                  <Link href="/courses/classroom" className="inline-flex items-center justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90">
                     Online Classroom
                   </Link>
                 </div>

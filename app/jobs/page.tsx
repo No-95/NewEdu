@@ -32,23 +32,23 @@ function JobsContent() {
             <div className="glass rounded-xl p-6 border border-border/50 w-full max-w-5xl text-center">
               <div className="flex flex-wrap items-center justify-center gap-2 mb-4">
                 <span className="px-3 py-1 rounded-full bg-primary/20 text-primary text-xs font-semibold">
-                  Remote Job
+                  {t('jobs.remoteJobTag')}
                 </span>
                 <span className="px-3 py-1 rounded-full bg-muted text-muted-foreground text-xs font-semibold">
-                  Flexible Working Hour
+                  {t('jobs.flexibleWorkingHourTag')}
                 </span>
               </div>
 
-              <h2 className="text-2xl font-bold text-foreground mb-2">Start Teaching Now with us</h2>
-              <p className="text-muted-foreground mb-4">Teach online from anywhere and set your own schedule.</p>
+              <h2 className="text-2xl font-bold text-foreground mb-2">{t('jobs.featuredTitle')}</h2>
+              <p className="text-muted-foreground mb-4">{t('jobs.featuredDescription')}</p>
 
               <div className="grid sm:grid-cols-2 gap-3 mb-5 max-w-2xl mx-auto">
                 <div className="rounded-lg bg-muted/40 border border-border/50 px-4 py-3">
-                  <p className="text-xs text-muted-foreground mb-1">Teacher Profit Share</p>
+                  <p className="text-xs text-muted-foreground mb-1">{t('jobs.teacherProfitShare')}</p>
                   <p className="text-lg font-bold text-emerald-400">92%</p>
                 </div>
                 <div className="rounded-lg bg-muted/40 border border-border/50 px-4 py-3">
-                  <p className="text-xs text-muted-foreground mb-1">Platform Share</p>
+                  <p className="text-xs text-muted-foreground mb-1">{t('jobs.platformShare')}</p>
                   <p className="text-lg font-bold text-primary">8%</p>
                 </div>
               </div>
@@ -72,7 +72,7 @@ function JobsContent() {
 
           <div className="mt-10 text-center animate-fade-in">
             <p className="text-muted-foreground text-sm sm:text-base">
-              More job will be available to pick up soon. Contact Us for more information.
+              {t('jobs.moreJobsSoon')}
             </p>
             <Link
               href="/contact-us"

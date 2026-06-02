@@ -200,9 +200,13 @@
   .site-mode-lightmode1 .hero-bg-circle,
   .site-mode-lightmode1 .hero-cube-float,
   .site-mode-lightmode1 .image-cube-backdrop,
+  .site-mode-lightmode1 .courses-decor-circle,
+  .site-mode-lightmode1 .books-decor-circle,
   .site-mode-lightmode2 .hero-bg-circle,
   .site-mode-lightmode2 .hero-cube-float,
-  .site-mode-lightmode2 .image-cube-backdrop {
+  .site-mode-lightmode2 .image-cube-backdrop,
+  .site-mode-lightmode2 .courses-decor-circle,
+  .site-mode-lightmode2 .books-decor-circle {
     display: none !important;
   }
 }

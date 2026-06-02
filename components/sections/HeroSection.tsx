@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Section } from '@/components/Section';
 import { ImageCube } from '@/components/ImageCube';
 import { useLanguage } from '@/lib/context/LanguageContext';
@@ -51,15 +52,21 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ pageNumber, totalPages
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
-              <button className="px-8 py-3.5 bg-primary text-primary-foreground font-semibold rounded-lg hover:shadow-[0_0_30px_rgba(0,217,255,0.5)] transition-all duration-300 transform hover:scale-105">
+              <Link
+                href="/courses"
+                className="px-8 py-3.5 bg-primary text-primary-foreground font-semibold rounded-lg hover:shadow-[0_0_30px_rgba(0,217,255,0.5)] transition-all duration-300 transform hover:scale-105"
+              >
                 {t('home.hero.startLearning')}
-              </button>
-              <button className="px-8 py-3.5 border border-secondary text-secondary font-semibold rounded-lg hover:bg-secondary/10 transition-all duration-300 flex items-center justify-center gap-2">
+              </Link>
+              <Link
+                href="/teacher-applicant"
+                className="px-8 py-3.5 border border-secondary text-secondary font-semibold rounded-lg hover:bg-secondary/10 transition-all duration-300 flex items-center justify-center gap-2"
+              >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                 </svg>
                 {t('home.hero.becomeTeacher')}
-              </button>
+              </Link>
             </div>
 
             {/* Stats Row */}

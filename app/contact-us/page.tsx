@@ -5,6 +5,7 @@ import { useMutation, useQuery } from 'convex/react';
 import { Header } from '@/components/Header';
 import { ParticleBackground } from '@/components/DarkmodeParticleBackground';
 import { ClientOnly } from '@/lib/hooks/useClientOnly';
+import { useLanguage } from '@/lib/context/LanguageContext';
 import { api } from '@/convex/_generated/api';
 
 type ContactForm = {
@@ -26,6 +27,7 @@ const initialForm: ContactForm = {
 };
 
 function ContactUsContent() {
+  const { t } = useLanguage();
   const [form, setForm] = useState<ContactForm>(initialForm);
   const [submittedMessage, setSubmittedMessage] = useState('');
   const recentSubmissions = useQuery(api.contact.listRecentContactSubmissions, { limit: 3 });
@@ -45,7 +47,7 @@ function ContactUsContent() {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await submitContactSubmission(form);
-    setSubmittedMessage('Thanks. Your information and feedback have been submitted.');
+    setSubmittedMessage(t('contactUsPage.submitSuccess'));
     setForm(initialForm);
   };
 
@@ -58,26 +60,26 @@ function ContactUsContent() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="mb-8 text-center animate-slide-up">
             <p className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary mb-4">
-              Support & Feedback
+              {t('contactUsPage.badge')}
             </p>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Contact Us</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">{t('contactUsPage.title')}</h1>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Send your information and feedback. Our team will review your message and get back to you quickly.
+              {t('contactUsPage.description')}
             </p>
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 mb-8">
             <div className="glass rounded-xl border border-border/50 p-4 text-center">
-              <p className="text-xs text-muted-foreground mb-1">Response Time</p>
-              <p className="text-sm font-semibold">Within 24 hours</p>
+              <p className="text-xs text-muted-foreground mb-1">{t('contactUsPage.responseTime')}</p>
+              <p className="text-sm font-semibold">{t('contactUsPage.responseTimeValue')}</p>
             </div>
             <div className="glass rounded-xl border border-border/50 p-4 text-center">
-              <p className="text-xs text-muted-foreground mb-1">Support Type</p>
-              <p className="text-sm font-semibold">Job, Course, Platform</p>
+              <p className="text-xs text-muted-foreground mb-1">{t('contactUsPage.supportType')}</p>
+              <p className="text-sm font-semibold">{t('contactUsPage.supportTypeValue')}</p>
             </div>
             <div className="glass rounded-xl border border-border/50 p-4 text-center">
-              <p className="text-xs text-muted-foreground mb-1">Preferred Contact</p>
-              <p className="text-sm font-semibold">Email / Phone</p>
+              <p className="text-xs text-muted-foreground mb-1">{t('contactUsPage.preferredContact')}</p>
+              <p className="text-sm font-semibold">{t('contactUsPage.preferredContactValue')}</p>
             </div>
           </div>
 
@@ -85,24 +87,24 @@ function ContactUsContent() {
             <section className="lg:col-span-7 order-2 lg:order-1">
               <form onSubmit={onSubmit} className="glass rounded-xl border border-border/50 p-6 sm:p-8 space-y-6">
                 <div className="pb-2 border-b border-border/50">
-                  <h2 className="text-2xl font-bold">Send Your Information</h2>
-                  <p className="text-sm text-muted-foreground mt-1">Please fill in your details and feedback message below.</p>
+                  <h2 className="text-2xl font-bold">{t('contactUsPage.formTitle')}</h2>
+                  <p className="text-sm text-muted-foreground mt-1">{t('contactUsPage.formDescription')}</p>
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">Full Name</label>
+                    <label className="block text-sm font-medium mb-2">{t('contactUsPage.fullName')}</label>
                     <input
                       name="fullName"
                       value={form.fullName}
                       onChange={onChange}
                       required
                       className="w-full rounded-lg border border-border/50 bg-muted/40 px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                      placeholder="Nguyen Van A"
+                      placeholder={t('contactUsPage.fullNamePlaceholder')}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-2">Email</label>
+                    <label className="block text-sm font-medium mb-2">{t('contactUsPage.email')}</label>
                     <input
                       type="email"
                       name="email"
@@ -110,48 +112,48 @@ function ContactUsContent() {
                       onChange={onChange}
                       required
                       className="w-full rounded-lg border border-border/50 bg-muted/40 px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                      placeholder="you@example.com"
+                      placeholder={t('contactUsPage.emailPlaceholder')}
                     />
                   </div>
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">Phone</label>
+                    <label className="block text-sm font-medium mb-2">{t('contactUsPage.phone')}</label>
                     <input
                       name="phone"
                       value={form.phone}
                       onChange={onChange}
                       required
                       className="w-full rounded-lg border border-border/50 bg-muted/40 px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                      placeholder="090..."
+                      placeholder={t('contactUsPage.phonePlaceholder')}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-2">Organization</label>
+                    <label className="block text-sm font-medium mb-2">{t('contactUsPage.organization')}</label>
                     <input
                       name="organization"
                       value={form.organization}
                       onChange={onChange}
                       className="w-full rounded-lg border border-border/50 bg-muted/40 px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                      placeholder="HDP EDU"
+                      placeholder={t('contactUsPage.organizationPlaceholder')}
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Your Role</label>
+                  <label className="block text-sm font-medium mb-2">{t('contactUsPage.role')}</label>
                   <input
                     name="role"
                     value={form.role}
                     onChange={onChange}
                     className="w-full rounded-lg border border-border/50 bg-muted/40 px-4 py-2.5 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="Teacher / Student / Partner"
+                    placeholder={t('contactUsPage.rolePlaceholder')}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Feedback Message</label>
+                  <label className="block text-sm font-medium mb-2">{t('contactUsPage.feedbackMessage')}</label>
                   <textarea
                     name="feedback"
                     value={form.feedback}
@@ -159,7 +161,7 @@ function ContactUsContent() {
                     required
                     rows={7}
                     className="w-full rounded-lg border border-border/50 bg-muted/40 px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="Share your feedback, request, or question..."
+                    placeholder={t('contactUsPage.feedbackPlaceholder')}
                   />
                 </div>
 
@@ -174,7 +176,7 @@ function ContactUsContent() {
                     type="submit"
                     className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg hover:shadow-glow-cyan transition-all text-sm font-medium"
                   >
-                    Submit Information
+                    {t('contactUsPage.submitButton')}
                   </button>
                 </div>
               </form>
@@ -182,44 +184,44 @@ function ContactUsContent() {
 
             <aside className="lg:col-span-5 order-1 lg:order-2 space-y-6 lg:sticky lg:top-24 h-fit">
               <section className="glass rounded-xl border border-border/50 p-6">
-                <h2 className="text-xl font-bold mb-3">Your Information</h2>
-                <p className="text-sm text-muted-foreground mb-4">Live preview based on what you type in the form.</p>
+                <h2 className="text-xl font-bold mb-3">{t('contactUsPage.previewTitle')}</h2>
+                <p className="text-sm text-muted-foreground mb-4">{t('contactUsPage.previewDescription')}</p>
 
                 <div className="space-y-3 text-sm">
                   <div className="rounded-lg bg-muted/40 border border-border/50 p-3">
-                    <p className="text-xs text-muted-foreground mb-1">Full Name</p>
-                    <p>{form.fullName || 'Not provided yet'}</p>
+                    <p className="text-xs text-muted-foreground mb-1">{t('contactUsPage.fullName')}</p>
+                    <p>{form.fullName || t('contactUsPage.notProvidedYet')}</p>
                   </div>
                   <div className="rounded-lg bg-muted/40 border border-border/50 p-3">
-                    <p className="text-xs text-muted-foreground mb-1">Email</p>
-                    <p>{form.email || 'Not provided yet'}</p>
+                    <p className="text-xs text-muted-foreground mb-1">{t('contactUsPage.email')}</p>
+                    <p>{form.email || t('contactUsPage.notProvidedYet')}</p>
                   </div>
                   <div className="rounded-lg bg-muted/40 border border-border/50 p-3">
-                    <p className="text-xs text-muted-foreground mb-1">Phone</p>
-                    <p>{form.phone || 'Not provided yet'}</p>
+                    <p className="text-xs text-muted-foreground mb-1">{t('contactUsPage.phone')}</p>
+                    <p>{form.phone || t('contactUsPage.notProvidedYet')}</p>
                   </div>
                   <div className="rounded-lg bg-muted/40 border border-border/50 p-3">
-                    <p className="text-xs text-muted-foreground mb-1">Organization</p>
-                    <p>{form.organization || 'Not provided yet'}</p>
+                    <p className="text-xs text-muted-foreground mb-1">{t('contactUsPage.organization')}</p>
+                    <p>{form.organization || t('contactUsPage.notProvidedYet')}</p>
                   </div>
                   <div className="rounded-lg bg-muted/40 border border-border/50 p-3">
-                    <p className="text-xs text-muted-foreground mb-1">Role</p>
-                    <p>{form.role || 'Not provided yet'}</p>
+                    <p className="text-xs text-muted-foreground mb-1">{t('contactUsPage.role')}</p>
+                    <p>{form.role || t('contactUsPage.notProvidedYet')}</p>
                   </div>
                 </div>
 
                 <div className="mt-5">
-                  <p className="text-xs text-muted-foreground mb-2">Form completion</p>
+                  <p className="text-xs text-muted-foreground mb-2">{t('contactUsPage.formCompletion')}</p>
                   <div className="h-2 rounded-full bg-muted overflow-hidden">
                     <div className="h-full bg-primary transition-all" style={{ width: `${completion}%` }} />
                   </div>
-                  <p className="mt-2 text-xs text-muted-foreground">{completion}% completed</p>
+                  <p className="mt-2 text-xs text-muted-foreground">{completion}% {t('contactUsPage.completed')}</p>
                 </div>
               </section>
 
               {recentSubmissions && recentSubmissions.length > 0 && (
                 <section className="glass rounded-xl border border-border/50 p-6">
-                  <h2 className="text-xl font-bold mb-3">Recent Submissions</h2>
+                  <h2 className="text-xl font-bold mb-3">{t('contactUsPage.recentSubmissions')}</h2>
                   <div className="space-y-3">
                     {recentSubmissions.map((entry) => (
                       <div key={entry._id} className="rounded-lg border border-border/50 bg-muted/30 p-3">

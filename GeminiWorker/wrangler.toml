@@ -1,0 +1,6 @@
+name = "gemini-worker"
+main = "src/index.ts"
+compatibility_date = "2026-06-02"
+
+[observability.logs]
+enabled = true
