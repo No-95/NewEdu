@@ -5,10 +5,11 @@ import { useEffect, useRef } from 'react';
 import { useMutation, useQuery } from 'convex/react';
 
 import { Header } from '@/components/Header';
-import { ParticleBackground } from '@/components/ParticleBackground';
+import { ParticleBackground } from '@/components/DarkmodeParticleBackground';
 import { api } from '@/convex/_generated/api';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { COURSE_TEXT, getCourseLanguage } from '@/lib/courses/localization';
+import CourseAction from './CourseAction';
 
 export function CoursesCatalogClient() {
   const { language } = useLanguage();
@@ -33,6 +34,7 @@ export function CoursesCatalogClient() {
   const totalCourses = courses?.length ?? 0;
   const totalVideos = courses?.reduce((sum, item) => sum + item.lectures.length, 0) ?? 0;
   const hasFreeCourse = courses?.some((item) => item.isFree) ?? false;
+  const forcePurchase = (process.env.NEXT_PUBLIC_FORCE_PURCHASE || '') === '1'
 
   return (
     <div className="min-h-screen bg-background">
@@ -90,10 +92,7 @@ export function CoursesCatalogClient() {
               {text.loading}
             </div>
           ) : (
-            <Link
-              href={`/courses/${course.slug}`}
-              className="group block overflow-hidden rounded-3xl border border-border/60 bg-background/80 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-[0_20px_45px_-30px_rgba(34,211,238,0.7)]"
-            >
+            <div className="group block overflow-hidden rounded-3xl border border-border/60 bg-background/80 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-[0_20px_45px_-30px_rgba(34,211,238,0.7)]">
               <div className="grid gap-0 md:grid-cols-[1.6fr_1fr]">
                 <div className="p-7 md:p-8">
                   <div className="mb-4 flex flex-wrap items-center gap-2">
@@ -137,10 +136,10 @@ export function CoursesCatalogClient() {
                     </ul>
                   </div>
 
-                  <p className="mt-6 inline-flex items-center text-sm font-semibold text-primary">{text.openDetails}</p>
+                  <CourseAction courseSlug={course.slug} isFree={forcePurchase ? false : course.isFree} />
                 </div>
               </div>
-            </Link>
+            </div>
           )}
         </section>
       </main>

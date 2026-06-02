@@ -3,7 +3,7 @@
 import React, { useMemo, useState } from 'react';
 import { useMutation, useQuery } from 'convex/react';
 import { Header } from '@/components/Header';
-import { ParticleBackground } from '@/components/ParticleBackground';
+import { ParticleBackground } from '@/components/DarkmodeParticleBackground';
 import { ClientOnly } from '@/lib/hooks/useClientOnly';
 import { api } from '@/convex/_generated/api';
 

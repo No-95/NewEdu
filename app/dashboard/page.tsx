@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { Header } from '@/components/Header'
-import { ParticleBackground } from '@/components/ParticleBackground'
+import { ParticleBackground } from '@/components/DarkmodeParticleBackground'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'

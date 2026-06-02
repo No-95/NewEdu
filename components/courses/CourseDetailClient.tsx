@@ -4,8 +4,9 @@ import Link from 'next/link';
 import { useQuery } from 'convex/react';
 
 import { Header } from '@/components/Header';
-import { ParticleBackground } from '@/components/ParticleBackground';
+import { ParticleBackground } from '@/components/DarkmodeParticleBackground';
 import { CourseOutlineSidebar } from '@/components/courses/CourseOutlineSidebar';
+import CourseAction from '@/components/courses/CourseAction';
 import { api } from '@/convex/_generated/api';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { COURSE_TEXT, getCourseLanguage } from '@/lib/courses/localization';
@@ -87,6 +88,7 @@ export function CourseDetailClient({ courseSlug }: CourseDetailClientProps) {
                 >
                   {text.jumpLast}
                 </Link>
+                <CourseAction courseSlug={course.slug} isFree={!!course.isFree} />
               </div>
             </div>
           </section>

@@ -226,42 +226,53 @@ export default function ProfileClient(): React.ReactElement {
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' })
+    } catch (err) {
+      console.warn('Logout failed', err)
+    } finally {
+      window.location.href = '/'
+    }
+  }
+
   return (
-    <Card className="w-full max-w-4xl mx-auto glow-edge">
-      <CardHeader>
+    <Card className="w-full max-w-4xl mx-auto glow-edge bg-zinc-900/60 rounded-xl border border-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
+      <CardHeader className="flex items-start justify-between gap-4 py-6">
         <div>
-          <CardTitle>Profile</CardTitle>
-          <CardDescription>Manage your personal information and avatar.</CardDescription>
+          <CardTitle className="text-2xl tracking-tight">Profile</CardTitle>
+          <CardDescription className="text-sm text-zinc-400">Manage your personal information and avatar.</CardDescription>
         </div>
         <CardAction>
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" onClick={handleCancel}>Cancel</Button>
-            <Button onClick={handleSave} className="flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" onClick={handleCancel} className="text-zinc-400 hover:text-zinc-200 transition-all duration-200">Cancel</Button>
+            <Button variant="ghost" onClick={handleLogout} className="text-red-400 hover:text-red-200 transition-all duration-200">Log out</Button>
+            <Button onClick={handleSave} className="flex items-center gap-2 bg-zinc-800 text-white hover:bg-zinc-800/90 transition-all duration-200 rounded-lg">
               <Check className="h-4 w-4" />
-              <span>{isSaving ? 'Saving...' : 'Save Changes'}</span>
+              <span className="text-sm">{isSaving ? 'Saving...' : 'Save Changes'}</span>
             </Button>
           </div>
         </CardAction>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="py-8">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
           <div className="sm:col-span-1 flex flex-col items-center">
             <div className="relative">
-              <div className="w-36 h-36 rounded-full overflow-hidden ring-2 ring-border shadow bg-muted flex items-center justify-center">
+              <div className="w-36 h-36 rounded-full overflow-hidden ring-1 ring-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] bg-zinc-800 flex items-center justify-center">
                 {avatarPreview ? (
                   <Avatar className="w-full h-full">
                     <AvatarImage src={avatarPreview} alt={form.displayName} />
-                    <AvatarFallback>{form.displayName.split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase()}</AvatarFallback>
+                    <AvatarFallback className="bg-zinc-700 text-zinc-200">{form.displayName.split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase()}</AvatarFallback>
                   </Avatar>
                 ) : (
-                  <div className="text-muted-foreground">
+                  <div className="text-zinc-500">
                     <User className="h-12 w-12" />
                   </div>
                 )}
               </div>
 
-              <label htmlFor="avatar" className="absolute -bottom-2 right-0 inline-flex items-center gap-2 rounded-full bg-white px-2 py-1 text-xs shadow cursor-pointer">
+              <label htmlFor="avatar" className="absolute -bottom-2 right-0 inline-flex items-center gap-2 rounded-md bg-zinc-800/70 px-2 py-1 text-xs text-zinc-200 border border-white/6 cursor-pointer transition-all duration-200 hover:translate-y-[-2px]">
                 <Camera className="h-4 w-4" />
                 <span>Change</span>
               </label>
@@ -269,8 +280,8 @@ export default function ProfileClient(): React.ReactElement {
             </div>
 
             <div className="mt-4 text-center">
-              <p className="text-sm font-semibold">{form.displayName}</p>
-              <p className="text-xs text-muted-foreground">@{form.username}</p>
+              <p className="text-sm font-semibold text-white tracking-tight">{form.displayName}</p>
+              <p className="text-xs text-zinc-400">@{form.username}</p>
             </div>
           </div>
 
@@ -278,18 +289,18 @@ export default function ProfileClient(): React.ReactElement {
             <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); handleSave() }}>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div>
-                  <Label htmlFor="displayName" className="text-sm">Display Name</Label>
+                  <Label htmlFor="displayName" className="text-sm text-zinc-300">Display Name</Label>
                   <div className="mt-1">
-                    <Input id="displayName" value={form.displayName} onChange={handleChange('displayName')} className="input-edge" />
+                    <Input id="displayName" value={form.displayName} onChange={handleChange('displayName')} className="input-edge bg-zinc-800 text-white" />
                   </div>
                 </div>
 
                 <div>
-                  <Label htmlFor="username" className="text-sm">Username</Label>
+                  <Label htmlFor="username" className="text-sm text-zinc-300">Username</Label>
                   <div className="mt-1 flex items-center">
-                    <span className="inline-flex items-center rounded-l-md border border-border bg-muted px-3 text-sm text-muted-foreground">@</span>
+                    <span className="inline-flex items-center rounded-l-md border border-white/6 bg-zinc-800 px-3 text-sm text-zinc-400">@</span>
                     <div className="flex-1">
-                      <Input id="username" value={form.username} onChange={handleChange('username')} className="input-edge w-full rounded-l-none" />
+                      <Input id="username" value={form.username} onChange={handleChange('username')} className="input-edge w-full rounded-l-none bg-zinc-800 text-white" />
                     </div>
                   </div>
                 </div>
@@ -297,50 +308,50 @@ export default function ProfileClient(): React.ReactElement {
 
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div>
-                  <Label htmlFor="title" className="text-sm">Title</Label>
+                  <Label htmlFor="title" className="text-sm text-zinc-300">Title</Label>
                   <div className="mt-1">
-                    <Input id="title" value={form.title ?? ''} onChange={handleChange('title')} className="input-edge" placeholder="e.g., Product Designer" />
+                    <Input id="title" value={form.title ?? ''} onChange={handleChange('title')} className="input-edge bg-zinc-800 text-white" placeholder="e.g., Product Designer" />
                   </div>
                 </div>
 
                 <div>
-                  <Label htmlFor="website" className="text-sm">Website</Label>
+                  <Label htmlFor="website" className="text-sm text-zinc-300">Website</Label>
                   <div className="mt-1">
-                    <Input id="website" value={form.website ?? ''} onChange={handleChange('website')} className="input-edge" placeholder="https://" />
+                    <Input id="website" value={form.website ?? ''} onChange={handleChange('website')} className="input-edge bg-zinc-800 text-white" placeholder="https://" />
                   </div>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                 <div>
-                  <Label htmlFor="githubUrl" className="text-sm">GitHub</Label>
+                  <Label htmlFor="githubUrl" className="text-sm text-zinc-300">GitHub</Label>
                   <div className="mt-1">
-                    <Input id="githubUrl" value={form.githubUrl ?? ''} onChange={handleChange('githubUrl')} className="input-edge" placeholder="username" />
+                    <Input id="githubUrl" value={form.githubUrl ?? ''} onChange={handleChange('githubUrl')} className="input-edge bg-zinc-800 text-white" placeholder="username" />
                   </div>
                 </div>
                 <div>
-                  <Label htmlFor="twitterHandle" className="text-sm">Twitter</Label>
+                  <Label htmlFor="twitterHandle" className="text-sm text-zinc-300">Twitter</Label>
                   <div className="mt-1">
-                    <Input id="twitterHandle" value={form.twitterHandle ?? ''} onChange={handleChange('twitterHandle')} className="input-edge" placeholder="@handle" />
+                    <Input id="twitterHandle" value={form.twitterHandle ?? ''} onChange={handleChange('twitterHandle')} className="input-edge bg-zinc-800 text-white" placeholder="@handle" />
                   </div>
                 </div>
                 <div>
-                  <Label htmlFor="linkedinUrl" className="text-sm">LinkedIn</Label>
+                  <Label htmlFor="linkedinUrl" className="text-sm text-zinc-300">LinkedIn</Label>
                   <div className="mt-1">
-                    <Input id="linkedinUrl" value={form.linkedinUrl ?? ''} onChange={handleChange('linkedinUrl')} className="input-edge" placeholder="profile URL" />
+                    <Input id="linkedinUrl" value={form.linkedinUrl ?? ''} onChange={handleChange('linkedinUrl')} className="input-edge bg-zinc-800 text-white" placeholder="profile URL" />
                   </div>
                 </div>
               </div>
 
               <div>
-                <Label htmlFor="bio" className="text-sm">Bio</Label>
+                <Label htmlFor="bio" className="text-sm text-zinc-300">Bio</Label>
                 <div className="mt-1">
-                  <Textarea id="bio" value={form.bio} onChange={handleChange('bio')} rows={4} className="input-edge" placeholder="Short bio — what would you like others to know?" />
+                  <Textarea id="bio" value={form.bio} onChange={handleChange('bio')} rows={4} className="input-edge bg-zinc-800 text-white" placeholder="Short bio — what would you like others to know?" />
                 </div>
               </div>
 
               {debugMsg && (
-                <div className="mt-2 p-2 text-xs text-muted-foreground bg-muted rounded">Debug: {debugMsg}</div>
+                <div className="mt-2 p-2 text-xs text-zinc-300 bg-zinc-800 rounded">Debug: {debugMsg}</div>
               )}
             </form>
           </div>
@@ -349,10 +360,10 @@ export default function ProfileClient(): React.ReactElement {
 
       <CardFooter>
         <div className="flex w-full justify-end gap-2">
-          <Button variant="ghost" onClick={handleCancel}>Cancel</Button>
-          <Button onClick={handleSave} className="flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
+          <Button variant="ghost" onClick={handleCancel} className="text-zinc-400 hover:text-zinc-200">Cancel</Button>
+          <Button onClick={handleSave} className="flex items-center gap-2 bg-zinc-800 text-white hover:bg-zinc-800/90 transition-all duration-200 rounded-lg">
             <Check className="h-4 w-4" />
-            <span>{isSaving ? 'Saving...' : 'Save Changes'}</span>
+            <span className="text-sm">{isSaving ? 'Saving...' : 'Save Changes'}</span>
           </Button>
         </div>
       </CardFooter>

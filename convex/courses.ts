@@ -8,7 +8,7 @@ const seedCourse = {
     'Khóa học miễn phí tổng hợp 72 video hướng dẫn tiếng Hàn chuyên ngành sản xuất – từ từ vựng cơ bản đến giao tiếp thực tế tại nhà máy.',
   description: 'Danh sach hien co 72 video HLS da xu ly va upload len Cloudflare R2 bucket hdp1stcourse.',
   badge: '100% miễn phí',
-  isFree: true,
+  isFree: false,
   teacherId: 'hdp-teacher-team',
   // Unit 3, 6, 14 have 4 lectures; all other units have 5.
   lectureCounts: [5, 5, 4, 5, 5, 4, 5, 5, 5, 5, 5, 5, 5, 4, 5],

@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Header } from '@/components/Header';
-import { ParticleBackground } from '@/components/ParticleBackground';
+import { ParticleBackground } from '@/components/DarkmodeParticleBackground';
 
 const heroImages = [
   { src: '/books/cover1.png', alt: 'Book cover 1' },

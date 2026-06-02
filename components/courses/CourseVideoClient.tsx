@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useQuery } from 'convex/react';
 
 import { Header } from '@/components/Header';
-import { ParticleBackground } from '@/components/ParticleBackground';
+import { ParticleBackground } from '@/components/DarkmodeParticleBackground';
 import { CourseOutlineSidebar } from '@/components/courses/CourseOutlineSidebar';
 import { HlsVideoPlayer } from '@/components/courses/HlsVideoPlayer';
 import { api } from '@/convex/_generated/api';

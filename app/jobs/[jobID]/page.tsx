@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Header } from '@/components/Header';
-import { ParticleBackground } from '@/components/ParticleBackground';
+import { ParticleBackground } from '@/components/DarkmodeParticleBackground';
 
 type JobPageProps = {
   params: Promise<{ jobID: string }>;

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ParticleBackground } from '@/components/ParticleBackground';
+import { ParticleBackground } from '@/components/DarkmodeParticleBackground';
 import { Navigation } from '@/components/Navigation';
 import { Header } from '@/components/Header';
 import { usePageNavigation } from '@/hooks/usePageNavigation';

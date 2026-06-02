@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import { LightmodeParticleBackground } from '@/components/LightmodeParticleBackground';
+import { useSiteMode } from '@/components/site-mode-provider';
 
 interface Particle {
   x: number;
@@ -12,11 +14,16 @@ interface Particle {
 }
 
 export const ParticleBackground: React.FC = () => {
+  const { mode } = useSiteMode();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
   const animationIdRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
+    if (mode !== 'darkmode1') {
+      return;
+    }
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -106,7 +113,32 @@ export const ParticleBackground: React.FC = () => {
         cancelAnimationFrame(animationIdRef.current);
       }
     };
-  }, []);
+  }, [mode]);
+
+  if (mode === 'lightmode1') {
+    return <LightmodeParticleBackground />;
+  }
+
+  if (mode === 'darkmode2') {
+    return (
+      <>
+        <div
+          className="fixed inset-0 z-0 pointer-events-none bg-center bg-cover bg-no-repeat"
+          style={{ backgroundImage: "url('/dark-mode.png')" }}
+        />
+        <div className="fixed inset-0 z-0 pointer-events-none bg-black/45" />
+      </>
+    );
+  }
+
+  if (mode === 'lightmode2') {
+    return (
+      <div
+        className="fixed inset-0 z-0 pointer-events-none bg-center bg-cover bg-no-repeat"
+        style={{ backgroundImage: "url('/light-mode.png')" }}
+      />
+    );
+  }
 
   return (
     <canvas

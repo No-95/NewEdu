@@ -117,6 +117,94 @@
   .neon-text {
     @apply text-primary font-bold drop-shadow-[0_0_10px_rgba(0,217,255,0.5)];
   }
+
+  .site-mode-darkmode2 .glass {
+    @apply bg-black/45 border-white/20;
+  }
+
+  .site-mode-lightmode1 h1,
+  .site-mode-lightmode1 h2,
+  .site-mode-lightmode1 h3,
+  .site-mode-lightmode1 h4,
+  .site-mode-lightmode1 h5,
+  .site-mode-lightmode1 h6,
+  .site-mode-lightmode2 h1,
+  .site-mode-lightmode2 h2,
+  .site-mode-lightmode2 h3,
+  .site-mode-lightmode2 h4,
+  .site-mode-lightmode2 h5,
+  .site-mode-lightmode2 h6 {
+    color: #a62a26 !important;
+  }
+
+  .site-mode-lightmode1,
+  .site-mode-lightmode2 {
+    color: #000000;
+  }
+
+  .site-mode-lightmode1 .text-foreground,
+  .site-mode-lightmode1 .text-muted-foreground,
+  .site-mode-lightmode1 .text-primary,
+  .site-mode-lightmode1 .text-secondary,
+  .site-mode-lightmode1 .glass,
+  .site-mode-lightmode1 .glass *,
+  .site-mode-lightmode2 .text-foreground,
+  .site-mode-lightmode2 .text-muted-foreground,
+  .site-mode-lightmode2 .text-primary,
+  .site-mode-lightmode2 .text-secondary,
+  .site-mode-lightmode2 .glass,
+  .site-mode-lightmode2 .glass * {
+    color: #000000 !important;
+  }
+
+  .site-mode-lightmode1,
+  .site-mode-lightmode1 *,
+  .site-mode-lightmode2,
+  .site-mode-lightmode2 * {
+    text-shadow: none !important;
+    box-shadow: none !important;
+    filter: none !important;
+  }
+
+  .site-mode-lightmode1 h1,
+  .site-mode-lightmode1 h2,
+  .site-mode-lightmode1 h3,
+  .site-mode-lightmode1 h4,
+  .site-mode-lightmode1 h5,
+  .site-mode-lightmode1 h6,
+  .site-mode-lightmode2 h1,
+  .site-mode-lightmode2 h2,
+  .site-mode-lightmode2 h3,
+  .site-mode-lightmode2 h4,
+  .site-mode-lightmode2 h5,
+  .site-mode-lightmode2 h6 {
+    color: #a62a26 !important;
+  }
+
+  .site-mode-darkmode2 button {
+    background: linear-gradient(135deg, #0f2f6d 0%, #1d4f9a 100%) !important;
+    color: #ffffff !important;
+    border-color: #2f66ba !important;
+    box-shadow: 0 10px 24px rgba(8, 25, 59, 0.45);
+  }
+
+  .site-mode-darkmode2 button:hover {
+    filter: brightness(1.06);
+  }
+
+  .site-mode-lightmode1 .glass,
+  .site-mode-lightmode2 .glass {
+    @apply bg-white/75 border-border;
+  }
+
+  .site-mode-lightmode1 .hero-bg-circle,
+  .site-mode-lightmode1 .hero-cube-float,
+  .site-mode-lightmode1 .image-cube-backdrop,
+  .site-mode-lightmode2 .hero-bg-circle,
+  .site-mode-lightmode2 .hero-cube-float,
+  .site-mode-lightmode2 .image-cube-backdrop {
+    display: none !important;
+  }
 }
 
 @layer utilities {
@@ -293,3 +381,4 @@
 .animate-page-flip-backward {
   animation: page-flip-backward 0.8s ease-out forwards;
 }
+

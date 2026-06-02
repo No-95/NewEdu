@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useAction, useMutation, useQuery } from 'convex/react';
 import { useRouter } from 'next/navigation';
 import { Header } from '@/components/Header';
-import { ParticleBackground } from '@/components/ParticleBackground';
+import { ParticleBackground } from '@/components/DarkmodeParticleBackground';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { api } from '@/convex/_generated/api';
 

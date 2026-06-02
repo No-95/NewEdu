@@ -14,6 +14,7 @@ import type * as contact from "../contact.js";
 import type * as courses from "../courses.js";
 import type * as homeworks from "../homeworks.js";
 import type * as progress from "../progress.js";
+import type * as purchases from "../purchases.js";
 import type * as teacherApplications from "../teacherApplications.js";
 import type * as transactions from "../transactions.js";
 
@@ -30,6 +31,7 @@ declare const fullApi: ApiFromModules<{
   courses: typeof courses;
   homeworks: typeof homeworks;
   progress: typeof progress;
+  purchases: typeof purchases;
   teacherApplications: typeof teacherApplications;
   transactions: typeof transactions;
 }>;

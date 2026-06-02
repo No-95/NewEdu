@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import { LanguageProvider } from '@/lib/context/LanguageContext'
 import { AppConvexProvider } from '@/components/convex-provider'
+import { SiteModeProvider } from '@/components/site-mode-provider'
 
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
@@ -37,11 +38,13 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark bg-background scroll-smooth">
       <body className="font-sans antialiased overflow-x-hidden">
-        <AppConvexProvider>
-          <LanguageProvider>
-            {children}
-          </LanguageProvider>
-        </AppConvexProvider>
+        <SiteModeProvider>
+          <AppConvexProvider>
+            <LanguageProvider>
+              {children}
+            </LanguageProvider>
+          </AppConvexProvider>
+        </SiteModeProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

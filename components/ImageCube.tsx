@@ -59,7 +59,7 @@ export const ImageCube: React.FC<ImageCubeProps> = ({
     >
       {/* Glow effect behind cube */}
       <div 
-        className="absolute inset-0 bg-primary/20 rounded-3xl blur-3xl animate-pulse"
+        className="image-cube-backdrop absolute inset-0 bg-primary/20 rounded-3xl blur-3xl animate-pulse"
         style={{ transform: 'scale(1.2)' }}
       />
       
