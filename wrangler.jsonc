@@ -13,6 +13,16 @@
       "service": "newedu"
     }
   ],
+  "routes": [
+    {
+      "pattern": "hdpedu.com",
+      "custom_domain": true
+    },
+    {
+      "pattern": "www.hdpedu.com",
+      "custom_domain": true
+    }
+  ],
   "observability": {
     "enabled": true
   },
