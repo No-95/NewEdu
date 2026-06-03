@@ -92,7 +92,9 @@ export function CourseDetailClient({ courseSlug }: CourseDetailClientProps) {
                 >
                   {text.jumpLast}
                 </Link>
-                <CourseAction courseSlug={course.slug} isFree={!!course.isFree} />
+                {course.slug !== 'cam-nang-video-tieng-han-san-xuat' ? (
+                  <CourseAction courseSlug={course.slug} isFree={!!course.isFree} />
+                ) : null}
               </div>
             </div>
           </section>

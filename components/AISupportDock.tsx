@@ -1,10 +1,10 @@
 'use client';
 
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, type WheelEvent } from 'react';
 import { Bot, MessageCircle, Send, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 
 type ChatMessage = {
   id: number;
@@ -15,6 +15,8 @@ type ChatMessage = {
 interface AISupportDockProps {
   children: ReactNode;
 }
+
+const BULLET_LINE_REGEX = /^\s*[-+]\s+(.+)$/;
 
 export function AISupportDock({ children }: AISupportDockProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,6 +30,84 @@ export function AISupportDock({ children }: AISupportDockProps) {
       text: 'Hi! I am your AI support assistant. Ask me anything about HDP EDU.',
     },
   ]);
+
+  const renderAssistantMessage = (content: string) => {
+    const blocks: Array<{ type: 'paragraph'; text: string } | { type: 'list'; items: string[] }> = [];
+    const lines = content.replace(/\r\n/g, '\n').split('\n');
+    let paragraphLines: string[] = [];
+    let listItems: string[] = [];
+
+    const flushParagraph = () => {
+      if (paragraphLines.length === 0) return;
+      blocks.push({ type: 'paragraph', text: paragraphLines.join('\n') });
+      paragraphLines = [];
+    };
+
+    const flushList = () => {
+      if (listItems.length === 0) return;
+      blocks.push({ type: 'list', items: listItems });
+      listItems = [];
+    };
+
+    for (const line of lines) {
+      const bulletMatch = line.match(BULLET_LINE_REGEX);
+
+      if (bulletMatch) {
+        flushParagraph();
+        listItems.push(bulletMatch[1].trim());
+        continue;
+      }
+
+      if (line.trim() === '') {
+        flushParagraph();
+        flushList();
+        continue;
+      }
+
+      flushList();
+      paragraphLines.push(line);
+    }
+
+    flushParagraph();
+    flushList();
+
+    return (
+      <div className="space-y-2">
+        {blocks.map((block, index) =>
+          block.type === 'list' ? (
+            <ul key={`list-${index}`} className="list-disc space-y-1 pl-5 leading-relaxed">
+              {block.items.map((item, itemIndex) => (
+                <li key={`list-item-${index}-${itemIndex}`}>{item}</li>
+              ))}
+            </ul>
+          ) : (
+            <p key={`paragraph-${index}`} className="whitespace-pre-wrap leading-relaxed">
+              {block.text}
+            </p>
+          )
+        )}
+      </div>
+    );
+  };
+
+  const handleMessagesWheel = (event: WheelEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+
+    const container = event.currentTarget;
+    if (container.scrollHeight <= container.clientHeight) {
+      event.preventDefault();
+      return;
+    }
+
+    const atTop = container.scrollTop <= 0;
+    const atBottom =
+      container.scrollTop + container.clientHeight >= container.scrollHeight - 1;
+
+    // Prevent wheel chaining to page scroll when reaching chat boundaries.
+    if ((event.deltaY < 0 && atTop) || (event.deltaY > 0 && atBottom)) {
+      event.preventDefault();
+    }
+  };
 
   const sendMessage = async () => {
     const message = text.trim();
@@ -122,7 +202,10 @@ export function AISupportDock({ children }: AISupportDockProps) {
             </Button>
           </div>
 
-          <div className="flex-1 space-y-3 overflow-y-auto px-4 py-3">
+          <div
+            className="flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 py-3"
+            onWheel={handleMessagesWheel}
+          >
             {messages.map((message) => (
               <div
                 key={message.id}
@@ -133,18 +216,24 @@ export function AISupportDock({ children }: AISupportDockProps) {
                     : 'bg-muted text-foreground',
                 ].join(' ')}
               >
-                {message.text}
+                {message.role === 'assistant' ? (
+                  renderAssistantMessage(message.text)
+                ) : (
+                  <p className="whitespace-pre-wrap leading-relaxed">{message.text}</p>
+                )}
               </div>
             ))}
           </div>
 
           <div className="border-t border-border/60 p-3">
-            <div className="flex items-center gap-2">
-              <Input
+            <div className="flex items-end gap-2">
+              <Textarea
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 placeholder="Type your message..."
                 disabled={isSending}
+                rows={2}
+                className="max-h-36 min-h-16 resize-none"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();

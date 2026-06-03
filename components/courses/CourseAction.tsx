@@ -4,7 +4,13 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 
-export default function CourseAction({ courseSlug, isFree }: { courseSlug: string; isFree: boolean }) {
+type CourseActionProps = {
+  courseSlug: string
+  isFree: boolean
+  hideContinueButton?: boolean
+}
+
+export default function CourseAction({ courseSlug, isFree, hideContinueButton = false }: CourseActionProps) {
   const [user, setUser] = useState<any | null>(null)
   const [creating, setCreating] = useState(false)
   const [hasAccess, setHasAccess] = useState<boolean>(false)
@@ -80,6 +86,10 @@ export default function CourseAction({ courseSlug, isFree }: { courseSlug: strin
         <Link href={`/courses/${courseSlug}`} className="inline-flex items-center rounded-md bg-emerald-600 px-4 py-2 text-sm font-semibold text-white">Start course</Link>
       </div>
     )
+  }
+
+  if (hasAccess && hideContinueButton) {
+    return null
   }
 
   return (

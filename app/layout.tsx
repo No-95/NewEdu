@@ -37,8 +37,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="dark bg-background scroll-smooth">
-      <body className="font-sans antialiased overflow-x-hidden">
+    <html lang="en" className="dark bg-background scroll-smooth" suppressHydrationWarning>
+      <body className="font-sans antialiased overflow-x-hidden" suppressHydrationWarning>
         <SiteModeProvider>
           <AppConvexProvider>
             <LanguageProvider>

@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { cookies, headers } from 'next/headers';
 import { ConvexHttpClient } from 'convex/browser';
+import { existsSync, readFileSync } from 'node:fs';
+import path from 'node:path';
 
 import { api } from '@/convex/_generated/api';
 
@@ -38,6 +40,58 @@ function normalizeWorkerChatUrl(rawUrl: string): string {
   }
 }
 
+function resolveServerEnv(name: string): string {
+  const fromEnv = (process.env[name] || '').trim();
+  if (fromEnv) {
+    return fromEnv;
+  }
+
+  const candidateDirs: string[] = [];
+  let currentDir = process.cwd();
+
+  for (let i = 0; i < 8; i += 1) {
+    candidateDirs.push(currentDir);
+    const parentDir = path.dirname(currentDir);
+    if (parentDir === currentDir) {
+      break;
+    }
+    currentDir = parentDir;
+  }
+
+  const candidates = candidateDirs.flatMap((dir) => [
+    path.join(dir, '.env.local'),
+    path.join(dir, '.env'),
+    path.join(dir, 'New-HDP-Edu', '.env.local'),
+    path.join(dir, 'New-HDP-Edu', '.env'),
+  ]);
+
+  for (const filePath of candidates) {
+    if (!existsSync(filePath)) {
+      continue;
+    }
+
+    try {
+      const fileText = readFileSync(filePath, 'utf8');
+      const line = fileText
+        .split(/\r?\n/)
+        .find((item) => item.trim().startsWith(`${name}=`));
+
+      if (!line) {
+        continue;
+      }
+
+      const value = line.slice(line.indexOf('=') + 1).trim().replace(/^['"]|['"]$/g, '');
+      if (value) {
+        return value;
+      }
+    } catch {
+      continue;
+    }
+  }
+
+  return '';
+}
+
 function getDateKeyUtc(): string {
   return new Date().toISOString().slice(0, 10);
 }
@@ -56,9 +110,9 @@ function buildUsageIdentifier(email: string | undefined, forwardedFor: string | 
 }
 
 export async function POST(request: Request) {
-  const workerUrl = normalizeWorkerChatUrl(process.env.AI_WORKER_URL || '');
-  const workerToken = (process.env.AI_WORKER_INTERNAL_TOKEN || '').trim();
-  const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
+  const workerUrl = normalizeWorkerChatUrl(resolveServerEnv('AI_WORKER_URL'));
+  const workerToken = resolveServerEnv('AI_WORKER_INTERNAL_TOKEN');
+  const convexUrl = resolveServerEnv('NEXT_PUBLIC_CONVEX_URL');
 
   if (!workerUrl) {
     return NextResponse.json(
@@ -150,12 +204,27 @@ export async function POST(request: Request) {
       body: JSON.stringify(forwardedPayload),
     });
 
-    const data = (await workerResponse.json()) as {
+    const rawBody = await workerResponse.text();
+    let data: {
       reply?: string;
       model?: string;
       error?: string;
       detail?: string;
-    };
+    } = {};
+
+    try {
+      data = JSON.parse(rawBody) as {
+        reply?: string;
+        model?: string;
+        error?: string;
+        detail?: string;
+      };
+    } catch {
+      data = {
+        error: 'Worker returned non-JSON response.',
+        detail: rawBody.slice(0, 300),
+      };
+    }
 
     if (!workerResponse.ok || !data?.reply) {
       return NextResponse.json(
