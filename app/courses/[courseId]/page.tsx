@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import { CourseDetailClient } from '@/components/courses/CourseDetailClient';
 
 export default async function CourseDetailsPage({
@@ -6,5 +8,9 @@ export default async function CourseDetailsPage({
   params: Promise<{ courseId: string }>;
 }) {
   const { courseId } = await params;
-  return <CourseDetailClient courseSlug={courseId} />;
+  return (
+    <Suspense fallback={null}>
+      <CourseDetailClient courseSlug={courseId} />
+    </Suspense>
+  );
 }

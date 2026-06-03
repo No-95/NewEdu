@@ -5,10 +5,11 @@ const seedCourse = {
   slug: 'cam-nang-video-tieng-han-san-xuat',
   title: 'Cẩm nang Video: Tiếng Hàn Sản xuất',
   subtitle:
-    'Khóa học miễn phí tổng hợp 72 video hướng dẫn tiếng Hàn chuyên ngành sản xuất – từ từ vựng cơ bản đến giao tiếp thực tế tại nhà máy.',
+    'Khóa học tổng hợp 72 video hướng dẫn tiếng Hàn chuyên ngành sản xuất – từ từ vựng cơ bản đến giao tiếp thực tế tại nhà máy.',
   description: 'Danh sach hien co 72 video HLS da xu ly va upload len Cloudflare R2 bucket hdp1stcourse.',
-  badge: '100% miễn phí',
+  badge: '2.000 ₫',
   isFree: false,
+  price: 2_000,
   teacherId: 'hdp-teacher-team',
   // Unit 3, 6, 14 have 4 lectures; all other units have 5.
   lectureCounts: [5, 5, 4, 5, 5, 4, 5, 5, 5, 5, 5, 5, 5, 4, 5],
@@ -22,6 +23,7 @@ function mapCourse(course: {
   description: string;
   badge: string;
   isFree: boolean;
+  price?: number;
   teacherId: string;
   totalVideos: number;
   published: boolean;
@@ -47,6 +49,7 @@ function mapCourse(course: {
     description: course.description,
     badge: course.badge,
     isFree: course.isFree,
+    price: course.price ?? 2_000,
     teacherId: course.teacherId,
     totalVideos: course.totalVideos,
     published: course.published,
@@ -84,6 +87,7 @@ export const seedCourseCatalog = mutation({
         description: seedCourse.description,
         badge: seedCourse.badge,
         isFree: seedCourse.isFree,
+        price: seedCourse.price,
         teacherId: seedCourse.teacherId,
         totalVideos,
         published: true,
@@ -103,6 +107,7 @@ export const seedCourseCatalog = mutation({
         description: seedCourse.description,
         badge: seedCourse.badge,
         isFree: seedCourse.isFree,
+        price: seedCourse.price,
         teacherId: seedCourse.teacherId,
         totalVideos,
         published: true,
@@ -137,6 +142,40 @@ export const seedCourseCatalog = mutation({
   },
 });
 
+export const updateCoursePrice = mutation({
+  args: {
+    slug: v.string(),
+    price: v.number(),
+    badge: v.optional(v.string()),
+  },
+  returns: v.union(
+    v.object({
+      updated: v.literal(true),
+      slug: v.string(),
+      price: v.number(),
+    }),
+    v.null()
+  ),
+  handler: async (ctx, args) => {
+    const course = await ctx.db
+      .query('courses')
+      .withIndex('by_slug', (q) => q.eq('slug', args.slug))
+      .first();
+
+    if (!course) {
+      return null;
+    }
+
+    await ctx.db.patch(course._id, {
+      price: args.price,
+      ...(args.badge !== undefined ? { badge: args.badge } : {}),
+      updatedAt: Date.now(),
+    });
+
+    return { updated: true as const, slug: args.slug, price: args.price };
+  },
+});
+
 export const getPublishedCourses = query({
   args: {},
   returns: v.array(
@@ -148,6 +187,7 @@ export const getPublishedCourses = query({
       description: v.string(),
       badge: v.string(),
       isFree: v.boolean(),
+      price: v.number(),
       teacherId: v.string(),
       totalVideos: v.number(),
       published: v.boolean(),
@@ -199,6 +239,7 @@ export const getCourseBySlug = query({
       description: v.string(),
       badge: v.string(),
       isFree: v.boolean(),
+      price: v.number(),
       teacherId: v.string(),
       totalVideos: v.number(),
       published: v.boolean(),
@@ -256,6 +297,7 @@ export const getLectureByCourseAndVideoId = query({
         description: v.string(),
         badge: v.string(),
         isFree: v.boolean(),
+        price: v.number(),
         teacherId: v.string(),
         totalVideos: v.number(),
         published: v.boolean(),
@@ -306,6 +348,7 @@ export const getLectureByCourseAndVideoId = query({
         description: course.description,
         badge: course.badge,
         isFree: course.isFree,
+        price: course.price ?? 2_000,
         teacherId: course.teacherId,
         totalVideos: course.totalVideos,
         published: course.published,

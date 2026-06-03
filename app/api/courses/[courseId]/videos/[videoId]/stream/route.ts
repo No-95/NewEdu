@@ -1,4 +1,5 @@
 import { ConvexHttpClient } from 'convex/browser';
+import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { api } from '@/convex/_generated/api';
 
@@ -28,12 +29,31 @@ export async function GET(
       return NextResponse.json({ error: 'Video not found.' }, { status: 404 });
     }
 
+    if (!result.course.isFree) {
+      const cookieStore = await cookies();
+      const email = cookieStore.get('user_email')?.value;
+      if (!email) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+
+      const user = await convex.query(api.auth.getUserByEmail, { email });
+      if (!user) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+
+      const hasAccess = await convex.query(api.purchases.hasAccess, {
+        userId: user._id,
+        courseId: result.course.slug,
+      });
+      if (!hasAccess) {
+        return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+      }
+    }
+
     const streamUrl = buildStreamUrl(courseId, result.lecture.videoFolderName);
 
     return NextResponse.json(
-      {
-        streamUrl,
-      },
+      { streamUrl },
       {
         headers: {
           'Cache-Control': 'private, max-age=60',

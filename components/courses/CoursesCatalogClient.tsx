@@ -136,7 +136,11 @@ export function CoursesCatalogClient() {
                     </ul>
                   </div>
 
-                  <CourseAction courseSlug={course.slug} isFree={forcePurchase ? false : course.isFree} />
+                  <CourseAction
+                    courseSlug={course.slug}
+                    isFree={forcePurchase ? false : course.isFree}
+                    price={course.price}
+                  />
                 </div>
               </div>
             </div>

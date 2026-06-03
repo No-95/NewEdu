@@ -76,6 +76,7 @@ export default defineSchema({
     description: v.string(),
     badge: v.string(),
     isFree: v.boolean(),
+    price: v.optional(v.number()),
     teacherId: v.string(),
     totalVideos: v.number(),
     published: v.boolean(),

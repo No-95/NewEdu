@@ -3,15 +3,17 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { formatVndPrice } from '@/lib/currency'
 
 type CourseActionProps = {
   courseSlug: string
   isFree: boolean
+  price: number
   hideContinueButton?: boolean
 }
 
-export default function CourseAction({ courseSlug, isFree, hideContinueButton = false }: CourseActionProps) {
-  const [user, setUser] = useState<any | null>(null)
+export default function CourseAction({ courseSlug, isFree, price, hideContinueButton = false }: CourseActionProps) {
+  const [user, setUser] = useState<{ _id?: string; email?: string } | null>(null)
   const [creating, setCreating] = useState(false)
   const [hasAccess, setHasAccess] = useState<boolean>(false)
 
@@ -32,7 +34,7 @@ export default function CourseAction({ courseSlug, isFree, hideContinueButton = 
             if (mounted) setHasAccess(!!json.hasAccess)
           }
         }
-      } catch (e) {
+      } catch {
         // ignore
       }
     })()
@@ -50,31 +52,39 @@ export default function CourseAction({ courseSlug, isFree, hideContinueButton = 
       const createRes = await fetch('/api/purchase/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ courseId: courseSlug, provider: 'vnpay', amount: 100000, currency: 'VND' }),
+        body: JSON.stringify({ courseId: courseSlug, provider: 'payos', amount: price, currency: 'VND' }),
       })
+      if (!createRes.ok) {
+        const err = await createRes.json().catch(() => ({}))
+        throw new Error(err.error || 'Failed to create purchase')
+      }
       const createJson = await createRes.json()
       const purchaseId = createJson.purchaseId
 
-      const vnpayRes = await fetch('/api/purchase/vnpay', {
+      const payosRes = await fetch('/api/purchase/payos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ purchaseId }),
       })
-      const vnpayJson = await vnpayRes.json()
-      const payUrl = vnpayJson.payUrl
+      if (!payosRes.ok) {
+        const err = await payosRes.json().catch(() => ({}))
+        throw new Error(err.error || 'Failed to start PayOS checkout')
+      }
+      const payosJson = await payosRes.json()
+      const payUrl = payosJson.payUrl
 
       if (!payUrl) throw new Error('No payment URL')
 
       if (payUrl.startsWith('/api/purchase/notify')) {
         await fetch(payUrl)
-        window.location.href = `/courses/${courseSlug}`
+        window.location.href = `/courses/${courseSlug}?paid=1`
         return
       }
 
       window.location.href = payUrl
     } catch (err) {
       console.error('Purchase error', err)
-      alert('Purchase failed')
+      alert(err instanceof Error ? err.message : 'Purchase failed')
     } finally {
       setCreating(false)
     }
@@ -93,13 +103,16 @@ export default function CourseAction({ courseSlug, isFree, hideContinueButton = 
   }
 
   return (
-    <div className="mt-6 inline-flex items-center">
+    <div className="mt-6 flex flex-col gap-2">
       {hasAccess ? (
         <Link href={`/courses/${courseSlug}`} className="inline-flex items-center rounded-md bg-zinc-800 px-4 py-2 text-sm font-semibold text-white">Continue with this course</Link>
       ) : (
-        <Button onClick={handlePurchase} disabled={creating} className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
-          {creating ? 'Processing...' : 'Purchase this course'}
-        </Button>
+        <>
+          <p className="text-sm font-semibold text-foreground">{formatVndPrice(price)}</p>
+          <Button onClick={handlePurchase} disabled={creating} className="inline-flex w-fit items-center rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
+            {creating ? 'Processing...' : 'Purchase this course'}
+          </Button>
+        </>
       )}
     </div>
   )

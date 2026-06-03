@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Check } from 'lucide-react';
+import { Check, Lock } from 'lucide-react';
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { cn } from '@/lib/utils';
@@ -19,9 +19,16 @@ interface CourseOutlineSidebarProps {
     videoFolderName: string;
   }>;
   activeVideoId?: string;
+  canAccessLectures?: boolean;
 }
 
-export function CourseOutlineSidebar({ courseId, title, lectures, activeVideoId }: CourseOutlineSidebarProps) {
+export function CourseOutlineSidebar({
+  courseId,
+  title,
+  lectures,
+  activeVideoId,
+  canAccessLectures = true,
+}: CourseOutlineSidebarProps) {
   const { language } = useLanguage();
   const locale = getCourseLanguage(language);
   const text = COURSE_TEXT[locale].outline;
@@ -63,29 +70,41 @@ export function CourseOutlineSidebar({ courseId, title, lectures, activeVideoId 
                         lecture.title ??
                         `${text.lecturePrefix} ${lecture.lecture}`;
 
-                      return (
-                        <Link
-                          key={lecture.id}
-                          href={`/courses/${courseId}/${lecture.videoFolderName}`}
-                          className={cn(
-                            'block rounded-xl border px-3 py-2.5 transition-colors',
-                            isActive
-                              ? 'border-primary bg-primary/10 text-primary'
-                              : 'border-border/50 bg-background/40 text-foreground hover:border-primary/50 hover:bg-muted/40'
-                          )}
-                        >
-                          <div className="flex items-start justify-between gap-3">
-                            <div className="min-w-0">
-                              <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-                                {text.lecturePrefix} {lecture.lecture}
-                              </p>
-                              <p className="truncate text-sm font-medium">{lectureDisplayTitle}</p>
-                            </div>
-                            <div className="flex shrink-0 items-center gap-2">
-                              {isDone ? <Check className="h-4 w-4 text-emerald-400" /> : null}
-                              <span className="text-xs text-muted-foreground">{lecture.videoFolderName}</span>
-                            </div>
+                      const itemClass = cn(
+                        'block rounded-xl border px-3 py-2.5 transition-colors',
+                        isActive
+                          ? 'border-primary bg-primary/10 text-primary'
+                          : 'border-border/50 bg-background/40 text-foreground',
+                        canAccessLectures && 'hover:border-primary/50 hover:bg-muted/40'
+                      );
+
+                      const content = (
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="min-w-0">
+                            <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                              {text.lecturePrefix} {lecture.lecture}
+                            </p>
+                            <p className="truncate text-sm font-medium">{lectureDisplayTitle}</p>
                           </div>
+                          <div className="flex shrink-0 items-center gap-2">
+                            {!canAccessLectures ? <Lock className="h-4 w-4 text-muted-foreground" /> : null}
+                            {isDone ? <Check className="h-4 w-4 text-emerald-400" /> : null}
+                            <span className="text-xs text-muted-foreground">{lecture.videoFolderName}</span>
+                          </div>
+                        </div>
+                      );
+
+                      if (!canAccessLectures) {
+                        return (
+                          <div key={lecture.id} className={cn(itemClass, 'cursor-not-allowed opacity-70')}>
+                            {content}
+                          </div>
+                        );
+                      }
+
+                      return (
+                        <Link key={lecture.id} href={`/courses/${courseId}/${lecture.videoFolderName}`} className={itemClass}>
+                          {content}
                         </Link>
                       );
                     })}

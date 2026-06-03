@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { Palette } from 'lucide-react';
 
 type SiteMode = 'darkmode1' | 'lightmode1' | 'darkmode2' | 'lightmode2';
 
@@ -141,10 +142,11 @@ export const SiteModeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         <button
           type="button"
           onClick={cycleMode}
-          className="fixed bottom-6 left-6 z-50 rounded-xl border border-border bg-card/95 px-4 py-2 text-sm font-semibold text-foreground shadow-lg backdrop-blur-sm transition-all hover:scale-[1.02] hover:border-primary"
+          className="fixed bottom-6 left-6 z-50 flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-card/95 text-foreground shadow-lg backdrop-blur-sm transition-all hover:scale-[1.02] hover:border-primary"
           aria-label="Change site visual mode"
+          title="Change theme"
         >
-          {mode}
+          <Palette className="h-5 w-5" aria-hidden />
         </button>
       </div>
     </SiteModeContext.Provider>

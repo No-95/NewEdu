@@ -1,16 +1,20 @@
 'use client';
 
 import Link from 'next/link';
+import { Lock } from 'lucide-react';
 import { useQuery } from 'convex/react';
 
 import { Header } from '@/components/Header';
 import { ParticleBackground } from '@/components/DarkmodeParticleBackground';
 import { CourseOutlineSidebar } from '@/components/courses/CourseOutlineSidebar';
+import CourseAction from '@/components/courses/CourseAction';
 import { HlsVideoPlayer } from '@/components/courses/HlsVideoPlayer';
 import { api } from '@/convex/_generated/api';
+import { useCourseAccess } from '@/hooks/useCourseAccess';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { COURSE_TEXT, LECTURE_TITLES, UNIT_TITLES, getCourseLanguage } from '@/lib/courses/localization';
 import { compareVideoFolderNames, parseVideoFolderName } from '@/lib/courses/outline';
+import { formatVndPrice } from '@/lib/currency';
 
 interface CourseVideoClientProps {
   courseSlug: string;
@@ -26,6 +30,10 @@ export function CourseVideoClient({ courseSlug, videoId }: CourseVideoClientProp
     videoId,
   });
   const course = useQuery(api.courses.getCourseBySlug, { slug: courseSlug });
+  const isFree = course?.isFree ?? result?.course.isFree ?? false;
+  const price = course?.price ?? 2_000;
+  const { loading: accessLoading, hasAccess } = useCourseAccess(courseSlug, isFree);
+  const canWatch = isFree || hasAccess;
 
   if (!result) {
     return (
@@ -94,8 +102,7 @@ export function CourseVideoClient({ courseSlug, videoId }: CourseVideoClientProp
               <h2 className="mt-1 text-lg font-semibold text-foreground/90">{lectureTypeTitle}</h2>
 
               <p className="mt-3 text-sm text-muted-foreground">
-                {lecture.description ||
-                  text.descriptionFallback}
+                {lecture.description || text.descriptionFallback}
               </p>
 
               <div className="mt-5 grid gap-3 sm:grid-cols-3">
@@ -116,10 +123,23 @@ export function CourseVideoClient({ courseSlug, videoId }: CourseVideoClientProp
               </div>
             </div>
 
-            <HlsVideoPlayer courseId={videoCourse.slug} videoId={lecture.videoFolderName} title={lecture.title} />
+            {!accessLoading && !canWatch ? (
+              <div className="rounded-2xl border border-border/60 bg-background/75 p-8 text-center">
+                <Lock className="mx-auto h-10 w-10 text-muted-foreground" />
+                <h3 className="mt-4 text-xl font-bold text-foreground">Purchase required</h3>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Unlock this course for {formatVndPrice(price)} to watch all video lessons.
+                </p>
+                <div className="mt-6 flex justify-center">
+                  <CourseAction courseSlug={videoCourse.slug} isFree={false} price={price} />
+                </div>
+              </div>
+            ) : (
+              <HlsVideoPlayer courseId={videoCourse.slug} videoId={lecture.videoFolderName} title={lecture.title} />
+            )}
 
             <div className="grid gap-3 sm:grid-cols-2">
-              {previousLecture ? (
+              {previousLecture && canWatch ? (
                 <Link
                   href={`/courses/${videoCourse.slug}/${previousLecture.videoFolderName}`}
                   className="rounded-xl border border-border/60 bg-background/70 p-4 transition hover:border-primary/60 hover:bg-muted/40"
@@ -133,7 +153,7 @@ export function CourseVideoClient({ courseSlug, videoId }: CourseVideoClientProp
                 </div>
               )}
 
-              {nextLecture ? (
+              {nextLecture && canWatch ? (
                 <Link
                   href={`/courses/${videoCourse.slug}/${nextLecture.videoFolderName}`}
                   className="rounded-xl border border-border/60 bg-background/70 p-4 transition hover:border-primary/60 hover:bg-muted/40"
@@ -154,6 +174,7 @@ export function CourseVideoClient({ courseSlug, videoId }: CourseVideoClientProp
             title={course?.title || videoCourse.title}
             lectures={course?.lectures || []}
             activeVideoId={lecture.videoFolderName}
+            canAccessLectures={canWatch}
           />
         </div>
       </main>
