@@ -2,7 +2,12 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "main": ".open-next/worker.js",
   "name": "newedu",
+  "workers_dev": true,
   "compatibility_date": "2026-05-27",
+  "vars": {
+    "NEXT_PUBLIC_CONVEX_URL": "https://adept-tapir-159.convex.cloud",
+    "NEXT_PUBLIC_APP_URL": "https://hdpedu.com"
+  },
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"

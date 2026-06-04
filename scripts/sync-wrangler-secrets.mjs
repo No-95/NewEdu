@@ -21,6 +21,8 @@ for (const line of text.split(/\r?\n/)) {
   const name = trimmed.slice(0, idx).trim();
   const value = trimmed.slice(idx + 1).trim();
   if (!name || keys.has(name)) continue;
+  // Public build-time vars live in .env.production / wrangler.jsonc vars
+  if (name.startsWith('NEXT_PUBLIC_')) continue;
   keys.add(name);
 
   console.log(`Setting secret: ${name}`);

@@ -2,56 +2,87 @@
 
 Repo: https://github.com/No-95/NewEdu
 
+## Critical: build-time vs runtime env
+
+| When | What | Where |
+|------|------|--------|
+| **Build** | `NEXT_PUBLIC_*` (inlined into browser) | [`.env.production`](.env.production) only |
+| **Runtime** | Secrets (PayOS, R2 keys, Resend, AI worker) | Cloudflare dashboard or `wrangler secret` |
+| **Never** | Put secrets in `.env.production` or commit them | |
+
+`pnpm run build:cloudflare` temporarily moves `.env.local` aside so secrets are **not** baked into the OpenNext bundle.
+
+Always deploy with **`--keep-vars`** so CLI deploys do not wipe dashboard secrets:
+
+```bash
+pnpm run deploy:prod
+```
+
 ## 1. Convex
 
 ```bash
 npx convex deploy
 ```
 
-Set `NEXT_PUBLIC_CONVEX_URL` in Cloudflare to your deployment URL (e.g. `https://adept-tapir-159.convex.cloud`).
-
-## 2. Build and deploy (CLI)
+## 2. Production build and deploy (recommended)
 
 ```bash
 pnpm install
 pnpm exec wrangler login
-pnpm run deploy
+pnpm run deploy:prod
 ```
 
-Worker name: `newedu` (see `wrangler.jsonc`).
+This runs `scripts/build-cloudflare-prod.mjs` then `opennextjs-cloudflare deploy -- --keep-vars`.
 
-## 3. Cloudflare environment variables
+Worker name: `newedu` (see [`wrangler.jsonc`](wrangler.jsonc)).
 
-In **Workers & Pages → newedu → Settings → Variables**, add:
+URLs:
 
-| Name | Type | Notes |
-|------|------|--------|
-| `NEXT_PUBLIC_CONVEX_URL` | Plain | Convex deployment URL |
-| `NEXT_PUBLIC_APP_URL` | Plain | `https://newedu.<subdomain>.workers.dev` or custom domain |
-| `PAYOS_CLIENT_ID` | Secret | |
-| `PAYOS_API_KEY` | Secret | |
-| `PAYOS_CHECKSUM_KEY` | Secret | |
-| `RESEND_API_KEY` | Secret | OTP email |
-| `RESEND_FROM_EMAIL` | Plain | |
-| `R2_PUBLIC_BASE_URL` | Plain | HLS base URL |
-| `R2_ACCESS_KEY_ID` | Secret | If using private R2 in API routes |
-| `R2_SECRET_ACCESS_KEY` | Secret | |
-| `R2_ACCOUNT_ID` | Plain | |
-| `R2_BUCKET` | Plain | |
-| `AI_WORKER_URL` | Plain | Gemini worker URL |
-| `AI_WORKER_INTERNAL_TOKEN` | Secret | |
+- https://hdpedu.com
+- https://www.hdpedu.com
+- https://newedu.minhhoangd852.workers.dev (workers.dev fallback)
 
-After first deploy, set `NEXT_PUBLIC_APP_URL` to the live URL and redeploy.
+## 3. Runtime secrets (Cloudflare dashboard)
+
+Set under **Workers & Pages → newedu → Settings → Variables** (encrypted secrets):
+
+- `PAYOS_CLIENT_ID`, `PAYOS_API_KEY`, `PAYOS_CHECKSUM_KEY`
+- `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`
+- `RESEND_API_KEY`, `AI_WORKER_INTERNAL_TOKEN`, `GEMINI_API_KEY` (if used on worker)
+- `CONVEX_SITE_URL`, `CONVEX_DEPLOYMENT` (optional)
+
+Plaintext runtime vars (or use [`wrangler.jsonc`](wrangler.jsonc) `vars`):
+
+- `R2_ACCOUNT_ID`, `R2_BUCKET`, `RESEND_FROM_EMAIL`, `AI_WORKER_URL`, `GEMINI_MODEL`
+- `R2_PUBLIC_BASE_URL` — optional if `R2_*` credentials are set; HLS uses S3 API when credentials exist
+
+Re-sync from local (skips `NEXT_PUBLIC_*`):
+
+```bash
+node scripts/sync-wrangler-secrets.mjs
+```
 
 ## 4. PayOS webhook
 
-Register in PayOS dashboard:
-
 ```
-https://YOUR_DOMAIN/api/purchase/notify/payos
+https://hdpedu.com/api/purchase/notify/payos
 ```
 
-## 5. Course test price
+## 5. Debugging 500 errors
+
+```bash
+pnpm exec wrangler tail newedu
+```
+
+Common causes:
+
+- `NEXT_PUBLIC_CONVEX_URL` missing from build → rebuild with `pnpm run deploy:prod`
+- Many dashboard uploads without build env → use single `deploy:prod` path only
+- `Dynamic require of middleware-manifest.json` → `scripts/patch-opennext-worker.mjs` runs after build
+- Next **16.2.x** on OpenNext can 500 with `ComponentMod.handler is not a function` → stay on **Next 15.5.x** until upstream fixes ([issue #1258](https://github.com/opennextjs/opennextjs-cloudflare/issues/1258))
+- Windows build: run `node scripts/patch-opennext-symlink.mjs` before build (standalone symlink EPERM)
+
+## 6. Course test price
 
 ```powershell
 $env:NEXT_PUBLIC_CONVEX_URL="https://adept-tapir-159.convex.cloud"
@@ -59,9 +90,6 @@ $env:COURSE_PRICE="2000"
 node scripts/set-course-price.mjs
 ```
 
-## 6. GitHub → Cloudflare (optional)
+## 7. Do not use parallel deploy paths
 
-Connect repo `No-95/NewEdu`, branch `main`, root `/`.
-
-Build: `pnpm install && CF_PAGES=1 pnpm run build`  
-Or use local `pnpm run deploy` after `wrangler login`.
+Avoid mixing **34+ manual dashboard uploads** with CLI deploys without the same env. Pick **CLI `deploy:prod`** or Workers Builds with **Build variables** matching `.env.production`.

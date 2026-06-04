@@ -1,6 +1,6 @@
 import { ConvexHttpClient } from 'convex/browser';
 import { NextResponse } from 'next/server';
-import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { AwsClient } from 'aws4fetch';
 import { api } from '@/convex/_generated/api';
 import { cookies } from 'next/headers';
 
@@ -34,7 +34,7 @@ function buildPublicAssetUrl(videoFolderName: string, assetPath: string): string
   return `${normalizedBaseUrl}/${videoFolderName}/${assetPath}`;
 }
 
-function getR2ClientAndBucket(): { client: S3Client; bucket: string } | null {
+function getR2SigningClient(): { client: AwsClient; accountId: string; bucket: string } | null {
   const accountId = process.env.R2_ACCOUNT_ID;
   const bucket = process.env.R2_BUCKET;
   const accessKeyId = process.env.R2_ACCESS_KEY_ID;
@@ -44,16 +44,19 @@ function getR2ClientAndBucket(): { client: S3Client; bucket: string } | null {
     return null;
   }
 
-  const client = new S3Client({
+  const client = new AwsClient({
+    accessKeyId,
+    secretAccessKey,
     region: 'auto',
-    endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
-    credentials: {
-      accessKeyId,
-      secretAccessKey,
-    },
+    service: 's3',
   });
 
-  return { client, bucket };
+  return { client, accountId, bucket };
+}
+
+function buildPrivateR2ObjectUrl(accountId: string, bucket: string, key: string): string {
+  const encodedKey = key.split('/').map(encodeURIComponent).join('/');
+  return `https://${accountId}.r2.cloudflarestorage.com/${bucket}/${encodedKey}`;
 }
 
 function getContentType(path: string, upstreamContentType?: string): string {
@@ -115,7 +118,6 @@ export async function GET(
       return NextResponse.json({ error: 'Video not found.' }, { status: 404 });
     }
 
-    // Server-side access guard: allow if course is free, otherwise require an active purchase
     if (!lectureResult.course.isFree) {
       const cookieStore = await cookies();
       const email = cookieStore.get('user_email')?.value;
@@ -124,29 +126,44 @@ export async function GET(
       const user = await convex.query(api.auth.getUserByEmail, { email });
       if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-      const hasAccess = await convex.query(api.purchases.hasAccess, { userId: user._id, courseId: lectureResult.course.slug });
+      const hasAccess = await convex.query(api.purchases.hasAccess, {
+        userId: user._id,
+        courseId: lectureResult.course.slug,
+      });
       if (!hasAccess) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     const key = `${lectureResult.lecture.videoFolderName}/${path}`;
-    const privateR2 = getR2ClientAndBucket();
+    const privateR2 = getR2SigningClient();
 
     if (privateR2) {
-      const object = await privateR2.client.send(
-        new GetObjectCommand({
-          Bucket: privateR2.bucket,
-          Key: key,
-        })
-      );
+      const objectUrl = buildPrivateR2ObjectUrl(privateR2.accountId, privateR2.bucket, key);
+      const response = await privateR2.client.fetch(objectUrl);
 
-      if (!object.Body) {
-        return NextResponse.json({ error: 'Video asset not found.' }, { status: 404 });
+      if (!response.ok) {
+        const body = await response.text();
+        const errorMessage = body.slice(0, 300) || 'Video asset not found.';
+        return NextResponse.json({ error: errorMessage }, { status: response.status });
       }
 
-      const stream = object.Body.transformToWebStream() as ReadableStream<Uint8Array>;
-      return new NextResponse(stream, {
+      if (!response.body) {
+        return NextResponse.json({ error: 'R2 response body was empty.' }, { status: 502 });
+      }
+
+      if (path.endsWith('.m3u8')) {
+        const content = await response.text();
+        return new NextResponse(content, {
+          headers: {
+            'Content-Type': getContentType(path, response.headers.get('content-type') ?? undefined),
+            'Cache-Control': 'private, max-age=60',
+          },
+        });
+      }
+
+      const buffer = await streamToBuffer(response.body);
+      return new NextResponse(buffer, {
         headers: {
-          'Content-Type': getContentType(path, object.ContentType),
+          'Content-Type': getContentType(path, response.headers.get('content-type') ?? undefined),
           'Cache-Control': 'private, max-age=60',
         },
       });
