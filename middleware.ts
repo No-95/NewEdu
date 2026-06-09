@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { api } from '@/convex/_generated/api';
+import { getConvexClient } from '@/lib/convex-server';
 
 const PROTECTED_PREFIXES = [
   '/courses',
@@ -11,19 +13,14 @@ const PROTECTED_PREFIXES = [
   '/teacher-applicant',
 ];
 
-async function fetchOnboardingStatus(request: NextRequest) {
-  const statusUrl = new URL('/api/onboarding/status', request.url);
-  const statusResponse = await fetch(statusUrl, {
-    headers: {
-      cookie: request.headers.get('cookie') ?? '',
-    },
-  });
-
-  if (!statusResponse.ok) {
+async function getOnboardingGate(email: string) {
+  try {
+    return await getConvexClient().query(api.onboarding.getOnboardingStatus, {
+      email: email.trim().toLowerCase(),
+    });
+  } catch {
     return null;
   }
-
-  return (await statusResponse.json()) as { required?: boolean; completed?: boolean };
 }
 
 export async function middleware(request: NextRequest) {
@@ -39,7 +36,7 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL('/auth', request.url));
     }
 
-    const status = await fetchOnboardingStatus(request);
+    const status = await getOnboardingGate(email);
     if (status && (!status.required || status.completed)) {
       return NextResponse.redirect(new URL('/dashboard', request.url));
     }
@@ -48,7 +45,7 @@ export async function middleware(request: NextRequest) {
   }
 
   if (pathname.startsWith('/auth') && email) {
-    const status = await fetchOnboardingStatus(request);
+    const status = await getOnboardingGate(email);
     if (status?.required && !status.completed) {
       return NextResponse.redirect(new URL('/onboarding', request.url));
     }
@@ -63,7 +60,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const status = await fetchOnboardingStatus(request);
+  const status = await getOnboardingGate(email);
 
   if (status?.required && !status.completed) {
     return NextResponse.redirect(new URL('/onboarding', request.url));

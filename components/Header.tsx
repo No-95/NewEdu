@@ -82,18 +82,20 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, lockNavigation = fal
 
           {/* Desktop Navigation */}
           {!lockNavigation && mounted && !isAuthenticated && (
-            <div className="hidden flex-1 justify-center md:flex">
+            <div className="pointer-events-none hidden min-w-0 flex-1 justify-center md:flex">
               <GuestNavMenu t={t} variant="desktop" />
             </div>
           )}
 
           {!lockNavigation && mounted && isAuthenticated && (
-            <RoleNavMenu activeRole={activeRole} t={t} variant="desktop" />
+            <div className="pointer-events-none hidden min-w-0 flex-1 justify-center md:flex">
+              <RoleNavMenu activeRole={activeRole} t={t} variant="desktop" />
+            </div>
           )}
 
           {/* Language Switcher & Auth Buttons */}
           {!lockNavigation && (
-          <div className="hidden md:flex items-center gap-3">
+          <div className="relative z-20 hidden shrink-0 items-center gap-3 md:flex">
             {/* Language Switcher */}
             {mounted && (
             <div className="relative">

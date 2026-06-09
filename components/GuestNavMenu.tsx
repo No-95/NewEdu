@@ -80,7 +80,7 @@ function EcosystemMegaMenu({
   return (
     <div
       ref={rootRef}
-      className="relative"
+      className="relative pointer-events-auto"
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
@@ -107,7 +107,7 @@ function EcosystemMegaMenu({
       </button>
 
       {open && (
-        <div className="absolute left-1/2 top-full z-50 mt-2 w-[min(720px,calc(100vw-2rem))] -translate-x-1/2">
+        <div className="pointer-events-auto absolute left-1/2 top-full z-50 w-[min(720px,calc(100vw-2rem))] -translate-x-1/2 pt-1">
           <div className="rounded-xl border border-border/50 bg-card p-5 shadow-2xl glass">
             <div className="grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-3">
               {GUEST_ECOSYSTEM_GROUPS.map((group) => (
@@ -219,7 +219,7 @@ export function GuestNavMenu({ t, variant, onNavigate }: GuestNavMenuProps) {
 
   if (variant === 'desktop') {
     return (
-      <nav className="hidden items-center gap-1 md:flex">
+      <nav className="pointer-events-auto hidden items-center gap-1 md:flex">
         <TopLink
           href={GUEST_HOME.href}
           label={t(GUEST_HOME.labelKey)}

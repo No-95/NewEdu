@@ -1,6 +1,6 @@
-import { ConvexHttpClient } from 'convex/browser';
 import { NextResponse } from 'next/server';
 import { api } from '@/convex/_generated/api';
+import { getConvexClient } from '@/lib/convex-server';
 
 export async function POST(request: Request) {
   try {
@@ -11,14 +11,10 @@ export async function POST(request: Request) {
     }
 
     const normalizedEmail = email.trim().toLowerCase();
-    const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
-    if (!convexUrl) {
-      return NextResponse.json({ error: 'NEXT_PUBLIC_CONVEX_URL is missing.' }, { status: 500 });
-    }
-
-    const convex = new ConvexHttpClient(convexUrl);
-    const user = await convex.query(api.auth.getUserByEmail, { email: normalizedEmail });
-    if (!user) {
+    const session = await getConvexClient().query(api.auth.getSessionByEmail, {
+      email: normalizedEmail,
+    });
+    if (!session) {
       return NextResponse.json({ error: 'No account found for this email.' }, { status: 404 });
     }
 

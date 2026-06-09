@@ -251,6 +251,84 @@ export const getUserByEmail = query({
   },
 });
 
+export const getSessionByEmail = query({
+  args: {
+    email: v.string(),
+  },
+  returns: v.union(
+    v.object({
+      user: v.object({
+        _id: v.string(),
+        email: v.string(),
+        fullName: v.string(),
+        username: v.optional(v.string()),
+        avatarUrl: v.optional(v.string()),
+        phone: v.optional(v.string()),
+        passwordHash: v.optional(v.string()),
+        balance: v.optional(v.number()),
+        agreeToTerms: v.boolean(),
+        emailVerified: v.boolean(),
+        role: v.string(),
+        createdAt: v.number(),
+        updatedAt: v.number(),
+      }),
+      onboarding: v.object({
+        required: v.boolean(),
+        completed: v.boolean(),
+        hdpId: v.union(v.string(), v.null()),
+        activeRole: v.union(v.string(), v.null()),
+        roles: v.array(v.string()),
+        onboardingVersion: v.union(v.number(), v.null()),
+      }),
+    }),
+    v.null()
+  ),
+  handler: async (ctx, args) => {
+    const normalizedEmail = args.email.trim().toLowerCase();
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_email', (q) => q.eq('email', normalizedEmail))
+      .first();
+
+    if (!user) {
+      return null;
+    }
+
+    const onboarding = await ctx.db
+      .query('userOnboarding')
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
+      .first();
+
+    const completed = user.onboardingCompletedAt !== undefined || onboarding !== null;
+
+    return {
+      user: {
+        _id: user._id.toString(),
+        email: user.email,
+        fullName: user.fullName ?? '',
+        username: user.username ?? undefined,
+        avatarUrl: user.avatarUrl ?? undefined,
+        phone: user.phone,
+        passwordHash: user.passwordHash,
+        balance: user.balance ?? 0,
+        agreeToTerms: user.agreeToTerms ?? false,
+        emailVerified: user.emailVerified ?? false,
+        role: user.role ?? 'student',
+        createdAt: user.createdAt ?? 0,
+        updatedAt: user.updatedAt ?? 0,
+      },
+      onboarding: {
+        required: user.onboardingRequired === true,
+        completed,
+        hdpId: user.hdpId ?? null,
+        activeRole: user.activeRole ?? null,
+        roles: onboarding?.roles ?? [],
+        onboardingVersion: user.onboardingVersion ?? null,
+      },
+    };
+  },
+});
+
 export const updateUserProfile = mutation({
   args: {
     email: v.string(),

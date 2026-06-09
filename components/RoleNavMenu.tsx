@@ -20,7 +20,7 @@ export function RoleNavMenu({ activeRole, t, variant, onNavigate }: RoleNavMenuP
 
   if (variant === 'desktop') {
     return (
-      <nav className="hidden min-w-0 flex-1 items-center justify-center gap-0.5 overflow-x-auto px-1 md:flex lg:gap-1">
+      <nav className="pointer-events-auto hidden min-w-0 items-center justify-center gap-0.5 overflow-x-auto px-1 md:flex lg:gap-1">
         {items.map((item) => {
           const active = isActive(item.href);
           return (

@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { ConvexHttpClient } from 'convex/browser';
 import { api } from '@/convex/_generated/api';
+import { getAuthenticatedSession } from '@/lib/auth';
+import { getConvexClient } from '@/lib/convex-server';
 import { onboardingSurveySchema } from '@/lib/onboarding/schema';
 
 export async function POST(request: Request) {
@@ -9,11 +10,6 @@ export async function POST(request: Request) {
   const email = cookieStore.get('user_email')?.value;
   if (!email) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
-  if (!convexUrl) {
-    return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
   }
 
   let body: unknown;
@@ -31,10 +27,15 @@ export async function POST(request: Request) {
     );
   }
 
-  const convex = new ConvexHttpClient(convexUrl);
+  const convex = getConvexClient();
 
   try {
-    const status = await convex.query(api.onboarding.getOnboardingStatus, { email });
+    const session = await getAuthenticatedSession();
+    const status = session?.onboarding;
+
+    if (!status) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
     if (status.completed) {
       return NextResponse.json(
