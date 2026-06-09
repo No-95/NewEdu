@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Header } from '@/components/Header';
 import { ParticleBackground } from '@/components/DarkmodeParticleBackground';
 import { useLanguage } from '@/lib/context/LanguageContext';
+import { resolvePostAuthPath } from '@/lib/auth-redirect';
 import { api } from '@/convex/_generated/api';
 
 async function hashPassword(password: string): Promise<string> {
@@ -167,7 +168,7 @@ function AuthPageContent() {
 
         await establishSession(formData.email);
         setOtpMessage('Account created successfully. Redirecting...');
-        router.push('/courses');
+        router.push(await resolvePostAuthPath());
         router.refresh();
         return;
       }
@@ -189,7 +190,7 @@ function AuthPageContent() {
 
       await establishSession(formData.email);
       setOtpMessage(`Welcome back, ${userRecord.fullName}. Redirecting...`);
-      router.push('/courses');
+      router.push(await resolvePostAuthPath());
       router.refresh();
     } catch (error) {
       if (error instanceof Error) {

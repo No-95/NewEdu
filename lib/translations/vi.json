@@ -11,7 +11,151 @@
     "contactUs": "Liên Hệ",
     "enrollNow": "Đăng Ký Ngay",
     "applyNow": "Ứng Tuyển Ngay",
-    "learnMore": "Tìm Hiểu Thêm"
+    "learnMore": "Tìm Hiểu Thêm",
+    "dashboard": "Bảng điều khiển",
+    "language": "Ngôn ngữ"
+  },
+  "nav": {
+    "ecosystem": {
+      "home": "Trang chủ",
+      "menuLabel": "Hệ sinh thái",
+      "learners": {
+        "label": "Dành cho Người học",
+        "courses": "Khóa học",
+        "mentor": "Mentor cá nhân",
+        "library": "Kho tài liệu"
+      },
+      "teachers": {
+        "label": "Giáo viên & Trung tâm",
+        "training": "Quản lý đào tạo",
+        "crm": "CRM tuyển sinh",
+        "business": "Kinh doanh",
+        "reports": "Hệ thống báo cáo",
+        "library": "Kho tài liệu"
+      },
+      "careers": {
+        "label": "Việc làm & nghề nghiệp",
+        "profile": "Hồ sơ năng lực",
+        "jobs": "Việc làm",
+        "support": "Hỗ trợ nghề nghiệp",
+        "matching": "Matching AI"
+      },
+      "business": {
+        "label": "Doanh nghiệp",
+        "recruiting": "Tuyển dụng",
+        "hr": "Nhân sự",
+        "internalTraining": "Đào tạo nội bộ"
+      },
+      "experts": {
+        "label": "Chuyên gia",
+        "network": "Mạng lưới chuyên gia",
+        "topics": "Chuyên đề"
+      },
+      "community": {
+        "label": "Cộng đồng",
+        "forum": "Diễn đàn hỏi đáp",
+        "industries": "Cộng đồng theo lĩnh vực"
+      },
+      "events": "Sự kiện & Kết nối"
+    },
+    "role": {
+      "assessments": "Bài kiểm tra",
+      "events": "Sự kiện"
+    }
+  },
+  "onboarding": {
+    "welcome": "Chào mừng đến với HDP EDU",
+    "stepLabel": "Bước {{step}} / {{total}}",
+    "next": "Tiếp theo",
+    "back": "Quay lại",
+    "submit": "Hoàn tất và tạo HDP ID",
+    "maxSelections": "Chọn tối đa {{max}}",
+    "otherPlaceholder": "Vui lòng mô tả...",
+    "step1": {
+      "title": "Bạn tham gia với vai trò nào?",
+      "subtitle": "HDP dùng để tạo Dashboard.",
+      "options": {
+        "learner": "Người học",
+        "teacher": "Giáo viên",
+        "training_center": "Trung tâm đào tạo",
+        "job_seeker": "Người tìm việc",
+        "employer": "Doanh nghiệp",
+        "expert": "Chuyên gia"
+      }
+    },
+    "step2": {
+      "title": "Mục tiêu chính của bạn là gì?",
+      "subtitle": "Dữ liệu này dùng cho Marketing Automation.",
+      "options": {
+        "learn_korean": "Học tiếng Hàn",
+        "find_job": "Tìm việc",
+        "recruit": "Tuyển dụng",
+        "find_partner": "Tìm đối tác",
+        "personal_brand": "Xây dựng thương hiệu cá nhân",
+        "share_knowledge": "Chia sẻ kiến thức",
+        "find_expert": "Tìm chuyên gia",
+        "other": "Khác"
+      }
+    },
+    "step3": {
+      "title": "Bạn quan tâm lĩnh vực nào?",
+      "subtitle": "Cho vào cộng đồng khác nhau",
+      "options": {
+        "manufacturing": "Sản xuất",
+        "trade_import_export": "Thương mại - Xuất nhập khẩu",
+        "hr_accounting": "Nhân sự - Kế toán",
+        "technology": "Công nghệ",
+        "education": "Giáo dục",
+        "translation": "Phiên dịch",
+        "other": "Khác"
+      }
+    },
+    "step4": {
+      "title": "Bạn đang ở giai đoạn nào?",
+      "subtitle": "Trả lời theo vai trò bạn đã chọn",
+      "learnerHeading": "Nếu là Người học",
+      "jobSeekerHeading": "Nếu là Người tìm việc",
+      "employerHeading": "Nếu là Doanh nghiệp",
+      "learnerStages": {
+        "korean_none": "Chưa biết tiếng Hàn",
+        "topik_1_2": "TOPIK 1–2",
+        "topik_3_4": "TOPIK 3–4",
+        "topik_5_6": "TOPIK 5–6",
+        "working_professional": "Đang đi làm"
+      },
+      "jobSeekerStages": {
+        "student": "Sinh viên",
+        "fresh_graduate": "Mới tốt nghiệp",
+        "exp_1_3": "1–3 năm kinh nghiệm",
+        "exp_3_5": "3–5 năm",
+        "exp_5_plus": "Trên 5 năm"
+      },
+      "employerStages": {
+        "size_under_10": "Dưới 10 nhân sự",
+        "size_10_50": "10–50 nhân sự",
+        "size_50_200": "50–200 nhân sự",
+        "size_200_plus": "Trên 200 nhân sự"
+      }
+    },
+    "step5": {
+      "title": "Bạn muốn nhận thông tin gì?",
+      "subtitle": "Gửi email MKT",
+      "options": {
+        "jobs": "Việc làm",
+        "courses": "Khóa học",
+        "events": "Sự kiện",
+        "materials": "Tài liệu",
+        "seminars": "Hội thảo",
+        "business_opportunities": "Cơ hội kinh doanh",
+        "investment": "Đầu tư",
+        "import_export": "Xuất nhập khẩu"
+      }
+    },
+    "success": {
+      "title": "Hồ sơ HDP EDU của bạn đã sẵn sàng",
+      "hdpIdLabel": "HDP ID",
+      "continue": "Tiếp tục"
+    }
   },
   "courses": {
     "title": "Học Tiếng Hàn với Các Giáo Viên Chuyên Nghiệp",
@@ -175,85 +319,328 @@
   },
   "home": {
     "hero": {
-      "badge": "Cho sinh viên và giáo viên",
-      "title": "Học & Dạy tiếng Hàn theo cách của bạn",
-      "description": "Cho dù bạn muốn thành thạo tiếng Hàn hay chia sẻ kinh nghiệm giảng dạy, HDP EDU kết nối những người học tập với các giáo viên đam mê trên toàn thế giới.",
-      "startLearning": "Bắt đầu học",
-      "becomeTeacher": "Trở thành giáo viên",
-      "activeLearners": "Người học hoạt động",
-      "expertTeachers": "Giáo viên chuyên gia",
-      "videoCourses": "Khóa học video",
+      "badge": "HDP EDU ECOSYSTEM",
+      "tagline": "Học tập • Nghề nghiệp • Doanh nghiệp • Chuyên gia • Cộng đồng",
+      "description1": "Nền tảng kết nối toàn diện dành cho cộng đồng Việt Nam – Hàn Quốc, nơi người học, giáo viên, doanh nghiệp và chuyên gia cùng học tập, phát triển sự nghiệp, mở rộng mạng lưới quan hệ và tạo ra những cơ hội hợp tác thực tế.",
+      "description2": "Từ nâng cao năng lực tiếng Hàn, tìm kiếm việc làm, tuyển dụng nhân sự, phát triển chuyên môn đến kết nối kinh doanh và đầu tư – tất cả được tích hợp trên một hệ sinh thái duy nhất.",
+      "startNow": "Bắt đầu ngay",
+      "exploreEcosystem": "Khám phá hệ sinh thái",
       "scrollExplore": "Cuộn để khám phá",
       "hoverRotate": "Di chuột qua khối để xoay"
     },
     "trust": {
-      "title": "Tại sao chọn HDP EDU?",
-      "description": "Được hàng ngàn người học tin tưởng trên toàn thế giới với kết quả đã được chứng minh",
-      "userRetention": "Giữ chân người dùng",
-      "retentionDesc": "Sinh viên hoàn thành mục tiêu của họ",
-      "fluencyAchievement": "Đạt thành thạo",
-      "fluencyDesc": "Đạt mức hội thoại trong 6 tháng",
-      "dailyEngagement": "Tham gia hàng ngày",
-      "engagementDesc": "Những người học hoạt động trên nền tảng hàng ngày",
-      "expertInstructors": "Giáo viên chuyên gia",
-      "instructorsDesc": "Người bản xứ & nhà ngôn ngữ học",
-      "topRated": "Được đánh giá cao trên App Stores",
-      "awardWinning": "Nền tảng đoạt giải thưởng",
-      "isoCertified": "Bảo mật được chứng chỉ ISO"
+      "communityMembers": "Thành viên cộng đồng",
+      "learnersWorkers": "Người học và người đi làm",
+      "teachersExperts": "Giảng viên & chuyên gia",
+      "partnerBusinesses": "Doanh nghiệp đối tác",
+      "jobOpportunities": "Cơ hội việc làm",
+      "learningResources": "Tài liệu & nguồn học liệu"
     },
-    "learning": {
-      "title": "Trải nghiệm học tập của bạn",
-      "subtitle": "Nhập vai, được cá nhân hóa và chứng minh hiệu quả",
-      "aiCurriculum": "Chương trình Hỗ trợ AI",
-      "aiDesc": "Lộ trình học tập thích ứng",
-      "conversation": "Hội thoại thực tế",
-      "conversationDesc": "Thực hành với gia sư AI",
-      "learnAnywhere": "Học ở bất cứ nơi đâu",
-      "learnDesc": "Web, iOS, Android",
-      "liveClasses": "Lớp học trực tiếp",
-      "liveDesc": "Giáo viên chuyên gia",
-      "learningImage": "Hình ảnh học tập"
-    },
-    "courses": {
-      "exploreTitle": "Khám phá các khóa học",
-      "subtitle": "Từ hoàn toàn người mới bắt đầu đến bậc thạc sĩ chuyên nghiệp",
-      "startJourney": "Bắt đầu hành trình",
-      "buildFluency": "Xây dựng tính thạo",
-      "professionalMastery": "Thành thạo chuyên nghiệp",
-      "viewAllCourses": "Xem tất cả khóa học",
-      "coursesImage": "Hình ảnh khóa học"
-    },
-    "jobs": {
-      "careerTitle": "Cơ hội nghề nghiệp",
-      "subtitle": "Mở cửa cho con đường sự nghiệp toàn cầu",
-      "topEmployers": "Nhà tuyển dụng hàng đầu",
-      "viewCareerBoard": "Xem bảng sự nghiệp",
-      "jobsImage": "Hình ảnh việc làm"
+    "ecosystem": {
+      "title": "HDP EDU Dành Cho Những Ai?",
+      "intro": "Một nền tảng — năm nhóm đối tượng. Mỗi hành trình được thiết kế riêng cho nhu cầu học tập, nghề nghiệp và hợp tác Việt Nam – Hàn Quốc.",
+      "scrollHint": "Cuộn để khám phá từng đối tượng",
+      "learners": {
+        "title": "Người học",
+        "description": "Nâng cao năng lực tiếng Hàn và kỹ năng nghề nghiệp để sẵn sàng cho môi trường làm việc quốc tế.",
+        "canDo": "Bạn có thể:",
+        "bullets": [
+          "Học tiếng Hàn chuyên ngành sản xuất, thương mại, logistics, kỹ thuật, nhân sự và quản lý.",
+          "Tiếp cận các khóa học thực tiễn từ chuyên gia và doanh nghiệp.",
+          "Tham gia cộng đồng học tập và trao đổi kinh nghiệm.",
+          "Tiếp cận thực tập, học bổng và cơ hội việc làm."
+        ],
+        "cta": "Khám phá chương trình học"
+      },
+      "teachers": {
+        "title": "Giáo viên & Trung tâm đào tạo",
+        "description": "Phát triển hoạt động đào tạo và mở rộng quy mô kinh doanh trên nền tảng số.",
+        "canDo": "Bạn có thể:",
+        "bullets": [
+          "Tạo và kinh doanh khóa học trực tuyến.",
+          "Quản lý lớp học, học viên và lịch giảng dạy.",
+          "Sử dụng CRM tuyển sinh và chăm sóc học viên.",
+          "Xây dựng thương hiệu cá nhân hoặc thương hiệu trung tâm.",
+          "Tiếp cận cộng đồng học viên trên toàn quốc."
+        ],
+        "cta": "Trở thành đối tác đào tạo"
+      },
+      "jobSeekers": {
+        "title": "Người tìm việc",
+        "description": "Tìm kiếm cơ hội nghề nghiệp phù hợp với năng lực và định hướng phát triển.",
+        "canDo": "Bạn có thể:",
+        "bullets": [
+          "Xây dựng hồ sơ năng lực chuyên nghiệp.",
+          "Tìm kiếm việc làm tiếng Hàn theo ngành nghề.",
+          "Kết nối trực tiếp với doanh nghiệp Hàn Quốc và FDI.",
+          "Nhận tư vấn nghề nghiệp và định hướng phát triển.",
+          "Tham gia các chương trình đào tạo trước tuyển dụng."
+        ],
+        "cta": "Tìm kiếm cơ hội nghề nghiệp"
+      },
+      "employers": {
+        "title": "Doanh nghiệp & Nhà tuyển dụng",
+        "description": "Tiếp cận nguồn nhân lực chất lượng cao và xây dựng thương hiệu tuyển dụng hiệu quả.",
+        "canDo": "Doanh nghiệp có thể:",
+        "bullets": [
+          "Đăng tuyển dụng và quản lý ứng viên.",
+          "Tìm kiếm nhân sự có tiếng Hàn và chuyên môn phù hợp.",
+          "Xây dựng Talent Pool riêng.",
+          "Tổ chức đào tạo và nâng cao năng lực nhân sự.",
+          "Kết nối với chuyên gia và đối tác Việt Nam – Hàn Quốc."
+        ],
+        "cta": "Đăng tuyển dụng"
+      },
+      "experts": {
+        "title": "Chuyên gia",
+        "description": "Xây dựng thương hiệu cá nhân, chia sẻ tri thức và mở rộng cơ hội hợp tác.",
+        "canDo": "Bạn có thể:",
+        "bullets": [
+          "Xây dựng hồ sơ chuyên gia chuyên nghiệp.",
+          "Chia sẻ kiến thức và kinh nghiệm thực tiễn.",
+          "Tổ chức hội thảo, webinar và khóa học chuyên đề.",
+          "Tư vấn cho cá nhân và doanh nghiệp.",
+          "Kết nối với cộng đồng chuyên môn trong và ngoài nước."
+        ],
+        "cta": "Tham gia mạng lưới chuyên gia"
+      }
     },
     "community": {
-      "joinTitle": "Tham gia cộng đồng của chúng tôi",
-      "subtitle": "Học cùng nhau với những người học tập đam mê trên toàn thế giới",
-      "learners": "Người học",
-      "countries": "Quốc gia",
-      "support": "Hỗ trợ",
-      "communityImage": "Hình ảnh cộng đồng"
+      "title": "Cộng đồng Việt Nam - Hàn Quốc",
+      "subtitle": "Không gian kết nối, học hỏi và phát triển dành cho những người quan tâm đến tiếng Hàn, nghề nghiệp và kinh doanh.",
+      "canDo": "Thành viên có thể:",
+      "bullets": [
+        "Tham gia các nhóm cộng đồng theo ngành nghề.",
+        "Chia sẻ tài liệu, giáo trình và kinh nghiệm thực tế.",
+        "Hỏi đáp về tiếng Hàn, công việc và văn hóa doanh nghiệp Hàn Quốc.",
+        "Kết nối với người học, doanh nghiệp và chuyên gia.",
+        "Mở rộng mạng lưới quan hệ và cơ hội hợp tác."
+      ],
+      "cta": "Tham gia cộng đồng"
+    },
+    "whyChoose": {
+      "title": "TẠI SAO LỰA CHỌN HDP EDU?",
+      "subtitle": "Một nền tảng — Nhiều giá trị",
+      "leadQuote": "Giá trị thực sự nằm ở sự kết nối — giữa tri thức và cơ hội, giữa người học và doanh nghiệp, giữa Việt Nam và Hàn Quốc.",
+      "pillars": [
+        "Học tập và phát triển năng lực",
+        "Nghề nghiệp và việc làm",
+        "Tuyển dụng và phát triển nhân sự",
+        "Kết nối chuyên gia",
+        "Cộng đồng Việt Nam – Hàn Quốc",
+        "Kho tri thức và tài nguyên chuyên ngành"
+      ]
     },
     "cta": {
-      "joinTitle": "Tham gia HDP EDU hôm nay",
-      "subtitle": "Dù bạn muốn học hay dạy, chúng tôi đều có chỗ cho bạn",
-      "iWantToLearn": "Tôi muốn học",
-      "iWantToTeach": "Tôi muốn dạy",
-      "sevenDayTrial": "Bản dùng thử miễn phí 7 ngày",
-      "fullCourseAccess": "Truy cập đầy đủ khóa học",
-      "support24": "Hỗ trợ 24/7",
-      "startLearningFree": "Bắt đầu học miễn phí",
-      "sellCourses": "Bán khóa học của bạn",
-      "setOwnPrice": "Đặt giá của riêng bạn",
-      "globalReach": "Tiếp cận toàn cầu",
-      "applyTeach": "Ứng dụng để dạy",
-      "getNotified": "Nhận thông báo về các tính năng mới",
-      "subscribe": "Đăng ký",
+      "connectionLabel": "Kết nối trực tiếp giữa",
+      "connectionLabelShort": "Kết nối trực tiếp",
+      "connectionFlow": "Người học ⇄ Doanh nghiệp ⇄ Chuyên gia ⇄ Cơ hội nghề nghiệp ⇄ Cơ hội hợp tác",
+      "headline": "KẾT NỐI CƠ HỘI VIỆT NAM – HÀN QUỐC",
+      "pullQuote": "Hệ sinh thái kết nối nguồn nhân lực, doanh nghiệp, chuyên gia và cộng đồng nhằm tạo ra những giá trị thực tiễn.",
+      "introBody": "HDP EDU không chỉ là một nền tảng học tập. Đây là cầu nối giữa Việt Nam và Hàn Quốc — nơi mà học tập, nghề nghiệp và kinh doanh hội tụ thành một hành trình phát triển toàn diện.",
+      "description1": "HDP EDU không chỉ là một nền tảng học tập.",
+      "description2": "Đây là hệ sinh thái kết nối nguồn nhân lực, doanh nghiệp, chuyên gia và cộng đồng Việt Nam – Hàn Quốc nhằm tạo ra những giá trị thực tiễn trong học tập, nghề nghiệp và kinh doanh.",
+      "ecosystemBadge": "HDP EDU ECOSYSTEM",
+      "ecosystemTagline": "Nơi học tập kết nối với nghề nghiệp. Nơi tri thức kết nối với cơ hội. Nơi cộng đồng cùng phát triển.",
+      "ecosystemPills": ["Học tập", "Nghề nghiệp", "Tri thức", "Cộng đồng", "Cơ hội"],
+      "signUpFree": "Đăng ký miễn phí",
       "copyright": "© 2024 HDP EDU. Tất cả các quyền được bảo lưu."
     }
+  },
+  "classroom": {
+    "badge": "Lớp học trực tuyến",
+    "title": "Sảnh lớp học trực tuyến",
+    "subtitle": "Tham gia lớp đang diễn ra hoặc mở phiên học mới ngay.",
+    "liveNow": "Đang live",
+    "availableTitle": "Lớp học khả dụng",
+    "availableSubtitle": "Chọn phòng và tham gia chỉ với một cú nhấp.",
+    "hostedBy": "Chủ phòng",
+    "passwordRequired": "Yêu cầu mật khẩu",
+    "live": "Đang live",
+    "roomLabel": "Phòng",
+    "startedLabel": "Bắt đầu",
+    "joinClassroom": "Vào lớp học",
+    "noRoomsTitle": "Chưa có lớp học. Hãy mở lớp ngay bây giờ.",
+    "noRoomsHint": "Tạo phòng ở bảng bên phải và bắt đầu live trong vài giây.",
+    "startTitle": "Mở lớp học mới",
+    "startSubtitle": "Tạo phòng live mới và mời học viên.",
+    "hostName": "Tên chủ phòng",
+    "hostNamePlaceholder": "Tên của bạn",
+    "classroomTitle": "Tiêu đề lớp học",
+    "classroomTitlePlaceholder": "Lớp tiếng Hàn sản xuất trực tuyến",
+    "passwordOptional": "Mật khẩu lớp học (tùy chọn)",
+    "passwordPlaceholder": "Đặt mật khẩu cho học viên",
+    "passwordHint": "Để trống nếu ai cũng có thể vào.",
+    "startNow": "Mở lớp ngay",
+    "defaultHost": "Chủ phòng HDP EDU",
+    "defaultTitle": "Lớp tiếng Hàn sản xuất trực tuyến",
+    "invalidRoom": "Mã phòng không hợp lệ.",
+    "roomUnavailable": "Lớp học này không còn khả dụng.",
+    "lockedTitle": "Lớp học đã khóa",
+    "lockedSubtitle": "Nhập mật khẩu từ giáo viên để tham gia.",
+    "passwordLabel": "Mật khẩu",
+    "passwordInputPlaceholder": "Nhập mật khẩu lớp học",
+    "passwordEmpty": "Vui lòng nhập mật khẩu lớp học.",
+    "passwordIncorrect": "Mật khẩu không đúng. Vui lòng thử lại.",
+    "checking": "Đang kiểm tra...",
+    "student": "Học viên"
+  },
+  "community": {
+    "comingSoon": "Trang cộng đồng sẽ sớm ra mắt."
+  },
+  "dashboard": {
+    "loading": "Đang tải bảng điều khiển...",
+    "eyebrow": "HDP EDU Dashboard",
+    "pageTitle": "Bảng điều khiển",
+    "roleBadge": "Vai trò",
+    "switchRole": "Chuyển vai trò",
+    "currentRole": "Vai trò hiện tại",
+    "defaultName": "bạn",
+    "continueLearning": "Xem tiếp",
+    "downloadCv": "Tải CV",
+    "updateProfile": "Cập nhật hồ sơ",
+    "learner": {
+      "welcome": "Chào mừng trở lại, {{name}}",
+      "journeyTitle": "Hành trình học tập của bạn",
+      "currentLevel": "Trình độ hiện tại",
+      "currentLevelValue": "TOPIK 3",
+      "goal": "Mục tiêu",
+      "goalValue": "TOPIK 5",
+      "progress": "Tiến độ hoàn thành",
+      "progressValue": "62%",
+      "activeCoursesTitle": "Khóa học đang học",
+      "activeCourses": ["Tiếng Hàn sản xuất", "TOPIK trung cấp", "Tiếng Hàn thương mại"],
+      "suggestedCoursesTitle": "Khóa học đề xuất",
+      "suggestedCourses": ["Tiếng Hàn nhân sự", "Tiếng Hàn logistics", "Kỹ năng phỏng vấn công ty Hàn Quốc"],
+      "jobsTitle": "Việc làm phù hợp với bạn",
+      "jobs": ["Phiên dịch sản xuất", "Nhân viên xuất nhập khẩu", "Trợ lý giám đốc Hàn Quốc"],
+      "materialsTitle": "Tài liệu dành cho bạn",
+      "materials": ["Từ vựng sản xuất", "Mẫu email tiếng Hàn", "Giáo trình TOPIK"],
+      "communityTitle": "Cộng đồng của bạn",
+      "communities": ["Cộng đồng TOPIK", "Cộng đồng sản xuất", "Cộng đồng người đi làm công ty Hàn"],
+      "eventsTitle": "Sự kiện sắp diễn ra",
+      "events": ["Webinar TOPIK", "Workshop kỹ năng phỏng vấn"],
+      "hdpPointsTitle": "Điểm HDP",
+      "hdpLevel": "Cấp độ",
+      "hdpLevelValue": "Member",
+      "hdpPoints": "Điểm",
+      "hdpPointsValue": "1.250 điểm"
+    },
+    "teacher": {
+      "overviewTitle": "Tổng quan kinh doanh",
+      "students": "Học viên đang theo học",
+      "studentsValue": "356",
+      "activeCourses": "Khóa học đang hoạt động",
+      "activeCoursesValue": "12",
+      "monthlyRevenue": "Doanh thu tháng",
+      "monthlyRevenueValue": "75.000.000 VNĐ",
+      "courseMgmtTitle": "Quản lý khóa học",
+      "courseMgmt": ["Tạo khóa học mới", "Quản lý bài giảng", "Quản lý bài tập", "Quản lý chứng chỉ"],
+      "crmTitle": "CRM tuyển sinh",
+      "leads": "Khách hàng tiềm năng",
+      "leadsValue": "124",
+      "consulted": "Đã tư vấn",
+      "consultedValue": "67",
+      "pendingSignup": "Chờ đăng ký",
+      "pendingSignupValue": "32",
+      "studentMgmtTitle": "Quản lý học viên",
+      "studentMgmt": ["Danh sách học viên", "Điểm danh", "Tiến độ học tập", "Kết quả học tập"],
+      "marketingTitle": "Marketing",
+      "marketing": ["Landing Page khóa học", "Affiliate", "Chương trình khuyến mãi", "Email Marketing"],
+      "instructorCommunityTitle": "Cộng đồng giảng viên",
+      "instructorCommunity": ["Chia sẻ tài liệu", "Webinar giảng dạy", "Hội thảo chuyên môn"],
+      "reportsTitle": "Báo cáo",
+      "reports": ["Doanh thu", "Tỷ lệ chuyển đổi", "Hiệu quả quảng cáo"]
+    },
+    "jobSeeker": {
+      "profileTitle": "Hồ sơ năng lực",
+      "profileCompletion": "Mức độ hoàn thiện",
+      "matchingJobsTitle": "Việc làm phù hợp",
+      "matchingJobs": ["Phiên dịch viên tiếng Hàn", "Trợ lý sản xuất", "Chuyên viên nhân sự"],
+      "profileViewsTitle": "Hồ sơ được xem",
+      "recruiterViews": "Nhà tuyển dụng đã xem",
+      "recruiterViewsValue": "27",
+      "interviewInvites": "Lời mời phỏng vấn",
+      "interviewInvitesValue": "5",
+      "skillSuggestionsTitle": "Gợi ý nâng cao năng lực",
+      "skillSuggestions": ["Tiếng Hàn sản xuất", "Kỹ năng Excel", "Kỹ năng báo cáo"],
+      "careerPathTitle": "Lộ trình nghề nghiệp",
+      "currentRole": "Hiện tại",
+      "currentRoleValue": "Nhân viên",
+      "targetRole": "Mục tiêu",
+      "targetRoleValue": "Quản lý",
+      "advisorsTitle": "Chuyên gia cố vấn",
+      "advisors": ["Mentor nhân sự", "Mentor sản xuất", "Mentor logistics"],
+      "careerEventsTitle": "Sự kiện nghề nghiệp",
+      "careerEvents": ["Career Day", "Job Fair", "Workshop CV"],
+      "networkTitle": "Mạng lưới kết nối",
+      "networkTags": ["Doanh nghiệp", "Chuyên gia", "Cộng đồng nghề nghiệp"]
+    },
+    "employer": {
+      "recruitingOverviewTitle": "Tổng quan tuyển dụng",
+      "activeJobs": "Tin tuyển dụng đang hoạt động",
+      "activeJobsValue": "12",
+      "newCandidates": "Ứng viên mới",
+      "newCandidatesValue": "87",
+      "interviews": "Phỏng vấn",
+      "interviewsValue": "16",
+      "hired": "Đã tuyển",
+      "hiredValue": "5",
+      "recruitingMgmtTitle": "Quản lý tuyển dụng",
+      "recruitingMgmt": ["Đăng tuyển", "Quản lý ứng viên", "Đánh giá ứng viên", "Phỏng vấn trực tuyến"],
+      "talentPoolTitle": "Talent Pool",
+      "talentPoolSubtitle": "Ứng viên theo:",
+      "talentPoolTags": ["Tiếng Hàn", "Sản xuất", "Logistics", "Nhân sự", "Kế toán"],
+      "trainingTitle": "Đào tạo nhân sự",
+      "training": ["Khóa học nội bộ", "Đánh giá năng lực", "Quản lý đào tạo"],
+      "matchingTitle": "Business Matching",
+      "matching": ["Tìm đối tác", "Tìm nhà cung cấp", "Tìm khách hàng"],
+      "expertsTitle": "Chuyên gia đề xuất",
+      "experts": ["Chuyên gia nhân sự", "Chuyên gia sản xuất", "Chuyên gia FDI"],
+      "reportsTitle": "Báo cáo",
+      "reports": ["Hiệu quả tuyển dụng", "Chi phí tuyển dụng", "Nguồn ứng viên"],
+      "eventsTitle": "Sự kiện doanh nghiệp",
+      "events": ["Business Matching", "Hội thảo doanh nghiệp", "Networking"]
+    },
+    "expert": {
+      "profileTitle": "Hồ sơ chuyên gia",
+      "credibility": "Mức độ uy tín",
+      "credibilityValue": "Expert Level 4",
+      "followers": "Lượt theo dõi",
+      "followersValue": "2.350",
+      "activityTitle": "Hoạt động chuyên gia",
+      "activity": ["Bài viết", "Webinar", "Podcast", "Tài liệu chia sẻ"],
+      "consultingTitle": "Lịch tư vấn",
+      "newRequests": "Yêu cầu mới",
+      "newRequestsValue": "12",
+      "weeklySessions": "Lịch tư vấn tuần này",
+      "weeklySessionsValue": "8",
+      "professionalCommunityTitle": "Cộng đồng chuyên môn",
+      "professionalCommunity": ["Nhân sự", "Sản xuất", "Thương mại quốc tế", "FDI"],
+      "collaborationTitle": "Cơ hội hợp tác",
+      "collaboration": ["Doanh nghiệp cần tư vấn", "Dự án đào tạo", "Hội thảo chuyên đề"],
+      "contentMgmtTitle": "Quản lý nội dung",
+      "contentMgmt": ["Bài viết", "Video", "Tài liệu", "Khóa học"],
+      "incomeTitle": "Thu nhập",
+      "incomeConsulting": "Tư vấn",
+      "incomeConsultingValue": "xx.xxx.xxx VNĐ",
+      "incomeCourses": "Khóa học",
+      "incomeCoursesValue": "xx.xxx.xxx VNĐ",
+      "incomeSeminars": "Hội thảo",
+      "incomeSeminarsValue": "xx.xxx.xxx VNĐ",
+      "personalBrandTitle": "Xây dựng thương hiệu cá nhân",
+      "personalBrand": ["Hồ sơ công khai", "Chứng nhận chuyên gia", "Thành tích", "Đánh giá từ cộng đồng"]
+    }
+  },
+  "aiSupport": {
+    "title": "Hỗ trợ AI",
+    "welcome": "Xin chào! Tôi là trợ lý hỗ trợ AI. Hãy hỏi tôi về HDP EDU bằng tiếng Việt, tiếng Anh hoặc tiếng Hàn.",
+    "placeholder": "Nhập tin nhắn...",
+    "typing": "AI đang trả lời...",
+    "openChat": "Mở trò chuyện hỗ trợ AI",
+    "errorUnavailable": "Dịch vụ AI tạm thời không khả dụng. Vui lòng thử lại.",
+    "errorConnection": "Không thể kết nối dịch vụ AI.",
+    "fallbackSorry": "Xin lỗi, tôi chưa thể trả lời ngay. Vui lòng liên hệ bộ phận hỗ trợ.",
+    "fallbackConnection": "Lỗi kết nối. Vui lòng thử lại sau."
   }
 }

@@ -62,7 +62,12 @@ Re-sync from local (skips `NEXT_PUBLIC_*`):
 node scripts/sync-wrangler-secrets.mjs
 ```
 
-## 4. PayOS webhook
+## 4. Book orders (`/books/purchase`)
+
+- Form submits to `POST /api/books/order` → Convex `bookOrders.submitBookOrder` → Resend email.
+- On **Convex dashboard**, set `RESEND_API_KEY` and `RESEND_FROM_EMAIL` (same as OTP). Optional: `BOOK_ORDER_NOTIFY_EMAIL` (default `minhhoangd852@gmail.com`).
+
+## 5. PayOS webhook
 
 ```
 https://hdpedu.com/api/purchase/notify/payos
@@ -86,7 +91,7 @@ Common causes:
 
 ```powershell
 $env:NEXT_PUBLIC_CONVEX_URL="https://adept-tapir-159.convex.cloud"
-$env:COURSE_PRICE="2000"
+$env:COURSE_PRICE="399000"
 node scripts/set-course-price.mjs
 ```
 

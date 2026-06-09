@@ -15,6 +15,7 @@ import type * as community from "../community.js";
 import type * as contact from "../contact.js";
 import type * as courses from "../courses.js";
 import type * as homeworks from "../homeworks.js";
+import type * as onboarding from "../onboarding.js";
 import type * as progress from "../progress.js";
 import type * as purchases from "../purchases.js";
 import type * as supportRateLimit from "../supportRateLimit.js";
@@ -35,6 +36,7 @@ declare const fullApi: ApiFromModules<{
   contact: typeof contact;
   courses: typeof courses;
   homeworks: typeof homeworks;
+  onboarding: typeof onboarding;
   progress: typeof progress;
   purchases: typeof purchases;
   supportRateLimit: typeof supportRateLimit;

@@ -161,7 +161,7 @@ export const createOrUpdateUser = mutation({
     passwordHash: v.optional(v.string()),
     agreeToTerms: v.boolean(),
   },
-  returns: v.object({ userId: v.string() }),
+  returns: v.object({ userId: v.string(), isNewUser: v.boolean() }),
   handler: async (ctx, args) => {
     const normalizedEmail = args.email.trim().toLowerCase();
     const existing = await ctx.db
@@ -180,7 +180,7 @@ export const createOrUpdateUser = mutation({
         emailVerified: true,
         updatedAt: now,
       });
-      return { userId: existing._id.toString() };
+      return { userId: existing._id.toString(), isNewUser: false };
     }
 
     const userId = await ctx.db.insert('users', {
@@ -194,11 +194,12 @@ export const createOrUpdateUser = mutation({
       username: undefined,
       avatarUrl: undefined,
       balance: 0,
+      onboardingRequired: true,
       createdAt: now,
       updatedAt: now,
     });
 
-    return { userId: userId.toString() };
+    return { userId: userId.toString(), isNewUser: true };
   },
 });
 

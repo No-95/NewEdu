@@ -7,11 +7,10 @@ import { useQuery } from 'convex/react';
 import { Header } from '@/components/Header';
 import { ParticleBackground } from '@/components/DarkmodeParticleBackground';
 import { CourseOutlineSidebar } from '@/components/courses/CourseOutlineSidebar';
-import CourseAction from '@/components/courses/CourseAction';
 import { api } from '@/convex/_generated/api';
 import { useCourseAccess } from '@/hooks/useCourseAccess';
 import { useLanguage } from '@/lib/context/LanguageContext';
-import { COURSE_TEXT, getCourseLanguage } from '@/lib/courses/localization';
+import { COURSE_TEXT, formatCourseTemplate, getCourseLanguage } from '@/lib/courses/localization';
 import { formatVndPrice } from '@/lib/currency';
 
 interface CourseDetailClientProps {
@@ -25,7 +24,11 @@ export function CourseDetailClient({ courseSlug }: CourseDetailClientProps) {
   const locale = getCourseLanguage(language);
   const text = COURSE_TEXT[locale].detail;
   const course = useQuery(api.courses.getCourseBySlug, { slug: courseSlug });
-  const { loading: accessLoading, hasAccess } = useCourseAccess(courseSlug, !!course?.isFree);
+  const { loading: accessLoading, syncingPayment, hasAccess } = useCourseAccess(
+    courseSlug,
+    !!course?.isFree,
+    { syncAfterPayment: paidStatus === '1' }
+  );
 
   if (!course) {
     return (
@@ -41,7 +44,7 @@ export function CourseDetailClient({ courseSlug }: CourseDetailClientProps) {
     );
   }
 
-  const coursePrice = course.price ?? 2_000;
+  const coursePrice = course.price ?? 399_000;
   const canWatch = course.isFree || hasAccess;
   const firstLecture = course.lectures[0]?.videoFolderName;
   const lastLecture = course.lectures[course.lectures.length - 1]?.videoFolderName;
@@ -52,14 +55,24 @@ export function CourseDetailClient({ courseSlug }: CourseDetailClientProps) {
       <Header />
 
       <main className="relative z-10 mx-auto max-w-7xl px-6 pb-16 pt-24">
-        {paidStatus === '1' ? (
+        {paidStatus === '1' && syncingPayment ? (
+          <div className="mb-6 rounded-xl border border-primary/40 bg-primary/10 px-4 py-3 text-sm text-foreground">
+            {text.confirmingPayment}
+          </div>
+        ) : null}
+        {paidStatus === '1' && !syncingPayment && hasAccess ? (
           <div className="mb-6 rounded-xl border border-emerald-300/40 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">
-            Payment successful. You now have access to this course.
+            {text.paymentSuccess}
+          </div>
+        ) : null}
+        {paidStatus === '1' && !syncingPayment && !hasAccess && !accessLoading ? (
+          <div className="mb-6 rounded-xl border border-amber-300/40 bg-amber-400/10 px-4 py-3 text-sm text-amber-100">
+            {text.paymentSyncing}
           </div>
         ) : null}
         {paidStatus === '0' ? (
           <div className="mb-6 rounded-xl border border-amber-300/40 bg-amber-400/10 px-4 py-3 text-sm text-amber-100">
-            Payment was cancelled. Purchase the course to unlock all videos.
+            {text.paymentCancelled}
           </div>
         ) : null}
 
@@ -126,20 +139,14 @@ export function CourseDetailClient({ courseSlug }: CourseDetailClientProps) {
                     {text.jumpLast}
                   </span>
                 )}
-                {!course.isFree ? (
-                  <CourseAction
-                    courseSlug={course.slug}
-                    isFree={false}
-                    price={coursePrice}
-                    hideContinueButton={accessLoading}
-                  />
-                ) : (
-                  <CourseAction courseSlug={course.slug} isFree price={0} />
-                )}
               </div>
               {!course.isFree && !accessLoading && !canWatch ? (
                 <p className="mt-4 text-sm text-muted-foreground">
-                  Purchase this course to unlock all {course.totalVideos} video lessons.
+                  {text.purchaseIntro}
+                  <Link href="/courses" className="font-semibold text-primary underline-offset-2 hover:underline">
+                    {text.purchaseLinkLabel}
+                  </Link>
+                  {formatCourseTemplate(text.purchaseOutro, { count: course.totalVideos })}
                 </p>
               ) : null}
             </div>

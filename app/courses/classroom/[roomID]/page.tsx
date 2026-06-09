@@ -6,10 +6,12 @@ import { useMutation } from 'convex/react';
 import { useQuery } from 'convex/react';
 
 import { api } from '@/convex/_generated/api';
+import { useLanguage } from '@/lib/context/LanguageContext';
 
 const FALLBACK_APP_ID = 'vpaas-magic-cookie-acd82c59b18f421aa23114905dfe4ca3';
 
 export default function ClassroomRoomPage() {
+  const { t } = useLanguage();
   const params = useParams<{ roomID: string }>();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -26,8 +28,8 @@ export default function ClassroomRoomPage() {
 
   const roomID = decodeURIComponent(params.roomID ?? '');
   const isHost = searchParams.get('host') === '1';
-  const roomTitle = searchParams.get('title') || 'Korean Production Live Classroom';
-  const hostName = searchParams.get('hostName') || 'HDP EDU Host';
+  const roomTitle = searchParams.get('title') || t('classroom.defaultTitle');
+  const hostName = searchParams.get('hostName') || t('classroom.defaultHost');
   const classroomAccess = useQuery(api.classrooms.getClassroomAccess, { roomID });
 
   const appId = process.env.NEXT_PUBLIC_JITSI_APP_ID || FALLBACK_APP_ID;
@@ -105,7 +107,7 @@ export default function ClassroomRoomPage() {
         roomName,
         parentNode: meetingContainerRef.current,
         userInfo: {
-          displayName: isHost ? hostName : 'Student',
+          displayName: isHost ? hostName : t('classroom.student'),
         },
         configOverwrite: {
           prejoinPageEnabled: false,
@@ -157,7 +159,7 @@ export default function ClassroomRoomPage() {
     setPasswordError('');
 
     if (!passwordInput.trim()) {
-      setPasswordError('Please enter the classroom password.');
+      setPasswordError(t('classroom.passwordEmpty'));
       return;
     }
 
@@ -169,7 +171,7 @@ export default function ClassroomRoomPage() {
       });
 
       if (!isValid) {
-        setPasswordError('Incorrect password. Please try again.');
+        setPasswordError(t('classroom.passwordIncorrect'));
         return;
       }
 
@@ -184,11 +186,11 @@ export default function ClassroomRoomPage() {
     <div className="fixed inset-0 z-[80] h-screen w-screen overflow-hidden bg-black text-foreground">
       {!roomID ? (
         <div className="flex h-full w-full items-center justify-center bg-background px-6 text-center">
-          <p className="text-sm text-muted-foreground">Invalid room ID.</p>
+          <p className="text-sm text-muted-foreground">{t('classroom.invalidRoom')}</p>
         </div>
       ) : classroomAccess && !classroomAccess.exists ? (
         <div className="flex h-full w-full items-center justify-center bg-background px-6 text-center">
-          <p className="text-sm text-muted-foreground">This classroom is no longer available.</p>
+          <p className="text-sm text-muted-foreground">{t('classroom.roomUnavailable')}</p>
         </div>
       ) : requiresPassword && !accessGranted ? (
         <div className="flex h-full w-full items-center justify-center bg-background px-6">
@@ -196,14 +198,12 @@ export default function ClassroomRoomPage() {
             onSubmit={handleUnlockRoom}
             className="w-full max-w-md rounded-2xl border border-border/60 bg-card/80 p-6 shadow-2xl"
           >
-            <h1 className="text-2xl font-black text-foreground">Classroom Locked</h1>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Enter the classroom password from your teacher to join.
-            </p>
+            <h1 className="text-2xl font-black text-foreground">{t('classroom.lockedTitle')}</h1>
+            <p className="mt-2 text-sm text-muted-foreground">{t('classroom.lockedSubtitle')}</p>
 
             <div className="mt-5">
               <label htmlFor="classroom-password" className="mb-2 block text-sm font-medium text-foreground">
-                Password
+                {t('classroom.passwordLabel')}
               </label>
               <input
                 id="classroom-password"
@@ -211,7 +211,7 @@ export default function ClassroomRoomPage() {
                 value={passwordInput}
                 onChange={(e) => setPasswordInput(e.target.value)}
                 className="w-full rounded-lg border border-border/60 bg-muted/35 px-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="Enter classroom password"
+                placeholder={t('classroom.passwordInputPlaceholder')}
                 autoFocus
               />
             </div>
@@ -223,7 +223,7 @@ export default function ClassroomRoomPage() {
               disabled={isCheckingPassword}
               className="mt-5 w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-70"
             >
-              {isCheckingPassword ? 'Checking...' : 'Join classroom'}
+              {isCheckingPassword ? t('classroom.checking') : t('classroom.joinClassroom')}
             </button>
           </form>
         </div>
@@ -231,7 +231,7 @@ export default function ClassroomRoomPage() {
         <div ref={meetingContainerRef} className="h-full w-full" />
       ) : (
         <div className="flex h-full w-full items-center justify-center bg-background px-6 text-center">
-          <p className="text-sm text-muted-foreground">Invalid room ID.</p>
+          <p className="text-sm text-muted-foreground">{t('classroom.invalidRoom')}</p>
         </div>
       )}
     </div>

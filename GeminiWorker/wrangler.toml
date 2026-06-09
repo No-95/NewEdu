@@ -2,5 +2,9 @@ name = "gemini-worker"
 main = "src/index.ts"
 compatibility_date = "2026-06-02"
 
+# Run near Google's API (avoids HKG/CN colos where Gemini returns FAILED_PRECONDITION).
+[placement]
+hostname = "generativelanguage.googleapis.com"
+
 [observability.logs]
 enabled = true

@@ -2,7 +2,9 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Section } from '@/components/Section';
+import { HomeBulletList, HomeCard } from '@/components/sections/home/HomeCard';
 import { useLanguage } from '@/lib/context/LanguageContext';
 
 interface CommunitySectionProps {
@@ -12,16 +14,8 @@ interface CommunitySectionProps {
 
 export const CommunitySection: React.FC<CommunitySectionProps> = ({ pageNumber, totalPages }) => {
   const { t } = useLanguage();
-  const stats = [
-    { label: t('home.community.learners'), value: '50K+' },
-    { label: t('home.community.countries'), value: '180+' },
-    { label: t('home.community.support'), value: '24/7' },
-  ];
-
-  const testimonials = [
-    { text: 'HDP EDU changed my life. I went from complete beginner to conversational in 6 months!', author: 'Sarah Chen', role: 'Product Manager' },
-    { text: 'The community here is incredible. Everyone is supportive and motivating.', author: 'Marcus Johnson', role: 'Language Enthusiast' },
-  ];
+  const bullets = t('home.community.bullets', { returnObjects: true }) as string[];
+  const bulletItems = Array.isArray(bullets) ? bullets : [];
 
   return (
     <Section
@@ -31,63 +25,43 @@ export const CommunitySection: React.FC<CommunitySectionProps> = ({ pageNumber, 
       showPageIndicator={true}
       className="relative"
     >
-      <div className="relative z-10 w-full max-w-7xl px-8 py-12 pt-28">
-        <div className="grid md:grid-cols-2 gap-14 items-center">
-          {/* Left: Image */}
-          <div className="order-2 md:order-1 animate-fade-in md:h-full">
-            <div className="relative w-full h-80 md:h-full rounded-xl overflow-hidden">
-              <Image
-                src="/homepage/section6.png"
-                alt="Community"
-                fill
-                className="w-full h-full object-cover rounded-xl"
-              />
-            </div>
+      <div className="absolute inset-0 z-10 flex items-center px-6 py-20 md:px-10">
+        <div className="mx-auto grid w-full max-w-6xl animate-slide-up items-center gap-10 lg:grid-cols-2 lg:gap-14">
+          <div className="space-y-6">
+            <HomeCard variant="feature">
+              <span className="home-eyebrow">HDP EDU</span>
+              <h2 className="home-title mt-4">{t('home.community.title')}</h2>
+              <p className="home-subtitle mt-3">{t('home.community.subtitle')}</p>
+
+              <HomeCard variant="muted" className="mt-6">
+                <p className="mb-4 text-xs font-semibold uppercase tracking-[0.14em] text-foreground/90">
+                  {t('home.community.canDo')}
+                </p>
+                <HomeBulletList items={bulletItems} inCards />
+              </HomeCard>
+
+              <Link href="/community" className="home-btn-primary mt-6 inline-flex">
+                {t('home.community.cta')}
+              </Link>
+            </HomeCard>
           </div>
 
-          {/* Right: Content */}
-          <div className="order-1 md:order-2 space-y-8 animate-slide-up">
-            <div className="space-y-3">
-              <h2 className="text-4xl md:text-5xl font-bold">{t('home.community.joinTitle')}</h2>
-              <p className="text-lg text-muted-foreground">
-                {t('home.community.subtitle')}
+          <div className="relative">
+            <HomeCard variant="default" className="relative aspect-[5/4] w-full overflow-hidden !p-0">
+              <Image
+                src="/homepage/section6.png"
+                alt={t('home.community.title')}
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-tr from-background/50 via-transparent to-primary/10" />
+            </HomeCard>
+            <HomeCard variant="muted" className="absolute -bottom-5 left-6 right-6 text-center">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary/90">
+                Vietnam — Korea
               </p>
-            </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-4">
-              {stats.map((stat, index) => (
-                <div key={index} className="text-center glass rounded-lg p-3">
-                  <div className="text-xl font-bold text-primary">{stat.value}</div>
-                  <p className="text-xs text-muted-foreground">{stat.label}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* Testimonials */}
-            <div className="space-y-4">
-              {testimonials.map((testimonial, index) => (
-                <div key={index} className="glass rounded-lg p-3">
-                  <div className="flex gap-0.5 mb-2">
-                    {[...Array(5)].map((_, i) => (
-                      <svg key={i} className="w-3.5 h-3.5 text-primary fill-primary" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    ))}
-                  </div>
-                  <p className="text-sm text-foreground italic mb-2">&quot;{testimonial.text}&quot;</p>
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center text-[10px] font-bold text-primary">
-                      {testimonial.author.split(' ').map(n => n[0]).join('')}
-                    </div>
-                    <div>
-                      <p className="text-xs font-semibold text-foreground">{testimonial.author}</p>
-                      <p className="text-[10px] text-muted-foreground">{testimonial.role}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+              <p className="mt-1 text-sm text-muted-foreground">{t('home.community.cta')}</p>
+            </HomeCard>
           </div>
         </div>
       </div>

@@ -2,15 +2,16 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery } from 'convex/react';
 
 import { Header } from '@/components/Header';
 import { ParticleBackground } from '@/components/DarkmodeParticleBackground';
 import { api } from '@/convex/_generated/api';
+import { useLanguage } from '@/lib/context/LanguageContext';
 
-function formatDateTime(timestamp: number) {
-  return new Date(timestamp).toLocaleString();
+function formatDateTime(timestamp: number, locale: string) {
+  return new Date(timestamp).toLocaleString(locale, { timeZone: 'Asia/Ho_Chi_Minh' });
 }
 
 function makeRoomID() {
@@ -19,24 +20,30 @@ function makeRoomID() {
 }
 
 export default function ClassroomLobbyPage() {
+  const { t, language } = useLanguage();
   const router = useRouter();
-  const [hostName, setHostName] = useState('HDP EDU Host');
-  const [roomTitle, setRoomTitle] = useState('Korean Production Live Classroom');
+  const [hostName, setHostName] = useState('');
+  const [roomTitle, setRoomTitle] = useState('');
   const [roomPassword, setRoomPassword] = useState('');
   const rooms = useQuery(api.classrooms.listLiveClassrooms, {}) ?? [];
   const upsertClassroom = useMutation(api.classrooms.upsertClassroom);
 
+  const dateLocale =
+    language === 'vi' ? 'vi-VN' : language === 'ko' ? 'ko-KR' : 'en-US';
+
+  useEffect(() => {
+    setHostName(t('classroom.defaultHost'));
+    setRoomTitle(t('classroom.defaultTitle'));
+  }, [language, t]);
+
   const hasRooms = rooms.length > 0;
 
-  const noClassroomMessage = useMemo(
-    () => 'No classroom available, Start your classroom now',
-    []
-  );
+  const noClassroomMessage = useMemo(() => t('classroom.noRoomsTitle'), [t, language]);
 
   const startClassroom = async () => {
     const roomID = makeRoomID();
-    const title = roomTitle.trim() || 'Korean Production Live Classroom';
-    const host = hostName.trim() || 'HDP EDU Host';
+    const title = roomTitle.trim() || t('classroom.defaultTitle');
+    const host = hostName.trim() || t('classroom.defaultHost');
     const password = roomPassword.trim() || undefined;
 
     await upsertClassroom({
@@ -48,7 +55,7 @@ export default function ClassroomLobbyPage() {
     });
 
     router.push(
-      `/courses/classroom/${encodeURIComponent(roomID)}?host=1&title=${encodeURIComponent(title)}&hostName=${encodeURIComponent(host)}`
+      `/courses/classroom/${encodeURIComponent(roomID)}?host=1&title=${encodeURIComponent(title)}&hostName=${encodeURIComponent(host)}`,
     );
   };
 
@@ -62,16 +69,16 @@ export default function ClassroomLobbyPage() {
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <p className="inline-flex rounded-full border border-primary/35 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.15em] text-primary">
-                Online Classroom
+                {t('classroom.badge')}
               </p>
-              <h1 className="mt-3 text-3xl font-black md:text-4xl">Live Classroom Lobby</h1>
+              <h1 className="mt-3 text-3xl font-black md:text-4xl">{t('classroom.title')}</h1>
               <p className="mt-2 max-w-3xl text-sm text-muted-foreground md:text-base">
-                Join currently running classrooms or start a new session instantly.
+                {t('classroom.subtitle')}
               </p>
             </div>
 
             <div className="rounded-2xl border border-emerald-500/25 bg-emerald-500/10 px-5 py-3 text-center">
-              <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Live now</p>
+              <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{t('classroom.liveNow')}</p>
               <p className="text-2xl font-black text-emerald-300">{rooms.length}</p>
             </div>
           </div>
@@ -79,8 +86,8 @@ export default function ClassroomLobbyPage() {
 
         <section className="mt-8 grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
           <article className="glass rounded-3xl border border-border/60 p-6 md:p-7">
-            <h2 className="text-xl font-bold">Available Classrooms</h2>
-            <p className="mt-1 text-sm text-muted-foreground">Choose a room and join in one click.</p>
+            <h2 className="text-xl font-bold">{t('classroom.availableTitle')}</h2>
+            <p className="mt-1 text-sm text-muted-foreground">{t('classroom.availableSubtitle')}</p>
 
             {hasRooms ? (
               <div className="mt-5 grid gap-4">
@@ -92,24 +99,30 @@ export default function ClassroomLobbyPage() {
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <h3 className="text-lg font-bold text-foreground">{room.title}</h3>
-                        <p className="mt-1 text-sm text-muted-foreground">Hosted by {room.hostName}</p>
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          {t('classroom.hostedBy')} {room.hostName}
+                        </p>
                       </div>
 
                       <div className="flex flex-wrap items-center gap-2">
                         {room.requiresPassword ? (
                           <span className="inline-flex rounded-full border border-amber-400/35 bg-amber-400/15 px-2.5 py-1 text-xs font-semibold text-amber-300">
-                            Password required
+                            {t('classroom.passwordRequired')}
                           </span>
                         ) : null}
                         <span className="inline-flex rounded-full border border-emerald-400/35 bg-emerald-400/15 px-2.5 py-1 text-xs font-semibold text-emerald-300">
-                          Live
+                          {t('classroom.live')}
                         </span>
                       </div>
                     </div>
 
                     <div className="mt-4 flex flex-wrap gap-3 text-xs text-muted-foreground">
-                      <span className="rounded-md bg-muted/40 px-2.5 py-1">Room: {room.roomID}</span>
-                      <span className="rounded-md bg-muted/40 px-2.5 py-1">Started: {formatDateTime(room.startedAt)}</span>
+                      <span className="rounded-md bg-muted/40 px-2.5 py-1">
+                        {t('classroom.roomLabel')}: {room.roomID}
+                      </span>
+                      <span className="rounded-md bg-muted/40 px-2.5 py-1">
+                        {t('classroom.startedLabel')}: {formatDateTime(room.startedAt, dateLocale)}
+                      </span>
                     </div>
 
                     <div className="mt-4">
@@ -117,7 +130,7 @@ export default function ClassroomLobbyPage() {
                         href={`/courses/classroom/${encodeURIComponent(room.roomID)}`}
                         className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
                       >
-                        Join classroom
+                        {t('classroom.joinClassroom')}
                       </Link>
                     </div>
                   </div>
@@ -126,50 +139,46 @@ export default function ClassroomLobbyPage() {
             ) : (
               <div className="mt-5 rounded-2xl border border-dashed border-border/70 bg-background/50 p-8 text-center">
                 <p className="text-lg font-semibold text-foreground">{noClassroomMessage}</p>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  Create a room from the panel on the right and go live in seconds.
-                </p>
+                <p className="mt-2 text-sm text-muted-foreground">{t('classroom.noRoomsHint')}</p>
               </div>
             )}
           </article>
 
           <aside className="glass rounded-3xl border border-border/60 p-6 md:p-7">
-            <h2 className="text-xl font-bold">Start new classroom</h2>
-            <p className="mt-1 text-sm text-muted-foreground">Create a new live room and invite learners.</p>
+            <h2 className="text-xl font-bold">{t('classroom.startTitle')}</h2>
+            <p className="mt-1 text-sm text-muted-foreground">{t('classroom.startSubtitle')}</p>
 
             <div className="mt-5 space-y-4">
               <div>
-                <label className="mb-2 block text-sm font-medium">Host name</label>
+                <label className="mb-2 block text-sm font-medium">{t('classroom.hostName')}</label>
                 <input
                   value={hostName}
                   onChange={(e) => setHostName(e.target.value)}
                   className="w-full rounded-lg border border-border/60 bg-muted/35 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="Your name"
+                  placeholder={t('classroom.hostNamePlaceholder')}
                 />
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-medium">Classroom title</label>
+                <label className="mb-2 block text-sm font-medium">{t('classroom.classroomTitle')}</label>
                 <input
                   value={roomTitle}
                   onChange={(e) => setRoomTitle(e.target.value)}
                   className="w-full rounded-lg border border-border/60 bg-muted/35 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="Korean Production Live Classroom"
+                  placeholder={t('classroom.classroomTitlePlaceholder')}
                 />
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-medium">Classroom password (optional)</label>
+                <label className="mb-2 block text-sm font-medium">{t('classroom.passwordOptional')}</label>
                 <input
                   type="password"
                   value={roomPassword}
                   onChange={(e) => setRoomPassword(e.target.value)}
                   className="w-full rounded-lg border border-border/60 bg-muted/35 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="Set password for students"
+                  placeholder={t('classroom.passwordPlaceholder')}
                 />
-                <p className="mt-2 text-xs text-muted-foreground">
-                  Leave empty if anyone can join.
-                </p>
+                <p className="mt-2 text-xs text-muted-foreground">{t('classroom.passwordHint')}</p>
               </div>
 
               <button
@@ -177,7 +186,7 @@ export default function ClassroomLobbyPage() {
                 onClick={startClassroom}
                 className="w-full rounded-lg bg-gradient-to-r from-primary to-secondary px-4 py-3 text-sm font-semibold text-white transition hover:brightness-105"
               >
-                Start classroom now
+                {t('classroom.startNow')}
               </button>
             </div>
           </aside>

@@ -10,6 +10,7 @@ type IncomingHistoryItem = {
 type IncomingPayload = {
   message?: string;
   history?: IncomingHistoryItem[];
+  locale?: 'en' | 'vi' | 'ko';
 };
 
 const MAX_MESSAGE_CHARS = 1500;
@@ -121,8 +122,13 @@ export async function POST(request: Request) {
     ? payload.history.slice(-MAX_HISTORY_ITEMS)
     : [];
 
+  const locale = payload.locale;
+  const safeLocale =
+    locale === 'en' || locale === 'vi' || locale === 'ko' ? locale : undefined;
+
   const forwardedPayload: IncomingPayload = {
     message: safeMessage,
+    locale: safeLocale,
     history: safeHistory
       .filter((item) => item && (item.role === 'user' || item.role === 'assistant') && typeof item.text === 'string')
       .map((item) => ({

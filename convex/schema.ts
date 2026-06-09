@@ -16,9 +16,50 @@ export default defineSchema({
     createdAt: v.optional(v.number()),
     updatedAt: v.optional(v.number()),
     balance: v.optional(v.number()),
+    hdpId: v.optional(v.string()),
+    onboardingCompletedAt: v.optional(v.number()),
+    onboardingVersion: v.optional(v.number()),
+    onboardingRequired: v.optional(v.boolean()),
+    activeRole: v.optional(v.string()),
   })
     .index('by_email', ['email'])
-    .index('by_role', ['role']),
+    .index('by_role', ['role'])
+    .index('by_hdpId', ['hdpId']),
+
+  hdpIdSequences: defineTable({
+    name: v.literal('default'),
+    lastValue: v.number(),
+  }).index('by_name', ['name']),
+
+  userOnboarding: defineTable({
+    userId: v.id('users'),
+    version: v.number(),
+    roles: v.array(v.string()),
+    goals: v.array(v.string()),
+    goalOtherText: v.optional(v.string()),
+    industries: v.array(v.string()),
+    industryOtherText: v.optional(v.string()),
+    learnerStage: v.optional(v.string()),
+    jobSeekerStage: v.optional(v.string()),
+    employerStage: v.optional(v.string()),
+    marketingInterests: v.array(v.string()),
+    submittedAt: v.number(),
+  }).index('by_userId', ['userId']),
+
+  userRoleProfiles: defineTable({
+    userId: v.id('users'),
+    roleKey: v.string(),
+    stageKey: v.optional(v.string()),
+    headline: v.optional(v.string()),
+    bio: v.optional(v.string()),
+    companyName: v.optional(v.string()),
+    experienceSummary: v.optional(v.string()),
+    enabled: v.boolean(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_userId', ['userId'])
+    .index('by_userId_roleKey', ['userId', 'roleKey']),
 
   otpSessions: defineTable({
     email: v.string(),
@@ -166,8 +207,7 @@ export default defineSchema({
     updatedAt: v.optional(v.number()),
   })
     .index('by_assignedTo', ['assignedTo'])
-    .index('by_status', ['status'])
-,
+    .index('by_status', ['status']),
 
   userCourseProgress: defineTable({
     userId: v.id('users'),
@@ -196,10 +236,15 @@ export default defineSchema({
     phone: v.string(),
     address: v.string(),
     note: v.optional(v.string()),
+    userId: v.optional(v.string()),
+    courseId: v.optional(v.string()),
+    source: v.optional(v.string()),
     createdAt: v.number(),
   })
     .index('by_createdAt', ['createdAt'])
-    .index('by_phone', ['phone']),
+    .index('by_phone', ['phone'])
+    .index('by_user_course', ['userId', 'courseId'])
+    .index('by_userId_source', ['userId', 'source']),
 
   supportDailyUsage: defineTable({
     identifier: v.string(),

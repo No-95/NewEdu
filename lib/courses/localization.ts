@@ -13,6 +13,16 @@ export function getCourseLanguage(language: Language): CourseLanguage {
   return toCourseLanguage(language);
 }
 
+export function formatCourseTemplate(
+  template: string,
+  values: Record<string, string | number>,
+): string {
+  return template.replace(/\{(\w+)\}/g, (_, key: string) => {
+    const value = values[key];
+    return value === undefined ? `{${key}}` : String(value);
+  });
+}
+
 export const COURSE_TEXT: Record<
   CourseLanguage,
   {
@@ -37,6 +47,38 @@ export const COURSE_TEXT: Record<
       flowItem2: string;
       flowItem3: string;
       openDetails: string;
+      onlineClassroom: string;
+      viewOnlineRooms: string;
+      freeBookPromo: string;
+      giftBookTag: string;
+    };
+    action: {
+      continueCourse: string;
+      startCourse: string;
+      purchaseCourse: string;
+      processing: string;
+      signInToPurchase: string;
+      purchaseFailed: string;
+      createPurchaseFailed: string;
+      payosFailed: string;
+      giftBookBadge: string;
+      claimFreeBook: string;
+      giftFormTitle: string;
+      giftFormDescription: string;
+      giftFullName: string;
+      giftPhone: string;
+      giftAddress: string;
+      giftNote: string;
+      giftFullNamePlaceholder: string;
+      giftPhonePlaceholder: string;
+      giftAddressPlaceholder: string;
+      giftNotePlaceholder: string;
+      giftSubmit: string;
+      giftSubmitting: string;
+      giftSuccess: string;
+      alreadyClaimedGift: string;
+      giftOnceOnly: string;
+      signInToClaim: string;
     };
     detail: {
       loading: string;
@@ -49,6 +91,13 @@ export const COURSE_TEXT: Record<
       startDescription: string;
       watchFirst: string;
       jumpLast: string;
+      confirmingPayment: string;
+      paymentSuccess: string;
+      paymentSyncing: string;
+      paymentCancelled: string;
+      purchaseIntro: string;
+      purchaseLinkLabel: string;
+      purchaseOutro: string;
     };
     video: {
       loading: string;
@@ -64,6 +113,8 @@ export const COURSE_TEXT: Record<
       firstLessonMessage: string;
       lastLessonMessage: string;
       descriptionFallback: string;
+      purchaseRequired: string;
+      unlockCourseFor: string;
     };
     outline: {
       title: string;
@@ -97,6 +148,38 @@ export const COURSE_TEXT: Record<
       flowItem2: 'Practical lecture progression',
       flowItem3: 'Production vocabulary focus',
       openDetails: 'Open course details',
+      onlineClassroom: 'Online Classroom',
+      viewOnlineRooms: 'View available online classrooms',
+      freeBookPromo: 'Free book included with this course',
+      giftBookTag: 'Free book',
+    },
+    action: {
+      continueCourse: 'Continue with this course',
+      startCourse: 'Start course',
+      purchaseCourse: 'Purchase this course',
+      processing: 'Processing...',
+      signInToPurchase: 'Please sign in to purchase',
+      purchaseFailed: 'Purchase failed',
+      createPurchaseFailed: 'Failed to create purchase',
+      payosFailed: 'Failed to start PayOS checkout',
+      giftBookBadge: 'Free book',
+      claimFreeBook: 'Claim free book',
+      giftFormTitle: 'Free book delivery',
+      giftFormDescription: 'Enter your shipping details to receive the book included with your course.',
+      giftFullName: 'Full name',
+      giftPhone: 'Phone number',
+      giftAddress: 'Shipping address',
+      giftNote: 'Note for delivery (optional)',
+      giftFullNamePlaceholder: 'Enter your full name',
+      giftPhonePlaceholder: 'Enter your phone number',
+      giftAddressPlaceholder: 'Enter your full shipping address',
+      giftNotePlaceholder: 'e.g. call before delivery',
+      giftSubmit: 'Submit',
+      giftSubmitting: 'Submitting...',
+      giftSuccess: 'Registered successfully. We will contact you soon to deliver your book.',
+      alreadyClaimedGift: 'Book received',
+      giftOnceOnly: 'Each account can only register for the free book once.',
+      signInToClaim: 'Please sign in to claim your free book',
     },
     detail: {
       loading: 'Loading course...',
@@ -110,6 +193,15 @@ export const COURSE_TEXT: Record<
         'The outline on the right is grouped automatically by Unit and sorted numerically, so Unit 2 always comes before Unit 10.',
       watchFirst: 'Watch first lecture',
       jumpLast: 'Jump to last lecture',
+      confirmingPayment: 'Confirming your payment…',
+      paymentSuccess: 'Payment successful. You now have access to this course.',
+      paymentSyncing:
+        'Payment received. Access is still syncing — refresh in a moment or contact support if this persists.',
+      paymentCancelled:
+        'Payment was cancelled. Purchase the course from the courses page to unlock all videos.',
+      purchaseIntro: 'Purchase this course from the ',
+      purchaseLinkLabel: 'courses page',
+      purchaseOutro: ' to unlock all {count} video lessons.',
     },
     video: {
       loading: 'Loading video...',
@@ -126,6 +218,8 @@ export const COURSE_TEXT: Record<
       lastLessonMessage: 'You have reached the final lesson of the course.',
       descriptionFallback:
         'This lesson focuses on practical factory communication, specialized vocabulary, and production workflow scenarios.',
+      purchaseRequired: 'Purchase required',
+      unlockCourseFor: 'Unlock this course for {price} to watch all video lessons.',
     },
     outline: {
       title: 'Course Outline',
@@ -158,6 +252,38 @@ export const COURSE_TEXT: Record<
       flowItem2: 'Tiến trình bài học thực tiễn',
       flowItem3: 'Tập trung từ vựng sản xuất',
       openDetails: 'Mở chi tiết khóa học',
+      onlineClassroom: 'Lớp học trực tuyến',
+      viewOnlineRooms: 'Xem các lớp học trực tuyến đang mở',
+      freeBookPromo: 'Tặng sách khi mua khóa học này',
+      giftBookTag: 'Tặng sách',
+    },
+    action: {
+      continueCourse: 'Tiếp tục khóa học này',
+      startCourse: 'Bắt đầu khóa học',
+      purchaseCourse: 'Mua khóa học này',
+      processing: 'Đang xử lý...',
+      signInToPurchase: 'Vui lòng đăng nhập để mua khóa học',
+      purchaseFailed: 'Mua khóa học thất bại',
+      createPurchaseFailed: 'Không tạo được đơn mua',
+      payosFailed: 'Không khởi tạo được thanh toán PayOS',
+      giftBookBadge: 'Tặng Sách',
+      claimFreeBook: 'Nhận sách Free',
+      giftFormTitle: 'Đăng ký nhận sách tặng',
+      giftFormDescription: 'Điền thông tin giao hàng để nhận sách tặng kèm khóa học bạn đã mua.',
+      giftFullName: 'Họ và tên',
+      giftPhone: 'Số điện thoại',
+      giftAddress: 'Địa chỉ nhận hàng',
+      giftNote: 'Ghi chú (tùy chọn)',
+      giftFullNamePlaceholder: 'Nhập họ và tên',
+      giftPhonePlaceholder: 'Nhập số điện thoại',
+      giftAddressPlaceholder: 'Nhập địa chỉ nhận hàng chi tiết',
+      giftNotePlaceholder: 'Ví dụ: gọi trước khi giao',
+      giftSubmit: 'Gửi đăng ký',
+      giftSubmitting: 'Đang gửi...',
+      giftSuccess: 'Đăng ký nhận sách thành công. Chúng tôi sẽ liên hệ bạn sớm.',
+      alreadyClaimedGift: 'Đã nhận sách',
+      giftOnceOnly: 'Mỗi tài khoản chỉ được đăng ký nhận sách một lần.',
+      signInToClaim: 'Vui lòng đăng nhập để nhận sách',
     },
     detail: {
       loading: 'Đang tải khóa học...',
@@ -171,6 +297,15 @@ export const COURSE_TEXT: Record<
         'Outline bên phải được nhóm tự động theo Unit và sắp xếp theo thứ tự số, vì vậy Unit 2 luôn đứng trước Unit 10.',
       watchFirst: 'Xem bài học đầu tiên',
       jumpLast: 'Đến bài học cuối cùng',
+      confirmingPayment: 'Đang xác nhận thanh toán…',
+      paymentSuccess: 'Thanh toán thành công. Bạn đã có quyền truy cập khóa học.',
+      paymentSyncing:
+        'Đã nhận thanh toán. Quyền truy cập đang đồng bộ — vui lòng tải lại trang hoặc liên hệ hỗ trợ nếu vẫn chưa vào được.',
+      paymentCancelled:
+        'Thanh toán đã hủy. Mua khóa học tại trang khóa học để mở khóa toàn bộ video.',
+      purchaseIntro: 'Mua khóa học tại ',
+      purchaseLinkLabel: 'trang khóa học',
+      purchaseOutro: ' để mở khóa {count} bài video.',
     },
     video: {
       loading: 'Đang tải video...',
@@ -187,9 +322,11 @@ export const COURSE_TEXT: Record<
       lastLessonMessage: 'Bạn đã đến bài cuối cùng của khóa học.',
       descriptionFallback:
         'Nội dung bài học tập trung vào giao tiếp thực tế tại nhà máy, từ vựng chuyên môn và tình huống vận hành.',
+      purchaseRequired: 'Cần mua khóa học',
+      unlockCourseFor: 'Mua khóa học với giá {price} để xem toàn bộ bài video.',
     },
     outline: {
-      title: 'Course Outline',
+      title: 'Nội dung khóa học',
       subtitle: 'Danh sách Unit và bài học',
       sortedHint: 'Các bài học được sắp xếp theo thứ tự số Unit và Lecture.',
       unitFallbackPrefix: 'Unit',
@@ -198,7 +335,7 @@ export const COURSE_TEXT: Record<
   },
   ko: {
     catalog: {
-      learningHub: 'Learning Hub',
+      learningHub: '학습 허브',
       heroTitle: '현장 커뮤니케이션 중심의 한국어 실무 과정',
       heroDescription:
         '유닛 기반 학습 구조, 실전형 강의 흐름, 그리고 운영 가능한 HLS 스트리밍을 제공합니다. 지금 과정을 선택하고 시작하세요.',
@@ -219,6 +356,38 @@ export const COURSE_TEXT: Record<
       flowItem2: '실무 중심 강의 진행',
       flowItem3: '생산 현장 어휘 집중',
       openDetails: '코스 상세 보기',
+      onlineClassroom: '온라인 강의실',
+      viewOnlineRooms: '이용 가능한 온라인 강의실 보기',
+      freeBookPromo: '이 코스 구매 시 도서 증정',
+      giftBookTag: '도서 증정',
+    },
+    action: {
+      continueCourse: '이 강좌 계속하기',
+      startCourse: '강좌 시작하기',
+      purchaseCourse: '이 강좌 구매하기',
+      processing: '처리 중...',
+      signInToPurchase: '구매하려면 로그인해 주세요',
+      purchaseFailed: '구매에 실패했습니다',
+      createPurchaseFailed: '구매 주문을 생성하지 못했습니다',
+      payosFailed: 'PayOS 결제를 시작하지 못했습니다',
+      giftBookBadge: '도서 증정',
+      claimFreeBook: '무료 도서 신청',
+      giftFormTitle: '무료 도서 수령 신청',
+      giftFormDescription: '코스 구매 시 포함된 도서를 받을 배송 정보를 입력해 주세요.',
+      giftFullName: '이름',
+      giftPhone: '전화번호',
+      giftAddress: '배송 주소',
+      giftNote: '메모 (선택)',
+      giftFullNamePlaceholder: '이름을 입력하세요',
+      giftPhonePlaceholder: '전화번호를 입력하세요',
+      giftAddressPlaceholder: '상세 배송 주소를 입력하세요',
+      giftNotePlaceholder: '예: 배송 전 연락',
+      giftSubmit: '신청하기',
+      giftSubmitting: '제출 중...',
+      giftSuccess: '신청이 완료되었습니다. 곧 연락드리겠습니다.',
+      alreadyClaimedGift: '도서 수령 완료',
+      giftOnceOnly: '계정당 무료 도서는 한 번만 신청할 수 있습니다.',
+      signInToClaim: '무료 도서를 받으려면 로그인해 주세요',
     },
     detail: {
       loading: '코스를 불러오는 중입니다...',
@@ -232,6 +401,15 @@ export const COURSE_TEXT: Record<
         '오른쪽 아웃라인은 Unit 기준으로 자동 그룹화되고 숫자 순으로 정렬되어 Unit 2가 Unit 10보다 먼저 표시됩니다.',
       watchFirst: '첫 강의 보기',
       jumpLast: '마지막 강의로 이동',
+      confirmingPayment: '결제 확인 중…',
+      paymentSuccess: '결제가 완료되었습니다. 이제 코스에 접근할 수 있습니다.',
+      paymentSyncing:
+        '결제가 접수되었습니다. 접근 권한이 동기화 중입니다. 잠시 후 새로고침하거나 계속되지 않으면 지원팀에 문의하세요.',
+      paymentCancelled:
+        '결제가 취소되었습니다. 코스 페이지에서 구매하면 모든 영상을 이용할 수 있습니다.',
+      purchaseIntro: '코스 페이지에서 ',
+      purchaseLinkLabel: '이 강좌를 구매',
+      purchaseOutro: '하면 {count}개의 영상 강의를 이용할 수 있습니다.',
     },
     video: {
       loading: '영상을 불러오는 중입니다...',
@@ -248,9 +426,11 @@ export const COURSE_TEXT: Record<
       lastLessonMessage: '코스의 마지막 강의에 도달했습니다.',
       descriptionFallback:
         '본 강의는 생산 현장 실무 대화, 전문 어휘, 운영 상황 대응에 중점을 둡니다.',
+      purchaseRequired: '구매 필요',
+      unlockCourseFor: '{price}에 코스를 구매하면 모든 영상 강의를 시청할 수 있습니다.',
     },
     outline: {
-      title: 'Course Outline',
+      title: '코스 개요',
       subtitle: '유닛 및 강의 목록',
       sortedHint: '강의는 Unit/Lecture 숫자 순서대로 정렬됩니다.',
       unitFallbackPrefix: 'Unit',

@@ -6,14 +6,10 @@ import { Navigation } from '@/components/Navigation';
 import { Header } from '@/components/Header';
 import { usePageNavigation } from '@/hooks/usePageNavigation';
 import { HeroSection } from '@/components/sections/HeroSection';
-import { TrustSection } from '@/components/sections/TrustSection';
-import { LearningSection } from '@/components/sections/LearningSection';
-import { CoursesSection } from '@/components/sections/CoursesSection';
-import { JobsSection } from '@/components/sections/JobsSection';
-import { CommunitySection } from '@/components/sections/CommunitySection';
-import { CTASection } from '@/components/sections/CTASection';
+import { EcosystemSection } from '@/components/sections/EcosystemSection';
+import { HomeClosingSection } from '@/components/sections/HomeClosingSection';
 
-const TOTAL_PAGES = 7;
+const TOTAL_PAGES = 5;
 
 export default function Home() {
   const { currentPage, isTransitioning, nextPage, prevPage, canGoNext, canGoPrev } =
@@ -36,23 +32,32 @@ export default function Home() {
           {/* Section 1: Hero */}
           <HeroSection pageNumber={0} totalPages={TOTAL_PAGES} />
 
-          {/* Section 2: Trust Metrics */}
-          <TrustSection pageNumber={1} totalPages={TOTAL_PAGES} />
+          {/* Section 2: Ecosystem */}
+          <EcosystemSection pageNumber={1} totalPages={TOTAL_PAGES} />
 
-          {/* Section 3: Learning Experience */}
-          <LearningSection pageNumber={2} totalPages={TOTAL_PAGES} />
+          {/* Section 3: Why Choose */}
+          <HomeClosingSection
+            sectionId="why-choose"
+            panelIndex={0}
+            pageNumber={2}
+            totalPages={TOTAL_PAGES}
+          />
 
-          {/* Section 4: Course Categories */}
-          <CoursesSection pageNumber={3} totalPages={TOTAL_PAGES} />
+          {/* Section 4: Connection */}
+          <HomeClosingSection
+            sectionId="connection"
+            panelIndex={1}
+            pageNumber={3}
+            totalPages={TOTAL_PAGES}
+          />
 
-          {/* Section 5: Jobs & Opportunities */}
-          <JobsSection pageNumber={4} totalPages={TOTAL_PAGES} />
-
-          {/* Section 6: Community */}
-          <CommunitySection pageNumber={5} totalPages={TOTAL_PAGES} />
-
-          {/* Section 7: Final CTA */}
-          <CTASection pageNumber={6} totalPages={TOTAL_PAGES} />
+          {/* Section 5: Ecosystem CTA */}
+          <HomeClosingSection
+            sectionId="cta"
+            panelIndex={2}
+            pageNumber={4}
+            totalPages={TOTAL_PAGES}
+          />
         </div>
       </div>
 

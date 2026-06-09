@@ -12,7 +12,13 @@ import { HlsVideoPlayer } from '@/components/courses/HlsVideoPlayer';
 import { api } from '@/convex/_generated/api';
 import { useCourseAccess } from '@/hooks/useCourseAccess';
 import { useLanguage } from '@/lib/context/LanguageContext';
-import { COURSE_TEXT, LECTURE_TITLES, UNIT_TITLES, getCourseLanguage } from '@/lib/courses/localization';
+import {
+  COURSE_TEXT,
+  LECTURE_TITLES,
+  UNIT_TITLES,
+  formatCourseTemplate,
+  getCourseLanguage,
+} from '@/lib/courses/localization';
 import { compareVideoFolderNames, parseVideoFolderName } from '@/lib/courses/outline';
 import { formatVndPrice } from '@/lib/currency';
 
@@ -31,7 +37,7 @@ export function CourseVideoClient({ courseSlug, videoId }: CourseVideoClientProp
   });
   const course = useQuery(api.courses.getCourseBySlug, { slug: courseSlug });
   const isFree = course?.isFree ?? result?.course.isFree ?? false;
-  const price = course?.price ?? 2_000;
+  const price = course?.price ?? 399_000;
   const { loading: accessLoading, hasAccess } = useCourseAccess(courseSlug, isFree);
   const canWatch = isFree || hasAccess;
 
@@ -126,9 +132,9 @@ export function CourseVideoClient({ courseSlug, videoId }: CourseVideoClientProp
             {!accessLoading && !canWatch ? (
               <div className="rounded-2xl border border-border/60 bg-background/75 p-8 text-center">
                 <Lock className="mx-auto h-10 w-10 text-muted-foreground" />
-                <h3 className="mt-4 text-xl font-bold text-foreground">Purchase required</h3>
+                <h3 className="mt-4 text-xl font-bold text-foreground">{text.purchaseRequired}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Unlock this course for {formatVndPrice(price)} to watch all video lessons.
+                  {formatCourseTemplate(text.unlockCourseFor, { price: formatVndPrice(price) })}
                 </p>
                 <div className="mt-6 flex justify-center">
                   <CourseAction courseSlug={videoCourse.slug} isFree={false} price={price} />

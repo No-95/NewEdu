@@ -3,19 +3,21 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { useLanguage, type Language } from '@/lib/context/LanguageContext';
+import { GuestNavMenu } from '@/components/GuestNavMenu';
+import { RoleNavMenu } from '@/components/RoleNavMenu';
 
 interface HeaderProps {
   onNavigate?: (section: string) => void;
+  lockNavigation?: boolean;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
+export const Header: React.FC<HeaderProps> = ({ onNavigate, lockNavigation = false }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const pathname = usePathname();
+  const [activeRole, setActiveRole] = useState<string | null>(null);
   const { language, setLanguage, t } = useLanguage();
 
   React.useEffect(() => {
@@ -25,14 +27,30 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
       try {
         const res = await fetch('/api/auth/me', { credentials: 'same-origin' });
         if (res.ok) {
+          const data = await res.json();
           setIsAuthenticated(true);
+          setActiveRole(data.activeRole ?? null);
         } else {
           setIsAuthenticated(false);
+          setActiveRole(null);
         }
       } catch (e) {
         setIsAuthenticated(false);
+        setActiveRole(null);
       }
     })();
+  }, []);
+
+  React.useEffect(() => {
+    const handleRoleChange = (event: Event) => {
+      const detail = (event as CustomEvent<{ activeRole: string }>).detail;
+      if (detail?.activeRole) {
+        setActiveRole(detail.activeRole);
+      }
+    };
+
+    window.addEventListener('hdp-active-role-changed', handleRoleChange);
+    return () => window.removeEventListener('hdp-active-role-changed', handleRoleChange);
   }, []);
 
   const languages: { code: Language; label: string; flag: string }[] = [
@@ -41,65 +59,40 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
     { code: 'ko', label: '한국어', flag: '🇰🇷' },
   ];
 
-  const navItems = mounted ? [
-    { label: t('common.courses'), href: '/courses', section: 'courses' },
-    { label: t('common.jobs'), href: '/jobs', section: 'jobs' },
-    { label: t('common.books'), href: '/books', section: 'books' },
-    { label: t('common.community'), href: 'https://skylink.hdpedu.com', section: 'community' },
-    { label: t('common.contactUs'), href: '/contact-us', section: 'contact' },
-    { label: t('common.teachWithUs'), href: '/teacher-applicant', section: 'teach' },
-  ] : [];
-
-  const handleNavClick = (section: string) => {
-    onNavigate?.(section);
-    setMobileMenuOpen(false);
-  };
-
-  const isActive = (href: string) => pathname === href;
-
   return (
     <header className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex h-16 items-center justify-between gap-2">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-            <div className="w-11 h-11 rounded-lg bg-muted border border-border flex items-center justify-center overflow-hidden">
-              <Image src="/hdp-logo.png" alt="HDP EDU logo" width={44} height={44} className="h-full w-full object-cover" priority />
+          {lockNavigation ? (
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-lg bg-muted border border-border flex items-center justify-center overflow-hidden">
+                <Image src="/hdp-logo.png" alt="HDP EDU logo" width={44} height={44} className="h-full w-full object-cover" priority />
+              </div>
+              <span className="text-xl font-bold text-foreground">HDP EDU</span>
             </div>
-            <span className="text-xl font-bold text-foreground">HDP EDU</span>
-          </Link>
+          ) : (
+            <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+              <div className="w-11 h-11 rounded-lg bg-muted border border-border flex items-center justify-center overflow-hidden">
+                <Image src="/hdp-logo.png" alt="HDP EDU logo" width={44} height={44} className="h-full w-full object-cover" priority />
+              </div>
+              <span className="text-xl font-bold text-foreground">HDP EDU</span>
+            </Link>
+          )}
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => {
-              const external = item.href.startsWith('http');
-              const activeClass = isActive(item.href)
-                ? 'text-primary bg-primary/10'
-                : 'text-muted-foreground hover:text-foreground hover:bg-muted/50';
+          {!lockNavigation && mounted && !isAuthenticated && (
+            <div className="hidden flex-1 justify-center md:flex">
+              <GuestNavMenu t={t} variant="desktop" />
+            </div>
+          )}
 
-              return external ? (
-                <a
-                  key={item.section}
-                  href={item.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${activeClass}`}
-                >
-                  {item.label}
-                </a>
-              ) : (
-                <Link
-                  key={item.section}
-                  href={item.href}
-                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${activeClass}`}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
-          </nav>
+          {!lockNavigation && mounted && isAuthenticated && (
+            <RoleNavMenu activeRole={activeRole} t={t} variant="desktop" />
+          )}
 
           {/* Language Switcher & Auth Buttons */}
+          {!lockNavigation && (
           <div className="hidden md:flex items-center gap-3">
             {/* Language Switcher */}
             {mounted && (
@@ -145,7 +138,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                   href="/dashboard"
                   className="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all"
                 >
-                  Dashboard
+                  {t('common.dashboard')}
                 </Link>
               ) : (
                 <>
@@ -165,8 +158,10 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
               )
             )}
           </div>
+          )}
 
           {/* Mobile Menu Button */}
+          {!lockNavigation && (
           <button
             className="md:hidden p-2 text-muted-foreground hover:text-foreground"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -179,38 +174,25 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
               )}
             </svg>
           </button>
+          )}
         </div>
 
         {/* Mobile Menu */}
-        {mobileMenuOpen && (
+        {!lockNavigation && mobileMenuOpen && (
           <div className="md:hidden py-4 border-t border-border/50">
             <nav className="flex flex-col gap-1">
-              {navItems.map((item) => {
-                const external = item.href.startsWith('http');
-                const active = isActive(item.href) ? 'text-primary bg-primary/10' : 'text-muted-foreground hover:text-foreground hover:bg-muted/50';
+              {mounted && !isAuthenticated && (
+                <GuestNavMenu t={t} variant="mobile" onNavigate={() => setMobileMenuOpen(false)} />
+              )}
 
-                return external ? (
-                  <a
-                    key={item.section}
-                    href={item.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`px-4 py-3 text-sm font-medium rounded-lg transition-all text-left ${active}`}
-                  >
-                    {item.label}
-                  </a>
-                ) : (
-                  <Link
-                    key={item.section}
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={`px-4 py-3 text-sm font-medium rounded-lg transition-all text-left ${active}`}
-                  >
-                    {item.label}
-                  </Link>
-                );
-              })}
+              {mounted && isAuthenticated && (
+                <RoleNavMenu
+                  activeRole={activeRole}
+                  t={t}
+                  variant="mobile"
+                  onNavigate={() => setMobileMenuOpen(false)}
+                />
+              )}
               <div className="mt-4 pt-4 border-t border-border/50 space-y-2">
                 {/* Mobile Language Switcher */}
                 <div className="space-y-2">
@@ -239,20 +221,32 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate }) => {
                 {/* Mobile Auth Buttons */}
                 {mounted && (
                 <div className="flex gap-2 pt-2">
-                  <Link
-                    href="/auth"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex-1 px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground border border-border rounded-lg transition-all text-center"
-                  >
-                    {t('common.signIn')}
-                  </Link>
-                  <Link
-                    href="/auth"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex-1 px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all text-center"
-                  >
-                    {t('common.signUp')}
-                  </Link>
+                  {isAuthenticated ? (
+                    <Link
+                      href="/dashboard"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex-1 px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all text-center"
+                    >
+                      {t('common.dashboard')}
+                    </Link>
+                  ) : (
+                    <>
+                      <Link
+                        href="/auth"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex-1 px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground border border-border rounded-lg transition-all text-center"
+                      >
+                        {t('common.signIn')}
+                      </Link>
+                      <Link
+                        href="/auth"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex-1 px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all text-center"
+                      >
+                        {t('common.signUp')}
+                      </Link>
+                    </>
+                  )}
                 </div>
                 )}
               </div>

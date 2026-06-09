@@ -1,10 +1,11 @@
 'use client';
 
-import { ReactNode, useState, type WheelEvent } from 'react';
+import { ReactNode, useEffect, useState, type WheelEvent } from 'react';
 import { Bot, MessageCircle, Send, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { useLanguage } from '@/lib/context/LanguageContext';
 
 type ChatMessage = {
   id: number;
@@ -19,17 +20,26 @@ interface AISupportDockProps {
 const BULLET_LINE_REGEX = /^\s*[-+]\s+(.+)$/;
 
 export function AISupportDock({ children }: AISupportDockProps) {
+  const { language, t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [text, setText] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [apiError, setApiError] = useState('');
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: 1,
-      role: 'assistant',
-      text: 'Hi! I am your AI support assistant. Ask me anything about HDP EDU.',
-    },
-  ]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+
+  useEffect(() => {
+    setMessages((prev) => {
+      const welcome = t('aiSupport.welcome');
+      if (prev.length === 0) {
+        return [{ id: 1, role: 'assistant', text: welcome }];
+      }
+      if (prev.length === 1 && prev[0].role === 'assistant') {
+        return [{ ...prev[0], text: welcome }];
+      }
+      return prev;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only refresh welcome when site language changes
+  }, [language]);
 
   const renderAssistantMessage = (content: string) => {
     const blocks: Array<{ type: 'paragraph'; text: string } | { type: 'list'; items: string[] }> = [];
@@ -128,6 +138,7 @@ export function AISupportDock({ children }: AISupportDockProps) {
         },
         body: JSON.stringify({
           message,
+          locale: language,
           history: nextMessages.slice(-6).map((item) => ({
             role: item.role,
             text: item.text,
@@ -138,14 +149,14 @@ export function AISupportDock({ children }: AISupportDockProps) {
       const data = await response.json();
       if (!response.ok || !data?.reply) {
         setApiError(
-          data?.detail || data?.error || 'AI service is temporarily unavailable. Please try again.'
+          data?.detail || data?.error || t('aiSupport.errorUnavailable')
         );
         setMessages((prev) => [
           ...prev,
           {
             id: Date.now() + 1,
             role: 'assistant',
-            text: 'Sorry, I cannot respond right now. Please contact support directly.',
+            text: t('aiSupport.fallbackSorry'),
           },
         ]);
         return;
@@ -160,13 +171,13 @@ export function AISupportDock({ children }: AISupportDockProps) {
         },
       ]);
     } catch {
-      setApiError('Cannot connect to AI service.');
+      setApiError(t('aiSupport.errorConnection'));
       setMessages((prev) => [
         ...prev,
         {
           id: Date.now() + 1,
           role: 'assistant',
-          text: 'Connection error. Please try again later.',
+          text: t('aiSupport.fallbackConnection'),
         },
       ]);
     } finally {
@@ -195,7 +206,7 @@ export function AISupportDock({ children }: AISupportDockProps) {
           <div className="flex items-center justify-between border-b border-border/60 px-4 py-3">
             <div className="flex items-center gap-2">
               <Bot className="h-5 w-5 text-primary" />
-              <p className="text-sm font-semibold">AI Support</p>
+              <p className="text-sm font-semibold">{t('aiSupport.title')}</p>
             </div>
             <Button size="icon-sm" variant="ghost" onClick={() => setIsOpen(false)}>
               <X className="h-4 w-4" />
@@ -230,7 +241,7 @@ export function AISupportDock({ children }: AISupportDockProps) {
               <Textarea
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                placeholder="Type your message..."
+                placeholder={t('aiSupport.placeholder')}
                 disabled={isSending}
                 rows={2}
                 className="max-h-36 min-h-16 resize-none"
@@ -246,7 +257,7 @@ export function AISupportDock({ children }: AISupportDockProps) {
               </Button>
             </div>
             {apiError ? <p className="mt-2 text-xs text-red-400">{apiError}</p> : null}
-            {isSending ? <p className="mt-2 text-xs text-muted-foreground">AI is typing...</p> : null}
+            {isSending ? <p className="mt-2 text-xs text-muted-foreground">{t('aiSupport.typing')}</p> : null}
           </div>
         </div>
       </aside>
@@ -256,7 +267,7 @@ export function AISupportDock({ children }: AISupportDockProps) {
           type="button"
           onClick={() => setIsOpen(true)}
           className="fixed bottom-6 right-6 z-[80] inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_12px_30px_rgba(0,217,255,0.45)] transition-transform hover:scale-105"
-          aria-label="Open AI support chat"
+          aria-label={t('aiSupport.openChat')}
         >
           <MessageCircle className="h-6 w-6" />
         </button>

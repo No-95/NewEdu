@@ -11,7 +11,151 @@
     "contactUs": "Contact Us",
     "enrollNow": "Enroll Now",
     "applyNow": "Apply Now",
-    "learnMore": "Learn More"
+    "learnMore": "Learn More",
+    "dashboard": "Dashboard",
+    "language": "Language"
+  },
+  "nav": {
+    "ecosystem": {
+      "home": "Home",
+      "menuLabel": "Ecosystem",
+      "learners": {
+        "label": "For Learners",
+        "courses": "Courses",
+        "mentor": "Personal mentor",
+        "library": "Resource library"
+      },
+      "teachers": {
+        "label": "Teachers & Centers",
+        "training": "Training management",
+        "crm": "Enrollment CRM",
+        "business": "Business",
+        "reports": "Reporting system",
+        "library": "Resource library"
+      },
+      "careers": {
+        "label": "Jobs & Careers",
+        "profile": "Competency profile",
+        "jobs": "Jobs",
+        "support": "Career support",
+        "matching": "AI matching"
+      },
+      "business": {
+        "label": "Business",
+        "recruiting": "Recruiting",
+        "hr": "Human resources",
+        "internalTraining": "Internal training"
+      },
+      "experts": {
+        "label": "Experts",
+        "network": "Expert network",
+        "topics": "Topics"
+      },
+      "community": {
+        "label": "Community",
+        "forum": "Q&A forum",
+        "industries": "Industry communities"
+      },
+      "events": "Events & Connections"
+    },
+    "role": {
+      "assessments": "Assessments",
+      "events": "Events"
+    }
+  },
+  "onboarding": {
+    "welcome": "Welcome to HDP EDU",
+    "stepLabel": "Step {{step}} / {{total}}",
+    "next": "Next",
+    "back": "Back",
+    "submit": "Complete and create HDP ID",
+    "maxSelections": "Select up to {{max}}",
+    "otherPlaceholder": "Please describe...",
+    "step1": {
+      "title": "Which role(s) are you joining as?",
+      "subtitle": "Used to build your Dashboard.",
+      "options": {
+        "learner": "Learner",
+        "teacher": "Teacher",
+        "training_center": "Training center",
+        "job_seeker": "Job seeker",
+        "employer": "Business / Recruiter",
+        "expert": "Expert"
+      }
+    },
+    "step2": {
+      "title": "What are your primary goals?",
+      "subtitle": "Used for marketing automation.",
+      "options": {
+        "learn_korean": "Learn Korean",
+        "find_job": "Find a job",
+        "recruit": "Recruit talent",
+        "find_partner": "Find partners",
+        "personal_brand": "Build personal brand",
+        "share_knowledge": "Share knowledge",
+        "find_expert": "Find experts",
+        "other": "Other"
+      }
+    },
+    "step3": {
+      "title": "Which industries interest you?",
+      "subtitle": "Used for community assignment.",
+      "options": {
+        "manufacturing": "Manufacturing",
+        "trade_import_export": "Trade & import/export",
+        "hr_accounting": "HR & accounting",
+        "technology": "Technology",
+        "education": "Education",
+        "translation": "Translation",
+        "other": "Other"
+      }
+    },
+    "step4": {
+      "title": "What stage are you at?",
+      "subtitle": "Answer based on the roles you selected",
+      "learnerHeading": "If you are a Learner",
+      "jobSeekerHeading": "If you are a Job seeker",
+      "employerHeading": "If you are a Business",
+      "learnerStages": {
+        "korean_none": "No Korean yet",
+        "topik_1_2": "TOPIK 1–2",
+        "topik_3_4": "TOPIK 3–4",
+        "topik_5_6": "TOPIK 5–6",
+        "working_professional": "Working professional"
+      },
+      "jobSeekerStages": {
+        "student": "Student",
+        "fresh_graduate": "Fresh graduate",
+        "exp_1_3": "1–3 years experience",
+        "exp_3_5": "3–5 years",
+        "exp_5_plus": "5+ years"
+      },
+      "employerStages": {
+        "size_under_10": "Under 10 employees",
+        "size_10_50": "10–50 employees",
+        "size_50_200": "50–200 employees",
+        "size_200_plus": "200+ employees"
+      }
+    },
+    "step5": {
+      "title": "What information would you like to receive?",
+      "subtitle": "Marketing email preferences",
+      "options": {
+        "jobs": "Jobs",
+        "courses": "Courses",
+        "events": "Events",
+        "materials": "Materials",
+        "seminars": "Seminars",
+        "business_opportunities": "Business opportunities",
+        "investment": "Investment",
+        "import_export": "Import & export"
+      }
+    },
+    "success": {
+      "title": "Your HDP EDU profile is ready",
+      "hdpIdLabel": "HDP ID",
+      "continue": "Continue"
+    }
   },
   "courses": {
     "title": "Learn Korean with Expert Instructors",
@@ -175,85 +319,328 @@
   },
   "home": {
     "hero": {
-      "badge": "For Students & Teachers",
-      "title": "Learn & Teach Korean Your Way",
-      "description": "Whether you want to master Korean or share your teaching expertise, HDP EDU connects learners with passionate educators worldwide.",
-      "startLearning": "Start Learning",
-      "becomeTeacher": "Become a Teacher",
-      "activeLearners": "Active Learners",
-      "expertTeachers": "Expert Teachers",
-      "videoCourses": "Video Courses",
+      "badge": "HDP EDU ECOSYSTEM",
+      "tagline": "Learning • Careers • Business • Experts • Community",
+      "description1": "A comprehensive platform for the Vietnam–Korea community, where learners, teachers, businesses, and experts learn together, grow careers, expand networks, and create real collaboration opportunities.",
+      "description2": "From Korean language skills and job search to hiring, professional development, and business connections — all integrated in one ecosystem.",
+      "startNow": "Get Started",
+      "exploreEcosystem": "Explore the Ecosystem",
       "scrollExplore": "Scroll to explore",
       "hoverRotate": "Hover over cube to rotate"
     },
     "trust": {
-      "title": "Why Choose HDP EDU?",
-      "description": "Trusted by thousands of learners worldwide with proven results",
-      "userRetention": "User Retention",
-      "retentionDesc": "Students who complete their goals",
-      "fluencyAchievement": "Fluency Achievement",
-      "fluencyDesc": "Reach conversational level in 6 months",
-      "dailyEngagement": "Daily Engagement",
-      "engagementDesc": "Active learners using platform daily",
-      "expertInstructors": "Expert Instructors",
-      "instructorsDesc": "Native speakers & linguists",
-      "topRated": "Top Rated on App Stores",
-      "awardWinning": "Award-Winning Platform",
-      "isoCertified": "ISO Certified Security"
+      "communityMembers": "Community members",
+      "learnersWorkers": "Learners and professionals",
+      "teachersExperts": "Instructors & experts",
+      "partnerBusinesses": "Partner businesses",
+      "jobOpportunities": "Job opportunities",
+      "learningResources": "Learning materials & resources"
     },
-    "learning": {
-      "title": "Your Learning Experience",
-      "subtitle": "Immersive, personalized, and proven effective",
-      "aiCurriculum": "AI-Powered Curriculum",
-      "aiDesc": "Adaptive learning paths",
-      "conversation": "Real-Time Conversation",
-      "conversationDesc": "Practice with AI tutors",
-      "learnAnywhere": "Learn Anywhere",
-      "learnDesc": "Web, iOS, Android",
-      "liveClasses": "Live Classes",
-      "liveDesc": "Expert instructors",
-      "learningImage": "Learning Image"
-    },
-    "courses": {
-      "exploreTitle": "Explore Our Courses",
-      "subtitle": "From complete beginner to advanced professional",
-      "startJourney": "Start Your Journey",
-      "buildFluency": "Build Fluency",
-      "professionalMastery": "Professional Mastery",
-      "viewAllCourses": "View All Courses",
-      "coursesImage": "Courses Image"
-    },
-    "jobs": {
-      "careerTitle": "Career Opportunities",
-      "subtitle": "Open doors to global career paths",
-      "topEmployers": "Top Employers",
-      "viewCareerBoard": "View Career Board",
-      "jobsImage": "Jobs Image"
+    "ecosystem": {
+      "title": "Who Is HDP EDU For?",
+      "intro": "One platform — five audiences. Each journey is tailored for learning, careers, and Vietnam–Korea collaboration.",
+      "scrollHint": "Scroll to explore each audience",
+      "learners": {
+        "title": "Learners",
+        "description": "Build Korean language skills and professional competencies for international workplaces.",
+        "canDo": "You can:",
+        "bullets": [
+          "Study industry-specific Korean for manufacturing, trade, logistics, engineering, HR, and management.",
+          "Access practical courses from experts and businesses.",
+          "Join learning communities and exchange experiences.",
+          "Access internships, scholarships, and job opportunities."
+        ],
+        "cta": "Explore learning programs"
+      },
+      "teachers": {
+        "title": "Teachers & Training Centers",
+        "description": "Grow your training business and scale on a digital platform.",
+        "canDo": "You can:",
+        "bullets": [
+          "Create and sell online courses.",
+          "Manage classes, students, and teaching schedules.",
+          "Use enrollment CRM and student care tools.",
+          "Build personal or center brand identity.",
+          "Reach learners nationwide."
+        ],
+        "cta": "Become a training partner"
+      },
+      "jobSeekers": {
+        "title": "Job Seekers",
+        "description": "Find career opportunities aligned with your skills and growth goals.",
+        "canDo": "You can:",
+        "bullets": [
+          "Build a professional competency profile.",
+          "Search Korean-language jobs by industry.",
+          "Connect directly with Korean and FDI companies.",
+          "Receive career counseling and development guidance.",
+          "Join pre-employment training programs."
+        ],
+        "cta": "Search career opportunities"
+      },
+      "employers": {
+        "title": "Businesses & Recruiters",
+        "description": "Access quality talent and build an effective employer brand.",
+        "canDo": "Businesses can:",
+        "bullets": [
+          "Post jobs and manage applicants.",
+          "Find talent with Korean skills and relevant expertise.",
+          "Build a dedicated talent pool.",
+          "Organize training and upskill employees.",
+          "Connect with Vietnam–Korea experts and partners."
+        ],
+        "cta": "Post a job"
+      },
+      "experts": {
+        "title": "Experts",
+        "description": "Build your personal brand, share knowledge, and expand collaboration opportunities.",
+        "canDo": "You can:",
+        "bullets": [
+          "Build a professional expert profile.",
+          "Share practical knowledge and experience.",
+          "Host seminars, webinars, and specialized courses.",
+          "Consult for individuals and businesses.",
+          "Connect with professional communities locally and abroad."
+        ],
+        "cta": "Join the expert network"
+      }
     },
     "community": {
-      "joinTitle": "Join Our Community",
-      "subtitle": "Learn together with passionate learners worldwide",
-      "learners": "Learners",
-      "countries": "Countries",
-      "support": "Support",
-      "communityImage": "Community Image"
+      "title": "Vietnam - Korea Community",
+      "subtitle": "A space to connect, learn, and grow for those interested in Korean, careers, and business.",
+      "canDo": "Members can:",
+      "bullets": [
+        "Join industry-based community groups.",
+        "Share materials, curricula, and real-world experience.",
+        "Ask questions about Korean, work, and Korean business culture.",
+        "Connect with learners, businesses, and experts.",
+        "Expand networks and collaboration opportunities."
+      ],
+      "cta": "Join the community"
+    },
+    "whyChoose": {
+      "title": "WHY CHOOSE HDP EDU?",
+      "subtitle": "One platform — Many values",
+      "leadQuote": "True value lies in connection — between knowledge and opportunity, learners and businesses, Vietnam and Korea.",
+      "pillars": [
+        "Learning and skill development",
+        "Careers and employment",
+        "Recruitment and talent development",
+        "Expert connections",
+        "Vietnam–Korea community",
+        "Knowledge base and industry resources"
+      ]
     },
     "cta": {
-      "joinTitle": "Join HDP EDU Today",
-      "subtitle": "Whether you want to learn or teach, we have a place for you",
-      "iWantToLearn": "I want to Learn",
-      "iWantToTeach": "I want to Teach",
-      "sevenDayTrial": "7-Day Free Trial",
-      "fullCourseAccess": "Full Course Access",
-      "support24": "24/7 Support",
-      "startLearningFree": "Start Learning Free",
-      "sellCourses": "Sell Your Courses",
-      "setOwnPrice": "Set Your Own Price",
-      "globalReach": "Global Reach",
-      "applyTeach": "Apply to Teach",
-      "getNotified": "Get notified about new features",
-      "subscribe": "Subscribe",
+      "connectionLabel": "Direct connections between",
+      "connectionLabelShort": "Direct connections",
+      "connectionFlow": "Learners ⇄ Businesses ⇄ Experts ⇄ Career opportunities ⇄ Collaboration opportunities",
+      "headline": "CONNECTING VIETNAM – KOREA OPPORTUNITIES",
+      "pullQuote": "An ecosystem connecting talent, businesses, experts, and community to create practical value.",
+      "introBody": "HDP EDU is more than a learning platform. It is a bridge between Vietnam and Korea — where learning, careers, and business converge into one comprehensive growth journey.",
+      "description1": "HDP EDU is more than a learning platform.",
+      "description2": "It is an ecosystem connecting talent, businesses, experts, and the Vietnam–Korea community to create practical value in learning, careers, and business.",
+      "ecosystemBadge": "HDP EDU ECOSYSTEM",
+      "ecosystemTagline": "Where learning connects to careers. Where knowledge connects to opportunity. Where community grows together.",
+      "ecosystemPills": ["Learning", "Careers", "Knowledge", "Community", "Opportunity"],
+      "signUpFree": "Sign up for free",
       "copyright": "© 2024 HDP EDU. All rights reserved."
     }
+  },
+  "classroom": {
+    "badge": "Online Classroom",
+    "title": "Live Classroom Lobby",
+    "subtitle": "Join currently running classrooms or start a new session instantly.",
+    "liveNow": "Live now",
+    "availableTitle": "Available Classrooms",
+    "availableSubtitle": "Choose a room and join in one click.",
+    "hostedBy": "Hosted by",
+    "passwordRequired": "Password required",
+    "live": "Live",
+    "roomLabel": "Room",
+    "startedLabel": "Started",
+    "joinClassroom": "Join classroom",
+    "noRoomsTitle": "No classroom available. Start your classroom now.",
+    "noRoomsHint": "Create a room from the panel on the right and go live in seconds.",
+    "startTitle": "Start new classroom",
+    "startSubtitle": "Create a new live room and invite learners.",
+    "hostName": "Host name",
+    "hostNamePlaceholder": "Your name",
+    "classroomTitle": "Classroom title",
+    "classroomTitlePlaceholder": "Korean Production Live Classroom",
+    "passwordOptional": "Classroom password (optional)",
+    "passwordPlaceholder": "Set password for students",
+    "passwordHint": "Leave empty if anyone can join.",
+    "startNow": "Start classroom now",
+    "defaultHost": "HDP EDU Host",
+    "defaultTitle": "Korean Production Live Classroom",
+    "invalidRoom": "Invalid room ID.",
+    "roomUnavailable": "This classroom is no longer available.",
+    "lockedTitle": "Classroom Locked",
+    "lockedSubtitle": "Enter the classroom password from your teacher to join.",
+    "passwordLabel": "Password",
+    "passwordInputPlaceholder": "Enter classroom password",
+    "passwordEmpty": "Please enter the classroom password.",
+    "passwordIncorrect": "Incorrect password. Please try again.",
+    "checking": "Checking...",
+    "student": "Student"
+  },
+  "community": {
+    "comingSoon": "Community page coming soon."
+  },
+  "dashboard": {
+    "loading": "Loading dashboard...",
+    "eyebrow": "HDP EDU Dashboard",
+    "pageTitle": "Dashboard",
+    "roleBadge": "Role",
+    "switchRole": "Switch role",
+    "currentRole": "Current role",
+    "defaultName": "there",
+    "continueLearning": "Continue",
+    "downloadCv": "Download CV",
+    "updateProfile": "Update profile",
+    "learner": {
+      "welcome": "Welcome back, {{name}}",
+      "journeyTitle": "Your learning journey",
+      "currentLevel": "Current level",
+      "currentLevelValue": "TOPIK 3",
+      "goal": "Goal",
+      "goalValue": "TOPIK 5",
+      "progress": "Completion progress",
+      "progressValue": "62%",
+      "activeCoursesTitle": "Courses in progress",
+      "activeCourses": ["Manufacturing Korean", "Intermediate TOPIK", "Business Korean"],
+      "suggestedCoursesTitle": "Recommended courses",
+      "suggestedCourses": ["HR Korean", "Logistics Korean", "Korean company interview skills"],
+      "jobsTitle": "Jobs for you",
+      "jobs": ["Manufacturing interpreter", "Import/export staff", "Korean director assistant"],
+      "materialsTitle": "Materials for you",
+      "materials": ["Manufacturing vocabulary", "Korean email templates", "TOPIK curriculum"],
+      "communityTitle": "Your communities",
+      "communities": ["TOPIK community", "Manufacturing community", "Korean company workers"],
+      "eventsTitle": "Upcoming events",
+      "events": ["TOPIK webinar", "Interview skills workshop"],
+      "hdpPointsTitle": "HDP Points",
+      "hdpLevel": "Level",
+      "hdpLevelValue": "Member",
+      "hdpPoints": "Points",
+      "hdpPointsValue": "1,250 pts"
+    },
+    "teacher": {
+      "overviewTitle": "Business overview",
+      "students": "Active students",
+      "studentsValue": "356",
+      "activeCourses": "Active courses",
+      "activeCoursesValue": "12",
+      "monthlyRevenue": "Monthly revenue",
+      "monthlyRevenueValue": "75,000,000 VND",
+      "courseMgmtTitle": "Course management",
+      "courseMgmt": ["Create new course", "Manage lectures", "Manage assignments", "Manage certificates"],
+      "crmTitle": "Enrollment CRM",
+      "leads": "Leads",
+      "leadsValue": "124",
+      "consulted": "Consulted",
+      "consultedValue": "67",
+      "pendingSignup": "Pending signup",
+      "pendingSignupValue": "32",
+      "studentMgmtTitle": "Student management",
+      "studentMgmt": ["Student list", "Attendance", "Learning progress", "Learning outcomes"],
+      "marketingTitle": "Marketing",
+      "marketing": ["Course landing page", "Affiliate", "Promotions", "Email marketing"],
+      "instructorCommunityTitle": "Instructor community",
+      "instructorCommunity": ["Share materials", "Teaching webinars", "Professional workshops"],
+      "reportsTitle": "Reports",
+      "reports": ["Revenue", "Conversion rate", "Ad performance"]
+    },
+    "jobSeeker": {
+      "profileTitle": "Competency profile",
+      "profileCompletion": "Completion",
+      "matchingJobsTitle": "Matching jobs",
+      "matchingJobs": ["Korean interpreter", "Production assistant", "HR specialist"],
+      "profileViewsTitle": "Profile views",
+      "recruiterViews": "Recruiter views",
+      "recruiterViewsValue": "27",
+      "interviewInvites": "Interview invites",
+      "interviewInvitesValue": "5",
+      "skillSuggestionsTitle": "Skill recommendations",
+      "skillSuggestions": ["Manufacturing Korean", "Excel skills", "Reporting skills"],
+      "careerPathTitle": "Career path",
+      "currentRole": "Current",
+      "currentRoleValue": "Staff",
+      "targetRole": "Target",
+      "targetRoleValue": "Manager",
+      "advisorsTitle": "Expert advisors",
+      "advisors": ["HR mentor", "Manufacturing mentor", "Logistics mentor"],
+      "careerEventsTitle": "Career events",
+      "careerEvents": ["Career Day", "Job Fair", "CV Workshop"],
+      "networkTitle": "Network",
+      "networkTags": ["Businesses", "Experts", "Career community"]
+    },
+    "employer": {
+      "recruitingOverviewTitle": "Recruiting overview",
+      "activeJobs": "Active job posts",
+      "activeJobsValue": "12",
+      "newCandidates": "New candidates",
+      "newCandidatesValue": "87",
+      "interviews": "Interviews",
+      "interviewsValue": "16",
+      "hired": "Hired",
+      "hiredValue": "5",
+      "recruitingMgmtTitle": "Recruiting management",
+      "recruitingMgmt": ["Post jobs", "Manage candidates", "Evaluate candidates", "Online interviews"],
+      "talentPoolTitle": "Talent pool",
+      "talentPoolSubtitle": "Candidates by:",
+      "talentPoolTags": ["Korean", "Manufacturing", "Logistics", "HR", "Accounting"],
+      "trainingTitle": "Staff training",
+      "training": ["Internal courses", "Competency assessment", "Training management"],
+      "matchingTitle": "Business matching",
+      "matching": ["Find partners", "Find suppliers", "Find customers"],
+      "expertsTitle": "Recommended experts",
+      "experts": ["HR expert", "Manufacturing expert", "FDI expert"],
+      "reportsTitle": "Reports",
+      "reports": ["Recruiting efficiency", "Recruiting cost", "Candidate sources"],
+      "eventsTitle": "Business events",
+      "events": ["Business matching", "Business seminars", "Networking"]
+    },
+    "expert": {
+      "profileTitle": "Expert profile",
+      "credibility": "Credibility",
+      "credibilityValue": "Expert Level 4",
+      "followers": "Followers",
+      "followersValue": "2,350",
+      "activityTitle": "Expert activity",
+      "activity": ["Articles", "Webinars", "Podcasts", "Shared materials"],
+      "consultingTitle": "Consulting schedule",
+      "newRequests": "New requests",
+      "newRequestsValue": "12",
+      "weeklySessions": "Sessions this week",
+      "weeklySessionsValue": "8",
+      "professionalCommunityTitle": "Professional communities",
+      "professionalCommunity": ["HR", "Manufacturing", "International trade", "FDI"],
+      "collaborationTitle": "Collaboration opportunities",
+      "collaboration": ["Business consulting needs", "Training projects", "Topic seminars"],
+      "contentMgmtTitle": "Content management",
+      "contentMgmt": ["Articles", "Videos", "Materials", "Courses"],
+      "incomeTitle": "Income",
+      "incomeConsulting": "Consulting",
+      "incomeConsultingValue": "xx.xxx.xxx VND",
+      "incomeCourses": "Courses",
+      "incomeCoursesValue": "xx.xxx.xxx VND",
+      "incomeSeminars": "Seminars",
+      "incomeSeminarsValue": "xx.xxx.xxx VND",
+      "personalBrandTitle": "Personal branding",
+      "personalBrand": ["Public profile", "Expert certification", "Achievements", "Community reviews"]
+    }
+  },
+  "aiSupport": {
+    "title": "AI Support",
+    "welcome": "Hi! I'm your AI support assistant. Ask me anything about HDP EDU in English, Vietnamese, or Korean.",
+    "placeholder": "Type your message...",
+    "typing": "AI is typing...",
+    "openChat": "Open AI support chat",
+    "errorUnavailable": "AI service is temporarily unavailable. Please try again.",
+    "errorConnection": "Cannot connect to AI service.",
+    "fallbackSorry": "Sorry, I cannot respond right now. Please contact support directly.",
+    "fallbackConnection": "Connection error. Please try again later."
   }
 }

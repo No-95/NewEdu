@@ -227,6 +227,106 @@
   .scroll-snap-section {
     @apply h-screen w-screen flex-shrink-0;
   }
+
+  .home-eyebrow {
+    @apply inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/90;
+  }
+
+  .home-eyebrow::before {
+    content: '';
+    @apply h-px w-8 bg-primary/60;
+  }
+
+  .home-title {
+    @apply text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-[2.75rem] lg:leading-[1.12];
+  }
+
+  .home-subtitle {
+    @apply text-base leading-relaxed text-muted-foreground md:text-lg;
+  }
+
+  .home-panel {
+    @apply rounded-2xl border border-white/10 bg-card/50 p-6 backdrop-blur-md md:p-8;
+    box-shadow: 0 24px 60px -40px rgba(0, 217, 255, 0.35);
+  }
+
+  .home-panel-muted {
+    @apply rounded-2xl border border-border/60 bg-muted/30 p-6 backdrop-blur-sm md:p-7;
+  }
+
+  .home-card {
+    @apply rounded-2xl border border-white/12 bg-card/55 p-6 backdrop-blur-md transition-all duration-300 md:p-7;
+    box-shadow: 0 20px 50px -38px rgba(0, 217, 255, 0.32);
+  }
+
+  .home-card-muted {
+    @apply rounded-xl border border-white/8 bg-muted/25 p-4 backdrop-blur-sm md:p-5;
+  }
+
+  .home-card-stat {
+    @apply rounded-xl border border-white/10 bg-card/40 px-3 py-4 text-center backdrop-blur-sm transition-all duration-300 hover:border-primary/25 hover:bg-primary/5 md:px-4 md:py-5;
+  }
+
+  .home-card-chip {
+    @apply rounded-xl border border-white/12 bg-white/5 px-4 py-3 text-left text-xs font-medium text-muted-foreground transition-all duration-300 hover:border-primary/35 hover:bg-primary/10 hover:text-foreground md:text-sm;
+  }
+
+  button.home-card-chip {
+    @apply w-full cursor-pointer;
+  }
+
+  .home-card-feature {
+    @apply rounded-2xl border border-white/12 bg-card/45 p-6 backdrop-blur-md md:p-8;
+    box-shadow: 0 28px 70px -45px rgba(0, 102, 255, 0.4);
+  }
+
+  .home-card:hover.home-card-feature,
+  .home-card-feature:hover {
+    @apply border-primary/20;
+  }
+
+  .home-btn-primary {
+    @apply inline-flex items-center justify-center rounded-lg bg-primary px-7 py-3 text-sm font-semibold text-primary-foreground transition-all duration-300 hover:shadow-[0_0_28px_rgba(0,217,255,0.45)];
+  }
+
+  .home-btn-outline {
+    @apply inline-flex items-center justify-center rounded-lg border border-white/20 bg-white/5 px-7 py-3 text-sm font-semibold text-foreground transition-all duration-300 hover:border-primary/40 hover:bg-primary/10;
+  }
+
+  .home-check-item {
+    @apply flex items-start gap-3 text-sm leading-relaxed text-muted-foreground md:text-[15px];
+  }
+
+  .home-image-shell {
+    @apply relative overflow-hidden rounded-2xl border border-white/15 bg-card/40;
+    box-shadow: 0 30px 80px -45px rgba(0, 102, 255, 0.55);
+  }
+
+  .home-grid-bg {
+    background-image:
+      linear-gradient(rgba(0, 217, 255, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 217, 255, 0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ecosystem-scroll {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ecosystem-scroll {
+      scroll-snap-type: y mandatory;
+    }
+  }
 }
 
 /* Animations */

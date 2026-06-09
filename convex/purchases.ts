@@ -95,7 +95,7 @@ export const getPurchaseByPayosOrderCode = query({
       if (!purchase.metadata) continue;
       try {
         const meta = JSON.parse(purchase.metadata) as { payosOrderCode?: number };
-        if (meta.payosOrderCode === args.payosOrderCode) {
+        if (Number(meta.payosOrderCode) === Number(args.payosOrderCode)) {
           return {
             _id: purchase._id,
             userId: purchase.userId,
@@ -138,6 +138,39 @@ export const activatePurchase = mutation({
     }
 
     return { success: true };
+  },
+});
+
+export const getLatestPendingPayosPurchase = query({
+  args: { userId: v.string(), courseId: v.string() },
+  returns: v.union(
+    v.object({
+      _id: v.string(),
+      status: v.string(),
+      metadata: v.optional(v.string()),
+      createdAt: v.number(),
+    }),
+    v.null()
+  ),
+  handler: async (ctx, args) => {
+    const purchases = await ctx.db
+      .query('purchases')
+      .withIndex('by_user_course', (q) => q.eq('userId', args.userId).eq('courseId', args.courseId))
+      .collect();
+
+    const pending = purchases
+      .filter((p) => p.status === 'pending' && p.provider === 'payos')
+      .sort((a, b) => b.createdAt - a.createdAt);
+
+    const latest = pending[0];
+    if (!latest) return null;
+
+    return {
+      _id: latest._id,
+      status: latest.status,
+      metadata: latest.metadata,
+      createdAt: latest.createdAt,
+    };
   },
 });
 

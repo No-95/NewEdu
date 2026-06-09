@@ -9,6 +9,7 @@ interface SectionProps {
   showPageIndicator?: boolean;
   pageNumber?: number;
   totalPages?: number;
+  fillHeight?: boolean;
 }
 
 export const Section: React.FC<SectionProps> = ({
@@ -18,11 +19,12 @@ export const Section: React.FC<SectionProps> = ({
   showPageIndicator = false,
   pageNumber = 0,
   totalPages = 0,
+  fillHeight = false,
 }) => {
   return (
     <section
       id={id}
-      className={`relative w-screen h-screen flex items-center justify-center overflow-hidden flex-shrink-0 pointer-events-auto ${className}`}
+      className={`relative w-screen h-screen flex flex-shrink-0 items-center justify-center overflow-hidden pointer-events-auto ${className}`}
     >
       <div className="absolute inset-0 opacity-40 pointer-events-none">
         <div className="absolute inset-0" style={{
@@ -33,7 +35,11 @@ export const Section: React.FC<SectionProps> = ({
         }} />
       </div>
 
-      <div className="relative z-10 w-full h-full flex items-center justify-center">
+      <div
+        className={`relative z-10 h-full w-full ${
+          fillHeight ? '' : 'flex items-center justify-center'
+        }`}
+      >
         {children}
       </div>
 

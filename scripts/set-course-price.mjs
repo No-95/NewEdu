@@ -8,8 +8,8 @@ if (!convexUrl) {
 }
 
 const slug = process.env.COURSE_SLUG || 'cam-nang-video-tieng-han-san-xuat';
-const price = Number(process.env.COURSE_PRICE || '2000');
-const badge = process.env.COURSE_BADGE || '2.000 ₫';
+const price = Number(process.env.COURSE_PRICE || '399000');
+const badge = process.env.COURSE_BADGE || '399.000 ₫';
 
 const client = new ConvexHttpClient(convexUrl);
 const result = await client.mutation(api.courses.updateCoursePrice, { slug, price, badge });

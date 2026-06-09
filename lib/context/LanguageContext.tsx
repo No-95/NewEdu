@@ -7,10 +7,17 @@ import ko from '@/lib/translations/ko.json';
 
 export type Language = 'en' | 'vi' | 'ko';
 
+interface TranslateOptions {
+  returnObjects?: boolean;
+}
+
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (key: string) => string;
+  t: {
+    (key: string): string;
+    (key: string, options: { returnObjects: true }): string[];
+  };
 }
 
 export const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -39,7 +46,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
     localStorage.setItem('hdpedu-language', lang);
   };
 
-  const t = (key: string): string => {
+  const t = ((key: string, options?: TranslateOptions): string | string[] => {
     const keys = key.split('.');
     let value: any = translations[language];
 
@@ -47,12 +54,20 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
       if (value && typeof value === 'object') {
         value = value[k];
       } else {
-        return key; // Return key if translation not found
+        return key;
       }
     }
 
-    return typeof value === 'string' ? value : key;
-  };
+    if (typeof value === 'string') {
+      return value;
+    }
+
+    if (options?.returnObjects && Array.isArray(value)) {
+      return value;
+    }
+
+    return key;
+  }) as LanguageContextType['t'];
 
   if (!mounted) {
     return <>{children}</>;
@@ -72,7 +87,7 @@ export const useLanguage = () => {
     return {
       language: 'en' as Language,
       setLanguage: () => {},
-      t: (key: string) => key,
+      t: ((key: string) => key) as LanguageContextType['t'],
     };
   }
   return context;
