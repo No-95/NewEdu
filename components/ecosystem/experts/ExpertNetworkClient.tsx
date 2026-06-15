@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { AppPageShell } from '@/components/ecosystem/shared/AppPageShell';
 import { EcosystemFilterBar } from '@/components/ecosystem/shared/EcosystemFilterBar';
 import { EcosystemSection } from '@/components/ecosystem/shared/EcosystemSection';
@@ -9,9 +10,11 @@ import { useLanguage } from '@/lib/context/LanguageContext';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Star, UserPlus, Calendar } from 'lucide-react';
+import { buildContactHref } from '@/lib/utils/client-actions';
 
 export function ExpertNetworkClient() {
   const { t } = useLanguage();
+  const router = useRouter();
   const [search, setSearch] = useState('');
   const [industry, setIndustry] = useState('all');
   const [country, setCountry] = useState('all');
@@ -95,13 +98,46 @@ export function ExpertNetworkClient() {
                 {t('ecosystemPages.shared.experience')} {expert.experience} · {expert.certifications.join(', ')}
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
-                <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
+                <Button
+                  type="button"
+                  size="sm"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90"
+                  onClick={() =>
+                    router.push(
+                      buildContactHref({
+                        topic: 'expert-consultation',
+                        role: 'expert_network',
+                        message: `Book consultation with ${expert.name} (${expert.consultationFee})`,
+                      })
+                    )
+                  }
+                >
                   <Calendar className="mr-1 h-4 w-4" /> {t('ecosystemPages.expertNetwork.actions.bookConsultation')}
                 </Button>
-                <Button size="sm" variant="outline" className="border-white/15">
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  className="border-white/15"
+                  onClick={() =>
+                    router.push(
+                      buildContactHref({
+                        topic: 'expert-connection',
+                        role: 'expert_network',
+                        message: `Connection request to ${expert.name}`,
+                      })
+                    )
+                  }
+                >
                   {t('ecosystemPages.expertNetwork.actions.sendRequest')}
                 </Button>
-                <Button size="sm" variant="outline" className="border-white/15">
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  className="border-white/15"
+                  onClick={() => router.push('/career/career-support')}
+                >
                   <UserPlus className="mr-1 h-4 w-4" /> {t('ecosystemPages.expertNetwork.actions.follow')}
                 </Button>
               </div>

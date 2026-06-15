@@ -1,189 +1,120 @@
 import { mutation, query } from './_generated/server';
+import type { QueryCtx } from './_generated/server';
 import { v } from 'convex/values';
+import type { Id } from './_generated/dataModel';
 
-export const listCommunityFeed = query({
+async function requireUser(ctx: QueryCtx, email: string) {
+  const user = await ctx.db
+    .query('users')
+    .withIndex('by_email', (q) => q.eq('email', email.trim().toLowerCase()))
+    .first();
+
+  if (!user) {
+    throw new Error('User not found.');
+  }
+
+  return user;
+}
+
+function normalizeTags(tags: string[]) {
+  return [...new Set(tags.map((tag) => tag.trim().toLowerCase()).filter(Boolean))].slice(0, 8);
+}
+
+export const listForumPosts = query({
   args: {
+    tag: v.optional(v.string()),
+    search: v.optional(v.string()),
     limit: v.optional(v.number()),
   },
-  returns: v.array(
-    v.object({
-      _id: v.string(),
-      authorName: v.string(),
-      authorHandle: v.string(),
-      authorAvatar: v.string(),
-      content: v.string(),
-      mediaType: v.union(v.literal('none'), v.literal('image'), v.literal('video')),
-      mediaUrl: v.optional(v.string()),
-      tag: v.optional(v.string()),
-      likesCount: v.number(),
-      comments: v.array(
-        v.object({
-          _id: v.id('communityComments'),
-          authorName: v.string(),
-          content: v.string(),
-          createdAt: v.number(),
-        })
-      ),
-      createdAt: v.number(),
-      updatedAt: v.number(),
-    })
-  ),
   handler: async (ctx, args) => {
-    const limit = args.limit ?? 20;
-    const posts = await ctx.db.query('communityPosts').order('desc').take(limit);
+    const limit = args.limit ?? 50;
+    const posts = await ctx.db.query('forumPosts').withIndex('by_createdAt').order('desc').take(200);
 
-    const feed = [];
+    const tag = args.tag?.trim().toLowerCase();
+    const search = args.search?.trim().toLowerCase();
 
-    for (const post of posts) {
-      const comments = await ctx.db
-        .query('communityComments')
-        .withIndex('by_postId', (q) => q.eq('postId', post._id))
-        .order('asc')
-        .collect();
+    const filtered = posts.filter((post) => {
+      if (tag && !post.tags.includes(tag)) return false;
+      if (!search) return true;
+      const haystack = `${post.title} ${post.body} ${post.authorName} ${post.tags.join(' ')}`.toLowerCase();
+      return haystack.includes(search);
+    });
 
-      feed.push({
-        _id: post._id,
-        authorName: post.authorName,
-        authorHandle: post.authorHandle,
-        authorAvatar: post.authorAvatar,
-        content: post.content,
-        mediaType: post.mediaType,
-        mediaUrl: post.mediaUrl,
-        tag: post.tag ?? post.tags?.[0],
-        likesCount: post.likesCount,
-        comments: comments.map((comment) => ({
-          _id: comment._id,
-          authorName: comment.authorName,
-          content: comment.content,
-          createdAt: comment.createdAt,
-        })),
-        createdAt: post.createdAt,
-        updatedAt: post.updatedAt,
-      });
-    }
-
-    return feed;
+    return filtered.slice(0, limit).map((post) => ({
+      id: post._id.toString(),
+      authorName: post.authorName,
+      title: post.title,
+      body: post.body,
+      tags: post.tags,
+      createdAt: post.createdAt,
+      updatedAt: post.updatedAt,
+    }));
   },
 });
 
-export const createCommunityPost = mutation({
-  args: {
-    authorName: v.optional(v.string()),
-    authorHandle: v.optional(v.string()),
-    content: v.string(),
-    mediaType: v.union(v.literal('none'), v.literal('image'), v.literal('video')),
-    mediaUrl: v.optional(v.string()),
-    tag: v.optional(v.string()),
-  },
-  returns: v.id('communityPosts'),
+export const getForumPost = query({
+  args: { id: v.string() },
   handler: async (ctx, args) => {
-    const now = Date.now();
-    const normalizedName = (args.authorName?.trim() || 'Community Learner').slice(0, 60);
-    const handleBase = (args.authorHandle?.trim() || normalizedName.replace(/\s+/g, '').toLowerCase() || 'learner')
-      .replace(/[^a-zA-Z0-9_]/g, '')
-      .slice(0, 20)
-      .toLowerCase();
+    const post = await ctx.db.get(args.id as Id<'forumPosts'>);
+    if (!post) return null;
 
-    const postId = await ctx.db.insert('communityPosts', {
-      authorId: undefined,
-      authorName: normalizedName,
-      authorHandle: `@${handleBase || 'learner'}`,
-      authorAvatar: normalizedName
-        .split(' ')
-        .filter(Boolean)
-        .slice(0, 2)
-        .map((segment) => segment[0]?.toUpperCase() ?? '')
-        .join('') || 'CL',
-      content: args.content,
-      mediaType: args.mediaType,
-      mediaUrl: args.mediaUrl,
-      tag: args.tag,
-      likesCount: 0,
+    return {
+      id: post._id.toString(),
+      authorName: post.authorName,
+      title: post.title,
+      body: post.body,
+      tags: post.tags,
+      createdAt: post.createdAt,
+      updatedAt: post.updatedAt,
+    };
+  },
+});
+
+export const listForumTags = query({
+  args: {},
+  handler: async (ctx) => {
+    const posts = await ctx.db.query('forumPosts').collect();
+    const counts = new Map<string, number>();
+
+    for (const post of posts) {
+      for (const tag of post.tags) {
+        counts.set(tag, (counts.get(tag) ?? 0) + 1);
+      }
+    }
+
+    return [...counts.entries()]
+      .map(([tag, count]) => ({ tag, count }))
+      .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
+  },
+});
+
+export const createForumPost = mutation({
+  args: {
+    email: v.string(),
+    title: v.string(),
+    body: v.string(),
+    tags: v.array(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const user = await requireUser(ctx, args.email);
+    const title = args.title.trim();
+    const body = args.body.trim();
+
+    if (!title || !body) {
+      throw new Error('Title and body are required.');
+    }
+
+    const now = Date.now();
+    const id = await ctx.db.insert('forumPosts', {
+      authorId: user._id,
+      authorName: user.fullName?.trim() || user.name?.trim() || user.email.split('@')[0],
+      title,
+      body,
+      tags: normalizeTags(args.tags),
       createdAt: now,
       updatedAt: now,
     });
 
-    return postId;
-  },
-});
-
-export const addCommunityComment = mutation({
-  args: {
-    postId: v.id('communityPosts'),
-    authorName: v.optional(v.string()),
-    content: v.string(),
-  },
-  returns: v.id('communityComments'),
-  handler: async (ctx, args) => {
-    const post = await ctx.db.get(args.postId);
-    if (!post) {
-      throw new Error('Post not found.');
-    }
-
-    const normalizedName = (args.authorName?.trim() || 'Community Learner').slice(0, 60);
-    const now = Date.now();
-    const commentId = await ctx.db.insert('communityComments', {
-      postId: args.postId,
-      authorId: undefined,
-      authorName: normalizedName,
-      content: args.content,
-      createdAt: now,
-    });
-
-    return commentId;
-  },
-});
-
-export const updateCommunityLikeCount = mutation({
-  args: {
-    postId: v.id('communityPosts'),
-    delta: v.number(),
-  },
-  returns: v.null(),
-  handler: async (ctx, args) => {
-    const post = await ctx.db.get(args.postId);
-    if (!post) {
-      throw new Error('Post not found.');
-    }
-
-    await ctx.db.patch(post._id, {
-      likesCount: Math.max(0, post.likesCount + args.delta),
-      updatedAt: Date.now(),
-    });
-
-    return null;
-  },
-});
-
-export const removeMockCommunityData = mutation({
-  args: {},
-  returns: v.object({ removedPosts: v.number(), removedComments: v.number() }),
-  handler: async (ctx) => {
-    const mockHandles = new Set(['@sarahlearns', '@jparkedu', '@mariahr']);
-    const posts = await ctx.db.query('communityPosts').collect();
-
-    let removedPosts = 0;
-    let removedComments = 0;
-
-    for (const post of posts) {
-      if (!mockHandles.has(post.authorHandle)) {
-        continue;
-      }
-
-      const comments = await ctx.db
-        .query('communityComments')
-        .withIndex('by_postId', (q) => q.eq('postId', post._id))
-        .collect();
-
-      for (const comment of comments) {
-        await ctx.db.delete(comment._id);
-        removedComments += 1;
-      }
-
-      await ctx.db.delete(post._id);
-      removedPosts += 1;
-    }
-
-    return { removedPosts, removedComments };
+    return id.toString();
   },
 });

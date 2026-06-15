@@ -526,8 +526,61 @@
   "community": {
     "comingSoon": "Community page coming soon."
   },
+  "communityPage": {
+    "title": "Community Forum",
+    "subtitle": "Share questions, tips, and experiences with learners and educators.",
+    "newPost": "New post",
+    "newPostHint": "Start a discussion and add tags so others can find it.",
+    "postTitle": "Title",
+    "postBody": "Content",
+    "postTags": "Tags",
+    "postTagsPlaceholder": "e.g. topik, manufacturing, careers",
+    "publish": "Publish post",
+    "posting": "Publishing...",
+    "postError": "Could not publish post. Please try again.",
+    "signInToPost": "Sign in to post",
+    "signInRequired": "Please sign in to create a post.",
+    "searchPlaceholder": "Search discussions...",
+    "allTags": "All tags",
+    "loading": "Loading discussions...",
+    "empty": "No posts yet. Be the first to start a discussion.",
+    "readMore": "Read more",
+    "notFound": "Post not found.",
+    "backToForum": "Back to forum"
+  },
+  "eventsPage": {
+    "title": "News & Events",
+    "subtitle": "Stay updated with announcements, events, and platform news.",
+    "searchPlaceholder": "Search news...",
+    "allCategories": "All",
+    "loading": "Loading news...",
+    "empty": "No news articles yet. Check back soon.",
+    "notFound": "Article not found.",
+    "backToNews": "Back to news",
+    "publishNews": "Publish news",
+    "publishHint": "Share an announcement or event with the community.",
+    "articleTitle": "Headline",
+    "excerpt": "Summary",
+    "body": "Full article",
+    "category": "Category",
+    "tags": "Tags",
+    "tagsPlaceholder": "e.g. webinar, topik, partnership",
+    "publish": "Publish",
+    "publishing": "Publishing...",
+    "publishError": "Could not publish article. Please try again.",
+    "signInRequired": "Please sign in to publish news.",
+    "categories": {
+      "news": "News",
+      "events": "Events",
+      "announcements": "Announcements",
+      "partnerships": "Partnerships"
+    }
+  },
   "dashboard": {
     "loading": "Loading dashboard...",
+    "loadingData": "Loading your dashboard data...",
+    "empty": "No data yet. Activity will appear here as you use HDP EDU.",
+    "viewAll": "View all",
     "eyebrow": "HDP EDU Dashboard",
     "pageTitle": "Dashboard",
     "roleBadge": "Role",
@@ -562,7 +615,8 @@
       "hdpLevel": "Level",
       "hdpLevelValue": "Member",
       "hdpPoints": "Points",
-      "hdpPointsValue": "1,250 pts"
+      "hdpPointsValue": "1,250 pts",
+      "balance": "Wallet balance"
     },
     "teacher": {
       "overviewTitle": "Business overview",

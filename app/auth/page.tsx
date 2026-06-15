@@ -1,6 +1,7 @@
 'use client';
 
 import React, { Suspense, useState } from 'react';
+import Link from 'next/link';
 import { useAction, useMutation, useQuery } from 'convex/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Header } from '@/components/Header';
@@ -384,9 +385,9 @@ function AuthPageContent({ initialSignIn }: { initialSignIn: boolean }) {
                   />
                   <span className="text-sm text-muted-foreground">{t('auth.rememberMe')}</span>
                 </label>
-                <a href="#" className="text-sm text-primary hover:text-primary/80 transition-colors">
+                <Link href="/contact-us?topic=password-reset&role=account" className="text-sm text-primary hover:text-primary/80 transition-colors">
                   {t('auth.forgotPassword')}
-                </a>
+                </Link>
               </div>
             )}
 
@@ -403,13 +404,13 @@ function AuthPageContent({ initialSignIn }: { initialSignIn: boolean }) {
                 />
                 <span className="text-xs text-muted-foreground">
                   {t('auth.agreeToTerms')}{' '}
-                  <a href="#" className="text-primary hover:underline">
+                  <Link href="/terms" className="text-primary hover:underline">
                     {t('auth.termsOfService')}
-                  </a>{' '}
+                  </Link>{' '}
                   {t('auth.agreeToTerms').split(' ').slice(0,1)} {' '}
-                  <a href="#" className="text-primary hover:underline">
+                  <Link href="/privacy" className="text-primary hover:underline">
                     {t('auth.privacyPolicy')}
-                  </a>
+                  </Link>
                 </span>
               </label>
             )}
@@ -423,26 +424,6 @@ function AuthPageContent({ initialSignIn }: { initialSignIn: boolean }) {
               {isSignIn ? t('common.signIn') : 'Create Account'}
             </button>
           </form>
-
-          {/* Divider */}
-          <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-border/50" />
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-card text-muted-foreground">{t('auth.orContinueWith')}</span>
-            </div>
-          </div>
-
-          {/* Social Login */}
-          <div className="grid grid-cols-2 gap-3">
-            <button className="px-4 py-2.5 rounded-lg bg-muted border border-border/50 text-foreground hover:bg-muted/80 transition-all text-sm font-medium flex items-center justify-center gap-2">
-              <span>Google</span>
-            </button>
-            <button className="px-4 py-2.5 rounded-lg bg-muted border border-border/50 text-foreground hover:bg-muted/80 transition-all text-sm font-medium flex items-center justify-center gap-2">
-              <span>GitHub</span>
-            </button>
-          </div>
 
           {/* Toggle Sign In / Sign Up */}
           <div className="mt-6 text-center">

@@ -74,9 +74,10 @@ export const CoursesSection: React.FC<CoursesSectionProps> = ({ pageNumber, tota
             {/* Course Cards */}
             <div className="space-y-5">
               {courses.map((course, index) => (
-                <div
+                <Link
                   key={index}
-                  className={`glass rounded-lg p-5 hover:shadow-glow-cyan transition-all duration-300 cursor-pointer group bg-gradient-to-r ${course.color} border ${course.borderColor}`}
+                  href="/courses"
+                  className={`glass rounded-lg p-5 hover:shadow-glow-cyan transition-all duration-300 group bg-gradient-to-r ${course.color} border ${course.borderColor}`}
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <div className="flex items-center justify-between">
@@ -89,7 +90,7 @@ export const CoursesSection: React.FC<CoursesSectionProps> = ({ pageNumber, tota
                       <div className="text-muted-foreground">{course.duration}</div>
                     </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
 

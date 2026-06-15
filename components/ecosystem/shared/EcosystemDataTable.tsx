@@ -21,10 +21,12 @@ export function EcosystemDataTable<T extends { id: string }>({
   columns,
   rows,
   emptyMessage = 'Không có dữ liệu',
+  onRowClick,
 }: {
   columns: Column<T>[];
   rows: T[];
   emptyMessage?: string;
+  onRowClick?: (row: T) => void;
 }) {
   if (rows.length === 0) {
     return (
@@ -48,7 +50,11 @@ export function EcosystemDataTable<T extends { id: string }>({
         </TableHeader>
         <TableBody>
           {rows.map((row) => (
-            <TableRow key={row.id} className="border-white/8 hover:bg-white/5">
+            <TableRow
+              key={row.id}
+              className={`border-white/8 hover:bg-white/5 ${onRowClick ? 'cursor-pointer' : ''}`}
+              onClick={() => onRowClick?.(row)}
+            >
               {columns.map((col) => (
                 <TableCell key={col.key} className={col.className}>
                   {col.render

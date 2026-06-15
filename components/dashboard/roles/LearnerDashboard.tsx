@@ -1,24 +1,40 @@
 'use client';
 
 import React from 'react';
+import { useQuery } from 'convex/react';
+import { api } from '@/convex/_generated/api';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { formatTemplate } from '@/lib/dashboard/role-utils';
 import {
   DashboardBulletList,
+  DashboardEmptyState,
   DashboardGrid,
   DashboardKeyValueList,
+  DashboardLinkList,
+  DashboardLoadingState,
   DashboardProgressBar,
   DashboardSection,
 } from '@/components/dashboard/shared/DashboardPrimitives';
 
-function useList(t: ReturnType<typeof useLanguage>['t'], key: string): string[] {
-  const value = t(key, { returnObjects: true });
-  return Array.isArray(value) ? value : [];
-}
-
-export function LearnerDashboard({ fullName }: { fullName: string }) {
+export function LearnerDashboard({
+  fullName,
+  userEmail,
+}: {
+  fullName: string;
+  userEmail: string;
+}) {
   const { t } = useLanguage();
+  const data = useQuery(api.dashboard.getLearnerDashboard, { email: userEmail });
   const displayName = fullName || t('dashboard.defaultName');
+
+  if (data === undefined) {
+    return <DashboardLoadingState />;
+  }
+
+  const activeCourseItems =
+    data.activeCourses.length > 0
+      ? data.activeCourses.map((course) => `${course.title} · ${course.progress}%`)
+      : [];
 
   return (
     <DashboardGrid>
@@ -28,13 +44,13 @@ export function LearnerDashboard({ fullName }: { fullName: string }) {
         </p>
         <DashboardKeyValueList
           rows={[
-            { label: t('dashboard.learner.currentLevel'), value: t('dashboard.learner.currentLevelValue') },
-            { label: t('dashboard.learner.goal'), value: t('dashboard.learner.goalValue') },
-            { label: t('dashboard.learner.progress'), value: t('dashboard.learner.progressValue') },
+            { label: t('dashboard.learner.currentLevel'), value: data.currentLevel },
+            { label: t('dashboard.learner.goal'), value: data.goal },
+            { label: t('dashboard.learner.progress'), value: `${data.progressPercent}%` },
           ]}
         />
         <div className="mt-6">
-          <DashboardProgressBar label={t('dashboard.learner.progress')} value={62} />
+          <DashboardProgressBar label={t('dashboard.learner.progress')} value={data.progressPercent} />
         </div>
       </DashboardSection>
 
@@ -44,34 +60,44 @@ export function LearnerDashboard({ fullName }: { fullName: string }) {
         actionHref="/courses"
         delay={0.1}
       >
-        <DashboardBulletList items={useList(t, 'dashboard.learner.activeCourses')} />
+        {data.activeCourses.length > 0 ? (
+          <DashboardLinkList
+            items={data.activeCourses.map((course) => ({
+              label: `${course.title} · ${course.progress}%`,
+              href: `/courses/${course.slug}`,
+            }))}
+          />
+        ) : (
+          <DashboardBulletList items={activeCourseItems} />
+        )}
       </DashboardSection>
 
-      <DashboardSection title={t('dashboard.learner.suggestedCoursesTitle')} delay={0.12}>
-        <DashboardBulletList items={useList(t, 'dashboard.learner.suggestedCourses')} />
+      <DashboardSection title={t('dashboard.learner.suggestedCoursesTitle')} delay={0.12} action={t('dashboard.viewAll')} actionHref="/courses">
+        <DashboardBulletList items={data.suggestedCourses} />
       </DashboardSection>
 
-      <DashboardSection title={t('dashboard.learner.jobsTitle')} delay={0.14}>
-        <DashboardBulletList items={useList(t, 'dashboard.learner.jobs')} />
+      <DashboardSection title={t('dashboard.learner.jobsTitle')} delay={0.14} action={t('dashboard.viewAll')} actionHref="/jobs">
+        <DashboardBulletList items={data.jobs} />
       </DashboardSection>
 
-      <DashboardSection title={t('dashboard.learner.materialsTitle')} delay={0.16}>
-        <DashboardBulletList items={useList(t, 'dashboard.learner.materials')} />
+      <DashboardSection title={t('dashboard.learner.materialsTitle')} delay={0.16} action={t('dashboard.viewAll')} actionHref="/books">
+        <DashboardBulletList items={data.materials} />
       </DashboardSection>
 
-      <DashboardSection title={t('dashboard.learner.communityTitle')} delay={0.18}>
-        <DashboardBulletList items={useList(t, 'dashboard.learner.communities')} />
+      <DashboardSection title={t('dashboard.learner.communityTitle')} delay={0.18} action={t('dashboard.viewAll')} actionHref="/community">
+        <DashboardBulletList items={data.communities} />
       </DashboardSection>
 
-      <DashboardSection title={t('dashboard.learner.eventsTitle')} delay={0.2}>
-        <DashboardBulletList items={useList(t, 'dashboard.learner.events')} />
+      <DashboardSection title={t('dashboard.learner.eventsTitle')} delay={0.2} action={t('dashboard.viewAll')} actionHref="/events">
+        <DashboardBulletList items={data.events} />
       </DashboardSection>
 
       <DashboardSection title={t('dashboard.learner.hdpPointsTitle')} delay={0.22}>
         <DashboardKeyValueList
           rows={[
-            { label: t('dashboard.learner.hdpLevel'), value: t('dashboard.learner.hdpLevelValue') },
-            { label: t('dashboard.learner.hdpPoints'), value: t('dashboard.learner.hdpPointsValue') },
+            { label: t('dashboard.learner.hdpLevel'), value: data.hdpId },
+            { label: t('dashboard.learner.hdpPoints'), value: `${data.hdpPoints.toLocaleString()} pts` },
+            { label: t('dashboard.learner.balance'), value: data.balanceFormatted },
           ]}
         />
       </DashboardSection>

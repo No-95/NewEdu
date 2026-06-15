@@ -90,7 +90,6 @@ export const HomeClosingSection: React.FC<HomeClosingSectionProps> = ({
                     alt={t('home.whyChoose.title')}
                     className="h-full w-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-br from-background/50 to-secondary/15" />
                 </div>
               </div>
             </div>
@@ -105,7 +104,6 @@ export const HomeClosingSection: React.FC<HomeClosingSectionProps> = ({
                     alt={t('home.cta.headline')}
                     className="h-full w-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-br from-background/40 to-secondary/20" />
                 </div>
               </div>
 
@@ -145,22 +143,23 @@ export const HomeClosingSection: React.FC<HomeClosingSectionProps> = ({
                 {t('home.cta.ecosystemTagline')}
               </p>
 
-              <div className="relative mb-8 h-[220px] w-full max-w-3xl overflow-hidden rounded-2xl border border-primary/25 shadow-[0_0_60px_rgba(0,217,255,0.1)] md:h-[260px]">
+              <div className="relative mb-6 h-[220px] w-full max-w-3xl overflow-hidden rounded-2xl border border-primary/25 shadow-[0_0_60px_rgba(0,217,255,0.1)] md:h-[260px]">
                 <img
                   src={SECTION_IMAGES[2]}
                   alt={t('home.cta.ecosystemBadge')}
                   className="h-full w-full object-cover"
                 />
-                <div className="absolute inset-0 flex flex-wrap items-center justify-center gap-3 bg-gradient-to-br from-background/65 to-secondary/25 p-4 md:gap-5">
-                  {pillItems.map((pill) => (
-                    <div
-                      key={pill}
-                      className="rounded-full border border-primary/40 bg-primary/15 px-4 py-2 text-sm font-semibold text-foreground backdrop-blur-sm md:px-5 md:py-2.5"
-                    >
-                      {pill}
-                    </div>
-                  ))}
-                </div>
+              </div>
+
+              <div className="mb-8 flex flex-wrap items-center justify-center gap-3 md:gap-5">
+                {pillItems.map((pill) => (
+                  <div
+                    key={pill}
+                    className="rounded-full border border-primary/40 bg-primary/15 px-4 py-2 text-sm font-semibold text-foreground md:px-5 md:py-2.5"
+                  >
+                    {pill}
+                  </div>
+                ))}
               </div>
 
               <Link

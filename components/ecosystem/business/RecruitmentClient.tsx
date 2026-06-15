@@ -10,6 +10,7 @@ import { EcosystemSection } from '@/components/ecosystem/shared/EcosystemSection
 import { EcosystemPageLoader } from '@/components/ecosystem/shared/EcosystemPageLoader';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { translateMetrics } from '@/lib/ecosystem/i18n';
+import { buildContactHref, scrollToElementId } from '@/lib/utils/client-actions';
 import { Badge } from '@/components/ui/badge';
 
 export function RecruitmentClient({ userEmail }: { userEmail: string }) {
@@ -34,9 +35,21 @@ export function RecruitmentClient({ userEmail }: { userEmail: string }) {
       actions={
         <EcosystemActionBar
           actions={[
-            { label: t('ecosystemPages.recruitment.actions.postJob'), variant: 'default' },
-            { label: t('ecosystemPages.recruitment.actions.viewCandidates'), variant: 'outline' },
-            { label: t('ecosystemPages.recruitment.actions.scheduleInterview'), variant: 'outline' },
+            {
+              label: t('ecosystemPages.recruitment.actions.postJob'),
+              variant: 'default',
+              href: buildContactHref({ topic: 'post-job', role: 'employer', message: 'Request to post a new job opening' }),
+            },
+            {
+              label: t('ecosystemPages.recruitment.actions.viewCandidates'),
+              variant: 'outline',
+              onClick: () => scrollToElementId('recruitment-candidates'),
+            },
+            {
+              label: t('ecosystemPages.recruitment.actions.scheduleInterview'),
+              variant: 'outline',
+              href: buildContactHref({ topic: 'schedule-interview', role: 'employer', message: 'Request to schedule an interview' }),
+            },
           ]}
         />
       }
@@ -71,7 +84,7 @@ export function RecruitmentClient({ userEmail }: { userEmail: string }) {
         />
       </EcosystemSection>
 
-      <EcosystemSection title={t('ecosystemPages.recruitment.interviewPipeline')}>
+      <EcosystemSection id="recruitment-candidates" title={t('ecosystemPages.recruitment.interviewPipeline')}>
         <EcosystemDataTable
           rows={data.candidates}
           emptyMessage={t('ecosystemPages.recruitment.emptyCandidates')}

@@ -14,6 +14,7 @@ import { EcosystemPageLoader } from '@/components/ecosystem/shared/EcosystemPage
 import { buildLeadStages } from '@/lib/ecosystem/constants';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { translateMetrics } from '@/lib/ecosystem/i18n';
+import { buildContactHref, scrollToElementId } from '@/lib/utils/client-actions';
 import type { LeadStage } from '@/lib/ecosystem/types';
 
 const LEAD_STAGE_COLORS: Record<LeadStage, string> = {
@@ -48,9 +49,24 @@ export function AdmissionCrmClient({ userEmail }: { userEmail: string }) {
       actions={
         <EcosystemActionBar
           actions={[
-            { label: t('ecosystemPages.admissionCrm.actions.addLead'), variant: 'default' },
-            { label: t('ecosystemPages.admissionCrm.actions.scheduleFollowUp'), variant: 'outline' },
-            { label: t('ecosystemPages.admissionCrm.actions.moveStage'), variant: 'outline' },
+            {
+              label: t('ecosystemPages.admissionCrm.actions.addLead'),
+              variant: 'default',
+              href: buildContactHref({ topic: 'add-lead', role: 'teacher', message: 'New admission lead request' }),
+            },
+            {
+              label: t('ecosystemPages.admissionCrm.actions.scheduleFollowUp'),
+              variant: 'outline',
+              href: buildContactHref({ topic: 'follow-up', role: 'teacher', message: 'Schedule admission follow-up' }),
+            },
+            {
+              label: t('ecosystemPages.admissionCrm.actions.moveStage'),
+              variant: 'outline',
+              onClick: () => {
+                setView('table');
+                scrollToElementId('admission-pipeline');
+              },
+            },
           ]}
         />
       }
@@ -81,6 +97,7 @@ export function AdmissionCrmClient({ userEmail }: { userEmail: string }) {
       </div>
 
       <EcosystemSection
+        id="admission-pipeline"
         title={t('ecosystemPages.admissionCrm.pipelineSection')}
         actions={
           <div className="flex gap-2">

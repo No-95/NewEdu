@@ -148,6 +148,7 @@ export const config = {
     '/courses/:path*',
     '/dashboard/:path*',
     '/community/:path*',
+    '/events/:path*',
     '/jobs/:path*',
     '/books/:path*',
     '/contact-us/:path*',

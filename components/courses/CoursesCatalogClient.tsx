@@ -93,7 +93,10 @@ export function CoursesCatalogClient() {
               {text.loading}
             </div>
           ) : (
-            <div className="group block overflow-hidden rounded-3xl border border-border/60 bg-background/80 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-[0_20px_45px_-30px_rgba(34,211,238,0.7)]">
+            <Link
+              href={`/courses/${course.slug}`}
+              className="group block overflow-hidden rounded-3xl border border-border/60 bg-background/80 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-[0_20px_45px_-30px_rgba(34,211,238,0.7)]"
+            >
               <div className="grid gap-0 md:grid-cols-[1.6fr_1fr]">
                 <div className="p-7 md:p-8">
                   <div className="mb-4 flex flex-wrap items-center gap-2">
@@ -141,14 +144,16 @@ export function CoursesCatalogClient() {
                     </ul>
                   </div>
 
-                  <CourseAction
-                    courseSlug={course.slug}
-                    isFree={forcePurchase ? false : course.isFree}
-                    price={course.price}
-                  />
+                  <div onClick={(e) => e.preventDefault()} onKeyDown={(e) => e.stopPropagation()}>
+                    <CourseAction
+                      courseSlug={course.slug}
+                      isFree={forcePurchase ? false : course.isFree}
+                      price={course.price}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
+            </Link>
           )}
         </section>
       </main>

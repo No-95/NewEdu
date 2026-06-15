@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
@@ -165,7 +166,9 @@ export default function WorksSection(): React.ReactElement {
                   <div className="flex items-center justify-between pt-2">
                     <p className="text-xs text-muted-foreground">Due: {homework.dueDate}</p>
                     {homework.status !== 'completed' && (
-                      <Button size="sm" variant="outline" className="text-xs">Continue</Button>
+                      <Button size="sm" variant="outline" className="text-xs" asChild>
+                        <Link href="/courses">Continue</Link>
+                      </Button>
                     )}
                   </div>
                 </div>

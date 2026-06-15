@@ -25,24 +25,26 @@ type SessionUser = {
 function RoleDashboardBody({
   activeRole,
   fullName,
+  userEmail,
 }: {
   activeRole: string | null;
   fullName: string | null;
+  userEmail: string;
 }) {
   const navKey = resolveRoleNavKey(activeRole);
 
   switch (navKey) {
     case 'teacher':
-      return <TeacherDashboard />;
+      return <TeacherDashboard userEmail={userEmail} />;
     case 'job_seeker':
-      return <JobSeekerDashboard />;
+      return <JobSeekerDashboard userEmail={userEmail} />;
     case 'employer':
-      return <EmployerDashboard />;
+      return <EmployerDashboard userEmail={userEmail} />;
     case 'expert':
-      return <ExpertDashboard />;
+      return <ExpertDashboard userEmail={userEmail} />;
     case 'learner':
     default:
-      return <LearnerDashboard fullName={fullName ?? ''} />;
+      return <LearnerDashboard fullName={fullName ?? ''} userEmail={userEmail} />;
   }
 }
 
@@ -129,7 +131,11 @@ export function DashboardClient() {
               )}
             </motion.header>
 
-            <RoleDashboardBody activeRole={user?.activeRole ?? null} fullName={user?.fullName ?? null} />
+            <RoleDashboardBody
+              activeRole={user?.activeRole ?? null}
+              fullName={user?.fullName ?? null}
+              userEmail={user?.email ?? ''}
+            />
           </>
         )}
       </div>

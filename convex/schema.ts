@@ -462,4 +462,32 @@ export default defineSchema({
     createdAt: v.number(),
     updatedAt: v.number(),
   }).index('by_ownerId', ['ownerId']),
+
+  forumPosts: defineTable({
+    authorId: v.id('users'),
+    authorName: v.string(),
+    title: v.string(),
+    body: v.string(),
+    tags: v.array(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index('by_createdAt', ['createdAt']),
+
+  newsArticles: defineTable({
+    slug: v.string(),
+    title: v.string(),
+    excerpt: v.string(),
+    body: v.string(),
+    category: v.string(),
+    tags: v.array(v.string()),
+    coverImage: v.optional(v.string()),
+    authorId: v.id('users'),
+    authorName: v.string(),
+    published: v.boolean(),
+    publishedAt: v.number(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_slug', ['slug'])
+    .index('by_published_publishedAt', ['published', 'publishedAt']),
 });

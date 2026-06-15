@@ -18,21 +18,21 @@ const COMMUNITY: RoleNavItem = {
 const EVENTS: RoleNavItem = {
   id: 'events',
   labelKey: 'nav.role.events',
-  href: '/contact-us',
+  href: '/events',
 };
 
 const EVENTS_FULL: RoleNavItem = {
   id: 'events',
   labelKey: 'nav.ecosystem.events',
-  href: '/contact-us',
+  href: '/events',
 };
 
 export const ROLE_NAV_BY_KEY: Record<RoleNavMenuKey, RoleNavItem[]> = {
   learner: [
     { id: 'courses', labelKey: 'nav.ecosystem.learners.courses', href: '/courses' },
-    { id: 'mentor', labelKey: 'nav.ecosystem.learners.mentor', href: '/dashboard' },
+    { id: 'mentor', labelKey: 'nav.ecosystem.learners.mentor', href: '/experts/network' },
     { id: 'library', labelKey: 'nav.ecosystem.learners.library', href: '/books' },
-    { id: 'assessments', labelKey: 'nav.role.assessments', href: '/dashboard' },
+    { id: 'assessments', labelKey: 'nav.role.assessments', href: '/career/ai-matching' },
     COMMUNITY,
     EVENTS,
   ],

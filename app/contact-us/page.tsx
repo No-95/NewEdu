@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from 'react';
 import { useMutation, useQuery } from 'convex/react';
+import { useSearchParams } from 'next/navigation';
 import { Header } from '@/components/Header';
 import { ParticleBackground } from '@/components/DarkmodeParticleBackground';
 import { ClientOnly } from '@/lib/hooks/useClientOnly';
@@ -28,10 +29,29 @@ const initialForm: ContactForm = {
 
 function ContactUsContent() {
   const { t } = useLanguage();
+  const searchParams = useSearchParams();
   const [form, setForm] = useState<ContactForm>(initialForm);
   const [submittedMessage, setSubmittedMessage] = useState('');
   const recentSubmissions = useQuery(api.contact.listRecentContactSubmissions, { limit: 3 });
   const submitContactSubmission = useMutation(api.contact.submitContactSubmission);
+
+  React.useEffect(() => {
+    const topic = searchParams.get('topic');
+    const role = searchParams.get('role');
+    const message = searchParams.get('message');
+    const organization = searchParams.get('organization');
+
+    if (!topic && !role && !message && !organization) {
+      return;
+    }
+
+    setForm((prev) => ({
+      ...prev,
+      role: role ?? prev.role,
+      organization: organization ?? prev.organization,
+      feedback: message ?? prev.feedback,
+    }));
+  }, [searchParams]);
 
   const completion = useMemo(() => {
     const fields = [form.fullName, form.email, form.phone, form.organization, form.role, form.feedback];

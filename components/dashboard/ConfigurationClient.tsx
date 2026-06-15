@@ -1,5 +1,6 @@
 "use client"
 import React, { useState } from 'react'
+import Link from 'next/link'
 
 export default function ConfigurationClient({ username }: { username?: string | null }) {
   const [tab, setTab] = useState<'configuration' | 'settings'>('configuration')
@@ -37,9 +38,9 @@ export default function ConfigurationClient({ username }: { username?: string | 
               >
                 See Your Skylink
               </a>
-              <a href="/dashboard#account" className="btn-outline">
+              <Link href="/career/profile" className="btn-outline">
                 Edit Profile
-              </a>
+              </Link>
             </div>
             {!username && (
               <p className="text-sm text-yellow-600">You don't have a username yet — set one in Account to enable Skylink.</p>

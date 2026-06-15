@@ -75,7 +75,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ pageNumber, totalPages
                 {t('home.hero.startNow')}
               </Link>
               <Link
-                href="/auth"
+                href="/courses"
                 className="px-8 py-3.5 border border-border text-foreground text-base font-semibold rounded-lg hover:bg-muted/50 transition-all duration-300"
               >
                 {t('home.hero.exploreEcosystem')}

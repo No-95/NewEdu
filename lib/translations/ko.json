@@ -526,8 +526,61 @@
   "community": {
     "comingSoon": "커뮤니티 페이지가 곧 제공됩니다."
   },
+  "communityPage": {
+    "title": "커뮤니티 포럼",
+    "subtitle": "학습자와 교육자와 질문, 팁, 경험을 나눠 보세요.",
+    "newPost": "새 글",
+    "newPostHint": "토론을 시작하고 태그를 추가해 다른 사람이 찾기 쉽게 하세요.",
+    "postTitle": "제목",
+    "postBody": "내용",
+    "postTags": "태그",
+    "postTagsPlaceholder": "예: topik, manufacturing, careers",
+    "publish": "게시",
+    "posting": "게시 중...",
+    "postError": "게시에 실패했습니다. 다시 시도해 주세요.",
+    "signInToPost": "로그인 후 게시",
+    "signInRequired": "글을 작성하려면 로그인해 주세요.",
+    "searchPlaceholder": "토론 검색...",
+    "allTags": "모든 태그",
+    "loading": "토론 불러오는 중...",
+    "empty": "아직 게시글이 없습니다. 첫 토론을 시작해 보세요.",
+    "readMore": "더 보기",
+    "notFound": "게시글을 찾을 수 없습니다.",
+    "backToForum": "포럼으로 돌아가기"
+  },
+  "eventsPage": {
+    "title": "뉴스 & 이벤트",
+    "subtitle": "공지, 이벤트, 플랫폼 소식을 확인하세요.",
+    "searchPlaceholder": "뉴스 검색...",
+    "allCategories": "전체",
+    "loading": "뉴스 불러오는 중...",
+    "empty": "아직 뉴스가 없습니다. 나중에 다시 확인해 주세요.",
+    "notFound": "기사를 찾을 수 없습니다.",
+    "backToNews": "뉴스로 돌아가기",
+    "publishNews": "뉴스 게시",
+    "publishHint": "공지 또는 이벤트를 커뮤니티와 공유하세요.",
+    "articleTitle": "제목",
+    "excerpt": "요약",
+    "body": "본문",
+    "category": "카테고리",
+    "tags": "태그",
+    "tagsPlaceholder": "예: webinar, topik, partnership",
+    "publish": "게시",
+    "publishing": "게시 중...",
+    "publishError": "기사 게시에 실패했습니다. 다시 시도해 주세요.",
+    "signInRequired": "뉴스를 게시하려면 로그인해 주세요.",
+    "categories": {
+      "news": "뉴스",
+      "events": "이벤트",
+      "announcements": "공지",
+      "partnerships": "파트너십"
+    }
+  },
   "dashboard": {
     "loading": "대시보드를 불러오는 중...",
+    "loadingData": "대시보드 데이터를 불러오는 중...",
+    "empty": "아직 데이터가 없습니다. HDP EDU를 사용하면 여기에 활동이 표시됩니다.",
+    "viewAll": "전체 보기",
     "eyebrow": "HDP EDU Dashboard",
     "pageTitle": "대시보드",
     "roleBadge": "역할",
@@ -562,7 +615,8 @@
       "hdpLevel": "등급",
       "hdpLevelValue": "Member",
       "hdpPoints": "포인트",
-      "hdpPointsValue": "1,250점"
+      "hdpPointsValue": "1,250점",
+      "balance": "지갑 잔액"
     },
     "teacher": {
       "overviewTitle": "비즈니스 개요",

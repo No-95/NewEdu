@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState } from 'react'
+import Link from 'next/link'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -114,7 +115,9 @@ export default function BalanceClient(): React.ReactElement {
                   </DialogContent>
                 </Dialog>
 
-                <Button variant="outline">Withdraw</Button>
+                <Button variant="outline" asChild>
+                  <Link href="/contact-us?topic=withdraw&role=account">Withdraw</Link>
+                </Button>
               </div>
             </div>
 
@@ -159,7 +162,9 @@ export default function BalanceClient(): React.ReactElement {
             <CardContent>
               <div className="text-sm text-muted-foreground">No saved cards</div>
               <div className="mt-4">
-                <Button className="w-full">Add Card</Button>
+                <Button className="w-full" asChild>
+                  <Link href="/contact-us?topic=payment-method&role=account">Add Card</Link>
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -171,7 +176,9 @@ export default function BalanceClient(): React.ReactElement {
             <CardContent>
               <div className="text-sm text-muted-foreground">View invoices and receipts</div>
               <div className="mt-3">
-                <Button variant="outline" className="w-full">View Invoices</Button>
+                <Button variant="outline" className="w-full" asChild>
+                  <Link href="/contact-us?topic=billing&role=account">View Invoices</Link>
+                </Button>
               </div>
             </CardContent>
           </Card>

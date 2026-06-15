@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'motion/react';
+import { useLanguage } from '@/lib/context/LanguageContext';
 
 export function DashboardGrid({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
@@ -51,6 +52,10 @@ export function DashboardSection({
 }
 
 export function DashboardBulletList({ items }: { items: string[] }) {
+  if (items.length === 0) {
+    return <DashboardEmptyState />;
+  }
+
   return (
     <ul className="space-y-2.5">
       {items.map((item) => (
@@ -63,7 +68,47 @@ export function DashboardBulletList({ items }: { items: string[] }) {
   );
 }
 
+export function DashboardLinkList({ items }: { items: { label: string; href: string }[] }) {
+  return (
+    <ul className="space-y-2.5">
+      {items.map((item) => (
+        <li key={item.href}>
+          <Link
+            href={item.href}
+            className="flex items-start gap-3 text-sm leading-relaxed text-muted-foreground transition-colors hover:text-primary"
+          >
+            <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary shadow-[0_0_8px_rgba(0,217,255,0.6)]" />
+            <span>{item.label}</span>
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+export function DashboardEmptyState({ message }: { message?: string }) {
+  const { t } = useLanguage();
+  return (
+    <p className="rounded-lg border border-white/10 bg-white/5 px-4 py-6 text-center text-sm text-muted-foreground">
+      {message ?? t('dashboard.empty')}
+    </p>
+  );
+}
+
+export function DashboardLoadingState() {
+  const { t } = useLanguage();
+  return (
+    <div className="home-panel flex min-h-[320px] items-center justify-center">
+      <p className="text-sm text-muted-foreground">{t('dashboard.loadingData')}</p>
+    </div>
+  );
+}
+
 export function DashboardChipList({ items }: { items: string[] }) {
+  if (items.length === 0) {
+    return <DashboardEmptyState />;
+  }
+
   return (
     <div className="flex flex-wrap gap-2">
       {items.map((item) => (
@@ -136,18 +181,30 @@ export function DashboardProgressBar({ label, value }: { label: string; value: n
   );
 }
 
-export function DashboardActionRow({ actions }: { actions: { label: string; href: string; primary?: boolean }[] }) {
+export function DashboardActionRow({
+  actions,
+}: {
+  actions: { label: string; href?: string; onClick?: () => void; primary?: boolean }[];
+}) {
   return (
     <div className="flex flex-wrap gap-3">
-      {actions.map((action) => (
-        <Link
-          key={action.label}
-          href={action.href}
-          className={action.primary ? 'home-btn-primary px-5 py-2.5 text-sm' : 'home-btn-outline px-5 py-2.5 text-sm'}
-        >
-          {action.label}
-        </Link>
-      ))}
+      {actions.map((action) => {
+        const className = action.primary ? 'home-btn-primary px-5 py-2.5 text-sm' : 'home-btn-outline px-5 py-2.5 text-sm';
+
+        if (action.onClick) {
+          return (
+            <button key={action.label} type="button" onClick={action.onClick} className={className}>
+              {action.label}
+            </button>
+          );
+        }
+
+        return (
+          <Link key={action.label} href={action.href ?? '/dashboard'} className={className}>
+            {action.label}
+          </Link>
+        );
+      })}
     </div>
   );
 }

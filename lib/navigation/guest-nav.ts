@@ -19,7 +19,7 @@ export const GUEST_HOME = {
 export const GUEST_EVENTS = {
   id: 'events',
   labelKey: 'nav.ecosystem.events',
-  href: '/contact-us',
+  href: '/events',
 } as const;
 
 export const GUEST_COMMUNITY = {

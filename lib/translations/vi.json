@@ -526,8 +526,61 @@
   "community": {
     "comingSoon": "Trang cộng đồng sẽ sớm ra mắt."
   },
+  "communityPage": {
+    "title": "Diễn đàn cộng đồng",
+    "subtitle": "Chia sẻ câu hỏi, mẹo và kinh nghiệm với học viên và giáo viên.",
+    "newPost": "Bài viết mới",
+    "newPostHint": "Bắt đầu thảo luận và thêm thẻ tag để mọi người dễ tìm.",
+    "postTitle": "Tiêu đề",
+    "postBody": "Nội dung",
+    "postTags": "Thẻ tag",
+    "postTagsPlaceholder": "vd: topik, manufacturing, careers",
+    "publish": "Đăng bài",
+    "posting": "Đang đăng...",
+    "postError": "Không thể đăng bài. Vui lòng thử lại.",
+    "signInToPost": "Đăng nhập để đăng bài",
+    "signInRequired": "Vui lòng đăng nhập để tạo bài viết.",
+    "searchPlaceholder": "Tìm thảo luận...",
+    "allTags": "Tất cả tag",
+    "loading": "Đang tải thảo luận...",
+    "empty": "Chưa có bài viết nào. Hãy là người đầu tiên bắt đầu thảo luận.",
+    "readMore": "Xem thêm",
+    "notFound": "Không tìm thấy bài viết.",
+    "backToForum": "Quay lại diễn đàn"
+  },
+  "eventsPage": {
+    "title": "Tin tức & Sự kiện",
+    "subtitle": "Cập nhật thông báo, sự kiện và tin tức từ nền tảng.",
+    "searchPlaceholder": "Tìm tin tức...",
+    "allCategories": "Tất cả",
+    "loading": "Đang tải tin tức...",
+    "empty": "Chưa có tin tức. Quay lại sau nhé.",
+    "notFound": "Không tìm thấy bài viết.",
+    "backToNews": "Quay lại tin tức",
+    "publishNews": "Đăng tin",
+    "publishHint": "Chia sẻ thông báo hoặc sự kiện với cộng đồng.",
+    "articleTitle": "Tiêu đề",
+    "excerpt": "Tóm tắt",
+    "body": "Nội dung đầy đủ",
+    "category": "Danh mục",
+    "tags": "Thẻ tag",
+    "tagsPlaceholder": "vd: webinar, topik, partnership",
+    "publish": "Xuất bản",
+    "publishing": "Đang xuất bản...",
+    "publishError": "Không thể xuất bản bài viết. Vui lòng thử lại.",
+    "signInRequired": "Vui lòng đăng nhập để đăng tin.",
+    "categories": {
+      "news": "Tin tức",
+      "events": "Sự kiện",
+      "announcements": "Thông báo",
+      "partnerships": "Đối tác"
+    }
+  },
   "dashboard": {
     "loading": "Đang tải bảng điều khiển...",
+    "loadingData": "Đang tải dữ liệu bảng điều khiển...",
+    "empty": "Chưa có dữ liệu. Hoạt động sẽ hiển thị khi bạn sử dụng HDP EDU.",
+    "viewAll": "Xem tất cả",
     "eyebrow": "HDP EDU Dashboard",
     "pageTitle": "Bảng điều khiển",
     "roleBadge": "Vai trò",
@@ -562,7 +615,8 @@
       "hdpLevel": "Cấp độ",
       "hdpLevelValue": "Member",
       "hdpPoints": "Điểm",
-      "hdpPointsValue": "1.250 điểm"
+      "hdpPointsValue": "1.250 điểm",
+      "balance": "Số dư ví"
     },
     "teacher": {
       "overviewTitle": "Tổng quan kinh doanh",

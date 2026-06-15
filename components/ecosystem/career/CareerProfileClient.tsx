@@ -7,6 +7,7 @@ import { EcosystemActionBar } from '@/components/ecosystem/shared/EcosystemActio
 import { EcosystemSection } from '@/components/ecosystem/shared/EcosystemSection';
 import { EcosystemPageLoader } from '@/components/ecosystem/shared/EcosystemPageLoader';
 import { useLanguage } from '@/lib/context/LanguageContext';
+import { buildContactHref, downloadTextFile, formatCareerProfileDocument } from '@/lib/utils/client-actions';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 
@@ -23,6 +24,18 @@ export function CareerProfileClient({ userEmail }: { userEmail: string }) {
     );
   }
 
+  const downloadCv = () => {
+    const content = formatCareerProfileDocument(profile, 'cv');
+    const filename = `${(profile.fullName || 'hdp-edu-profile').replace(/\s+/g, '-').toLowerCase()}-cv.txt`;
+    downloadTextFile(filename, content);
+  };
+
+  const downloadPdf = () => {
+    const content = formatCareerProfileDocument(profile, 'pdf-text');
+    const filename = `${(profile.fullName || 'hdp-edu-profile').replace(/\s+/g, '-').toLowerCase()}-profile.txt`;
+    downloadTextFile(filename, content);
+  };
+
   return (
     <AppPageShell
       title={t('ecosystemPages.careerProfile.title')}
@@ -30,9 +43,17 @@ export function CareerProfileClient({ userEmail }: { userEmail: string }) {
       actions={
         <EcosystemActionBar
           actions={[
-            { label: t('ecosystemPages.careerProfile.actions.edit'), variant: 'default' },
-            { label: t('ecosystemPages.careerProfile.actions.downloadCv'), variant: 'outline' },
-            { label: t('ecosystemPages.careerProfile.actions.downloadPdf'), variant: 'outline' },
+            {
+              label: t('ecosystemPages.careerProfile.actions.edit'),
+              variant: 'default',
+              href: buildContactHref({
+                topic: 'profile-update',
+                role: 'job_seeker',
+                message: 'I would like to update my career profile on HDP EDU.',
+              }),
+            },
+            { label: t('ecosystemPages.careerProfile.actions.downloadCv'), variant: 'outline', onClick: downloadCv },
+            { label: t('ecosystemPages.careerProfile.actions.downloadPdf'), variant: 'outline', onClick: downloadPdf },
           ]}
         />
       }

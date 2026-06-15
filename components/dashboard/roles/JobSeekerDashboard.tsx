@@ -1,6 +1,8 @@
 'use client';
 
 import React from 'react';
+import { useQuery } from 'convex/react';
+import { api } from '@/convex/_generated/api';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import {
   DashboardActionRow,
@@ -8,69 +10,70 @@ import {
   DashboardChipList,
   DashboardGrid,
   DashboardKeyValueList,
+  DashboardLoadingState,
   DashboardProgressBar,
   DashboardSection,
   DashboardStatGrid,
 } from '@/components/dashboard/shared/DashboardPrimitives';
 
-function useList(t: ReturnType<typeof useLanguage>['t'], key: string): string[] {
-  const value = t(key, { returnObjects: true });
-  return Array.isArray(value) ? value : [];
-}
-
-export function JobSeekerDashboard() {
+export function JobSeekerDashboard({ userEmail }: { userEmail: string }) {
   const { t } = useLanguage();
+  const data = useQuery(api.dashboard.getJobSeekerDashboard, { email: userEmail });
+
+  if (data === undefined) {
+    return <DashboardLoadingState />;
+  }
 
   return (
     <DashboardGrid>
       <DashboardSection title={t('dashboard.jobSeeker.profileTitle')} span={2} delay={0.05}>
-        <DashboardProgressBar label={t('dashboard.jobSeeker.profileCompletion')} value={85} />
+        <DashboardProgressBar label={t('dashboard.jobSeeker.profileCompletion')} value={data.completionScore} />
         <div className="mt-6">
           <DashboardActionRow
             actions={[
-              { label: t('dashboard.downloadCv'), href: '/dashboard', primary: true },
-              { label: t('dashboard.updateProfile'), href: '/dashboard' },
+              { label: t('dashboard.downloadCv'), href: '/career/profile', primary: true },
+              { label: t('dashboard.updateProfile'), href: '/career/profile' },
             ]}
           />
         </div>
       </DashboardSection>
 
-      <DashboardSection title={t('dashboard.jobSeeker.matchingJobsTitle')} delay={0.1}>
-        <DashboardBulletList items={useList(t, 'dashboard.jobSeeker.matchingJobs')} />
+      <DashboardSection title={t('dashboard.jobSeeker.matchingJobsTitle')} delay={0.1} action={t('dashboard.viewAll')} actionHref="/jobs">
+        <DashboardBulletList items={data.matchingJobs} />
       </DashboardSection>
 
       <DashboardSection title={t('dashboard.jobSeeker.profileViewsTitle')} delay={0.12}>
         <DashboardStatGrid
           stats={[
-            { label: t('dashboard.jobSeeker.recruiterViews'), value: t('dashboard.jobSeeker.recruiterViewsValue') },
-            { label: t('dashboard.jobSeeker.interviewInvites'), value: t('dashboard.jobSeeker.interviewInvitesValue'), accent: true },
+            { label: t('dashboard.jobSeeker.recruiterViews'), value: data.recruiterViews },
+            { label: t('dashboard.jobSeeker.interviewInvites'), value: data.interviewInvites, accent: true },
           ]}
         />
       </DashboardSection>
 
-      <DashboardSection title={t('dashboard.jobSeeker.skillSuggestionsTitle')} delay={0.14}>
-        <DashboardBulletList items={useList(t, 'dashboard.jobSeeker.skillSuggestions')} />
+      <DashboardSection title={t('dashboard.jobSeeker.skillSuggestionsTitle')} delay={0.14} action={t('dashboard.viewAll')} actionHref="/career/ai-matching">
+        <DashboardBulletList items={data.skillSuggestions} />
       </DashboardSection>
 
-      <DashboardSection title={t('dashboard.jobSeeker.careerPathTitle')} delay={0.16}>
+      <DashboardSection title={t('dashboard.jobSeeker.careerPathTitle')} delay={0.16} action={t('dashboard.viewAll')} actionHref="/career/profile">
         <DashboardKeyValueList
           rows={[
-            { label: t('dashboard.jobSeeker.currentRole'), value: t('dashboard.jobSeeker.currentRoleValue') },
-            { label: t('dashboard.jobSeeker.targetRole'), value: t('dashboard.jobSeeker.targetRoleValue') },
+            { label: t('dashboard.jobSeeker.currentRole'), value: data.currentRole },
+            { label: t('dashboard.jobSeeker.targetRole'), value: data.targetRole },
           ]}
         />
       </DashboardSection>
 
-      <DashboardSection title={t('dashboard.jobSeeker.advisorsTitle')} delay={0.18}>
-        <DashboardBulletList items={useList(t, 'dashboard.jobSeeker.advisors')} />
+      <DashboardSection title={t('dashboard.jobSeeker.advisorsTitle')} delay={0.18} action={t('dashboard.viewAll')} actionHref="/career/career-support">
+        <DashboardBulletList items={data.advisors} />
       </DashboardSection>
 
-      <DashboardSection title={t('dashboard.jobSeeker.careerEventsTitle')} delay={0.2}>
-        <DashboardBulletList items={useList(t, 'dashboard.jobSeeker.careerEvents')} />
+      <DashboardSection title={t('dashboard.jobSeeker.careerEventsTitle')} delay={0.2} action={t('dashboard.viewAll')} actionHref="/events">
+        <DashboardBulletList items={data.careerEvents} />
       </DashboardSection>
 
-      <DashboardSection title={t('dashboard.jobSeeker.networkTitle')} span={2} delay={0.22}>
-        <DashboardChipList items={useList(t, 'dashboard.jobSeeker.networkTags')} />
+      <DashboardSection title={t('dashboard.jobSeeker.networkTitle')} span={2} delay={0.22} action={t('dashboard.viewAll')} actionHref="/community">
+        <DashboardChipList items={data.networkTags} />
       </DashboardSection>
     </DashboardGrid>
   );

@@ -14,6 +14,7 @@ import { EcosystemPageLoader } from '@/components/ecosystem/shared/EcosystemPage
 import { buildTrainingModules } from '@/lib/ecosystem/constants';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { translateMetrics } from '@/lib/ecosystem/i18n';
+import { buildContactHref, downloadCsv } from '@/lib/utils/client-actions';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 
@@ -41,10 +42,44 @@ export function TrainingManagementClient({ userEmail }: { userEmail: string }) {
       actions={
         <EcosystemActionBar
           actions={[
-            { label: t('ecosystemPages.trainingManagement.actions.createClass'), variant: 'default' },
-            { label: t('ecosystemPages.trainingManagement.actions.assignTeacher'), variant: 'outline' },
-            { label: t('ecosystemPages.trainingManagement.actions.addStudent'), variant: 'outline' },
-            { label: t('ecosystemPages.trainingManagement.actions.exportReport'), variant: 'outline' },
+            {
+              label: t('ecosystemPages.trainingManagement.actions.createClass'),
+              variant: 'default',
+              href: buildContactHref({ topic: 'create-class', role: 'teacher', message: 'Request to create a new class' }),
+            },
+            {
+              label: t('ecosystemPages.trainingManagement.actions.assignTeacher'),
+              variant: 'outline',
+              href: buildContactHref({ topic: 'assign-teacher', role: 'teacher', message: 'Request teacher assignment' }),
+            },
+            {
+              label: t('ecosystemPages.trainingManagement.actions.addStudent'),
+              variant: 'outline',
+              href: buildContactHref({ topic: 'add-student', role: 'teacher', message: 'Request to add a student' }),
+            },
+            {
+              label: t('ecosystemPages.trainingManagement.actions.exportReport'),
+              variant: 'outline',
+              onClick: () => {
+                downloadCsv(
+                  'training-students-report.csv',
+                  data.students.map((student) => ({
+                    name: student.name,
+                    email: student.email,
+                    className: student.className,
+                    status: student.status,
+                    attendanceRate: student.attendanceRate,
+                  })),
+                  [
+                    { key: 'name', label: 'Name' },
+                    { key: 'email', label: 'Email' },
+                    { key: 'className', label: 'Class' },
+                    { key: 'status', label: 'Status' },
+                    { key: 'attendanceRate', label: 'Attendance %' },
+                  ]
+                );
+              },
+            },
           ]}
         />
       }
@@ -54,7 +89,20 @@ export function TrainingManagementClient({ userEmail }: { userEmail: string }) {
       </EcosystemSection>
 
       <EcosystemSection title={t('ecosystemPages.trainingManagement.modulesSection')}>
-        <EcosystemModuleGrid modules={trainingModules} />
+        <EcosystemModuleGrid
+          modules={trainingModules}
+          onModuleClick={(moduleId) => {
+            if (moduleId === 'students' || moduleId === 'teachers' || moduleId === 'classes') {
+              setTab(moduleId);
+              return;
+            }
+            window.location.href = buildContactHref({
+              topic: `training-${moduleId}`,
+              role: 'teacher',
+              message: `Request access to training module: ${moduleId}`,
+            });
+          }}
+        />
       </EcosystemSection>
 
       <EcosystemSection title={t('ecosystemPages.trainingManagement.dataSection')}>
