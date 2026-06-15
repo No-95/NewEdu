@@ -584,6 +584,104 @@
   .site-mode-lightmode2 .jobs-page .group:hover h2.text-foreground {
     color: var(--primary) !important;
   }
+
+  /* Light modes — experts network readability */
+  .site-mode-lightmode1 .experts-network-page,
+  .site-mode-lightmode2 .experts-network-page {
+    --experts-card-shadow: 0 12px 40px -20px color-mix(in srgb, var(--primary) 10%, transparent);
+    --experts-btn-shadow: 0 8px 20px color-mix(in srgb, var(--primary) 18%, transparent);
+  }
+
+  .site-mode-lightmode1 .experts-network-page .home-card,
+  .site-mode-lightmode1 .experts-network-page .home-grid-bg,
+  .site-mode-lightmode2 .experts-network-page .home-card,
+  .site-mode-lightmode2 .experts-network-page .home-grid-bg {
+    background: var(--card) !important;
+    border-color: var(--border) !important;
+    box-shadow: var(--experts-card-shadow) !important;
+  }
+
+  .site-mode-lightmode1 .experts-network-page .home-eyebrow,
+  .site-mode-lightmode2 .experts-network-page .home-eyebrow {
+    color: var(--primary) !important;
+  }
+
+  .site-mode-lightmode1 .experts-network-page .home-eyebrow::before,
+  .site-mode-lightmode2 .experts-network-page .home-eyebrow::before {
+    background: color-mix(in srgb, var(--primary) 60%, transparent) !important;
+  }
+
+  .site-mode-lightmode1 .experts-network-page .text-primary,
+  .site-mode-lightmode2 .experts-network-page .text-primary,
+  .site-mode-lightmode1 .experts-network-page [class*='text-primary'],
+  .site-mode-lightmode2 .experts-network-page [class*='text-primary'] {
+    color: var(--primary) !important;
+  }
+
+  .site-mode-lightmode1 .experts-network-page .text-muted-foreground,
+  .site-mode-lightmode2 .experts-network-page .text-muted-foreground {
+    color: color-mix(in srgb, var(--foreground) 62%, transparent) !important;
+  }
+
+  .site-mode-lightmode1 .experts-network-page .text-amber-400,
+  .site-mode-lightmode2 .experts-network-page .text-amber-400 {
+    color: #d97706 !important;
+  }
+
+  .site-mode-lightmode1 .experts-network-page .experts-badge,
+  .site-mode-lightmode2 .experts-network-page .experts-badge {
+    background: var(--muted) !important;
+    color: var(--foreground) !important;
+    border-color: var(--border) !important;
+  }
+
+  .site-mode-lightmode1 .experts-network-page [data-slot='input'],
+  .site-mode-lightmode1 .experts-network-page [data-slot='select-trigger'],
+  .site-mode-lightmode2 .experts-network-page [data-slot='input'],
+  .site-mode-lightmode2 .experts-network-page [data-slot='select-trigger'] {
+    background: var(--input) !important;
+    border-color: var(--border) !important;
+    color: var(--foreground) !important;
+  }
+
+  .site-mode-lightmode1 .experts-network-page .experts-btn-primary,
+  .site-mode-lightmode2 .experts-network-page .experts-btn-primary {
+    background: var(--primary) !important;
+    color: var(--primary-foreground) !important;
+    box-shadow: var(--experts-btn-shadow) !important;
+  }
+
+  .site-mode-lightmode1 .experts-network-page .experts-btn-primary:hover,
+  .site-mode-lightmode2 .experts-network-page .experts-btn-primary:hover {
+    background: color-mix(in srgb, var(--primary) 88%, #000) !important;
+    color: var(--primary-foreground) !important;
+  }
+
+  .site-mode-lightmode1 .experts-network-page .experts-btn-primary *,
+  .site-mode-lightmode2 .experts-network-page .experts-btn-primary *,
+  .site-mode-lightmode1 .experts-network-page .experts-btn-primary:hover *,
+  .site-mode-lightmode2 .experts-network-page .experts-btn-primary:hover * {
+    color: inherit !important;
+  }
+
+  .site-mode-lightmode1 .experts-network-page .experts-btn-outline,
+  .site-mode-lightmode2 .experts-network-page .experts-btn-outline {
+    background: var(--card) !important;
+    color: var(--foreground) !important;
+    border-color: var(--border) !important;
+  }
+
+  .site-mode-lightmode1 .experts-network-page .experts-btn-outline:hover,
+  .site-mode-lightmode2 .experts-network-page .experts-btn-outline:hover {
+    background: color-mix(in srgb, var(--primary) 8%, var(--card)) !important;
+    color: var(--primary) !important;
+    border-color: color-mix(in srgb, var(--primary) 35%, var(--border)) !important;
+  }
+
+  .site-mode-lightmode1 .experts-network-page .experts-btn-outline:hover *,
+  .site-mode-lightmode2 .experts-network-page .experts-btn-outline:hover * {
+    color: inherit !important;
+  }
 }
 
 /* Animations */

@@ -67,7 +67,7 @@ export const MARKETING_INTEREST_KEYS = [
 ] as const;
 
 export const ONBOARDING_LIMITS = {
-  maxRoles: 2,
+  maxRoles: 3,
   minRoles: 1,
   maxGoals: 3,
   minGoals: 1,

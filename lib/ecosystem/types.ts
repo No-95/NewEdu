@@ -220,13 +220,13 @@ export interface InternalCourse {
 export interface ExpertProfile {
   id: string;
   name: string;
+  avatarUrl: string;
   industry: string;
   country: string;
   biography: string;
   expertise: string[];
   experience: string;
   certifications: string[];
-  consultationFee: string;
   rating: number;
 }
 

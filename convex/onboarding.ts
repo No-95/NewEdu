@@ -67,7 +67,7 @@ const MARKETING_INTEREST_KEYS = [
   'import_export',
 ] as const;
 
-const MAX_ROLES = 2;
+const MAX_ROLES = 3;
 const MIN_ROLES = 1;
 const MAX_GOALS = 3;
 const MIN_GOALS = 1;

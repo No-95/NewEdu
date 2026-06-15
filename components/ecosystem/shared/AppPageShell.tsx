@@ -4,6 +4,7 @@ import React from 'react';
 import { Header } from '@/components/Header';
 import { ParticleBackground } from '@/components/DarkmodeParticleBackground';
 import { ClientOnly } from '@/lib/hooks/useClientOnly';
+import { cn } from '@/lib/utils';
 
 interface AppPageShellProps {
   title: string;
@@ -11,11 +12,12 @@ interface AppPageShellProps {
   actions?: React.ReactNode;
   children: React.ReactNode;
   maxWidth?: '6xl' | '7xl';
+  pageClassName?: string;
 }
 
-function ShellContent({ title, subtitle, actions, children, maxWidth = '7xl' }: AppPageShellProps) {
+function ShellContent({ title, subtitle, actions, children, maxWidth = '7xl', pageClassName }: AppPageShellProps) {
   return (
-    <div className="min-h-screen bg-background">
+    <div className={cn('min-h-screen bg-background', pageClassName)}>
       <ParticleBackground />
       <Header />
       <main

@@ -44,7 +44,7 @@ export function EcosystemFilterBar({
           value={searchValue}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder={searchPlaceholder}
-          className="border-white/10 bg-white/5 pl-9"
+          className="border-border bg-card pl-9"
         />
       </div>
       {filters?.map((filter) => (
@@ -53,7 +53,7 @@ export function EcosystemFilterBar({
           value={filterValues?.[filter.key] ?? 'all'}
           onValueChange={(v) => onFilterChange?.(filter.key, v)}
         >
-          <SelectTrigger className="w-full border-white/10 bg-white/5 md:w-[180px]">
+          <SelectTrigger className="w-full border-border bg-card md:w-[180px]">
             <SelectValue placeholder={filter.label} />
           </SelectTrigger>
           <SelectContent>
