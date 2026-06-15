@@ -263,6 +263,44 @@
       "resourcesDesc": "포괄적인 교과과정 및 교육 도구 사용"
     }
   },
+  "teacherCenter": {
+    "title": "강사 & 교육 센터",
+    "subtitle": "HDP EDU 디지털 플랫폼에서 교육 사업을 성장시키세요 — 베트남·한국 생태계에서 강사, 센터, 학습자가 연결됩니다.",
+    "whyJoinTitle": "왜 교육 파트너가 되어야 할까요?",
+    "whyJoinItems": [
+      "온라인 강의를 만들고 판매하세요.",
+      "수업, 학습자, 강의 일정을 관리하세요.",
+      "입학 CRM과 학습자 케어 도구를 활용하세요.",
+      "개인 또는 센터 브랜드를 구축하세요.",
+      "전국 학습자 커뮤니티에 접근하세요."
+    ],
+    "benefitsTitle": "HDP EDU와 파트너십의 이점",
+    "toolsTitle": "파트너를 위한 도구",
+    "ctaApply": "강사 지원하기",
+    "ctaSignUp": "파트너 계정 만들기",
+    "tools": {
+      "training": {
+        "title": "교육 관리",
+        "description": "수업 일정, 진도 추적, 강사 관리."
+      },
+      "crm": {
+        "title": "입학 CRM",
+        "description": "잠재 학습자 관리, 상담, 등록 전환."
+      },
+      "business": {
+        "title": "사업 개발",
+        "description": "브랜드 확장, 마케팅 캠페인, 파트너십 구축."
+      },
+      "reports": {
+        "title": "리포트 & 분석",
+        "description": "교육 성과, 매출, 학습자 성장 추적."
+      },
+      "library": {
+        "title": "자료 라이브러리",
+        "description": "교재, 자료, 즉시 사용 가능한 교육 도구."
+      }
+    }
+  },
   "contactUsPage": {
     "badge": "지원 및 피드백",
     "title": "문의하기",

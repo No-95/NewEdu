@@ -9,6 +9,7 @@ import { ParticleBackground } from '@/components/DarkmodeParticleBackground';
 import { api } from '@/convex/_generated/api';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { COURSE_TEXT, getCourseLanguage } from '@/lib/courses/localization';
+import { GiftBookHoverBadge } from '@/components/books/GiftBookHoverBadge';
 import CourseAction from './CourseAction';
 
 export function CoursesCatalogClient() {
@@ -102,9 +103,11 @@ export function CoursesCatalogClient() {
                       </span>
                     ) : null}
                     {!course.isFree ? (
-                      <span className="rounded-full border border-amber-300/50 bg-amber-400/20 px-3 py-1 text-xs font-semibold text-amber-100">
-                        {text.giftBookTag}
-                      </span>
+                      <GiftBookHoverBadge side="bottom" align="start">
+                        <span className="rounded-full border border-amber-300/50 bg-amber-400/20 px-3 py-1 text-xs font-semibold text-amber-100 cursor-help">
+                          {text.giftBookTag}
+                        </span>
+                      </GiftBookHoverBadge>
                     ) : null}
                     <span className="rounded-full border border-border/60 bg-muted/40 px-3 py-1 text-xs font-semibold text-muted-foreground">
                       {text.teacherTeam}

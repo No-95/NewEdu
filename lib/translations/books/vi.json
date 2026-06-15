@@ -1,0 +1,119 @@
+{
+  "giftBook": {
+    "badge": "Sách tặng kèm khóa học",
+    "priceLabel": "Giá sách",
+    "stockLabel": "Kho",
+    "stockUnit": "cuốn",
+    "viewDetails": "Xem chi tiết sách",
+    "title": "Tiếng Hàn Trong Nhà Máy Sản Xuất",
+    "subtitle": "Cẩm nang giao tiếp thực chiến cho môi trường công nghiệp Hàn Quốc",
+    "description": "Hệ thống tiếng Hàn chuyên ngành sản xuất sát thực tế — từ vựng, ngữ cảnh và tình huống công việc tại nhà máy Hàn Quốc.",
+    "coverAlt": "Tiếng Hàn Trong Nhà Máy Sản Xuất - Bìa sách",
+    "stockStatus": "Sắp hết",
+    "highlights": [
+      "PPC, IQC, SMT, Lắp ráp, QC công đoạn, Bảo trì",
+      "Thuật ngữ song ngữ cho môi trường sản xuất",
+      "Phù hợp kỹ thuật viên, QA-QC, tổ trưởng"
+    ]
+  },
+  "hero": {
+    "badge": "Sách - \"Tiếng Hàn Trong Nhà Máy Sản Xuất\"",
+    "title": "Cuốn sách thực chiến dành riêng cho",
+    "titleHighlight": "môi trường sản xuất",
+    "subtitle": "Giúp bạn hiểu quy trình, thuật ngữ, bối cảnh giao tiếp và tự tin làm việc với quản lý Hàn Quốc.",
+    "remainingLabel": "Còn lại",
+    "remainingCount": "74 cuốn",
+    "inStock": "Trong kho",
+    "statusLabel": "Tình trạng",
+    "almostSoldOut": "Sắp hết",
+    "firstPrint": "Đợt in đầu",
+    "discountBadge": "-10%",
+    "savingsNote": "Ưu đãi đợt đầu • Tiết kiệm 25.000đ",
+    "cta": "Đăng ký mua sách ngay",
+    "imageAlts": [
+      "Tiếng Hàn Trong Nhà Máy Sản Xuất - Bìa sách",
+      "Bìa sau với giới thiệu tác giả",
+      "Sách trên bàn",
+      "Trang tiêu đề",
+      "Nội dung bộ phận SMT",
+      "Bảng thuật ngữ song ngữ"
+    ]
+  },
+  "overview": {
+    "introLabel": "Giới thiệu",
+    "title": "Giới thiệu cuốn sách",
+    "paragraph1Bold": "Tiếng Hàn trong nhà máy sản xuất",
+    "paragraph1": " - Cẩm nang giao tiếp thực chiến cho môi trường công nghiệp Hàn Quốc. Trong các nhà máy có vốn đầu tư Hàn Quốc, ngôn ngữ không chỉ để giao tiếp mà còn ảnh hưởng trực tiếp đến hiệu suất, an toàn và cơ hội thăng tiến.",
+    "paragraph2": "Cuốn sách được biên soạn nhằm cung cấp hệ thống tiếng Hàn chuyên ngành sản xuất sát thực tế, giúp người học sử dụng đúng từ vựng, đúng ngữ cảnh và đúng tình huống công việc.",
+    "focusTitle": "Nội dung trọng tâm",
+    "focusItems": [
+      "PPC, IQC, Dập kim loại, Ép nhựa - Khuôn, SMT, Sơn - Phủ bề mặt",
+      "Lắp ráp, QC công đoạn, Bảo trì, Automation",
+      "Kỹ thuật sản phẩm, Kỹ thuật công đoạn, R&D, OQC..."
+    ],
+    "audienceTitle": "Phù hợp với",
+    "audienceItems": [
+      "Người lao động tại nhà máy Hàn Quốc",
+      "Kỹ thuật viên, QA - QC, tổ trưởng, quản lý sản xuất",
+      "Sinh viên khối kỹ thuật, ứng viên phỏng vấn công ty Hàn"
+    ],
+    "valueTitle": "Giá trị mang lại",
+    "valueItems": [
+      "Giao tiếp chính xác trong môi trường sản xuất",
+      "Tự tin làm việc với quản lý người Hàn",
+      "Hạn chế sai sót do hiểu nhầm",
+      "Nâng cao cơ hội thăng tiến"
+    ],
+    "backCoverNote": "Bìa sau",
+    "backCoverDesc": " với giới thiệu chi tiết về tác giả.",
+    "highlightsTitle": "Điểm nổi bật",
+    "statValues": ["12+", "500+", "100+", "Real"],
+    "statLabels": ["Chuyên đề", "Từ vựng", "Mẫu câu", "Tình huống"]
+  },
+  "purchase": {
+    "badge": "Đặt mua sách",
+    "title": "Thông tin nhận sách",
+    "subtitle": "Điền thông tin giao hàng; HDP EDU sẽ liên hệ xác nhận đơn và giao sách đến bạn.",
+    "success": "Đăng ký mua sách thành công. Chúng tôi sẽ liên hệ bạn sớm để xác nhận và giao hàng.",
+    "fullName": "Họ và tên",
+    "fullNamePlaceholder": "Nhập họ và tên",
+    "phone": "Số điện thoại",
+    "phonePlaceholder": "Nhập số điện thoại",
+    "address": "Địa chỉ nhận hàng",
+    "addressPlaceholder": "Nhập địa chỉ nhận hàng chi tiết",
+    "note": "Ghi chú cho shipper (tùy chọn)",
+    "notePlaceholder": "Ví dụ: gọi trước khi giao, giao trong giờ hành chính...",
+    "validationError": "Vui lòng nhập đầy đủ họ tên, số điện thoại và địa chỉ giao hàng.",
+    "submitError": "Gửi đơn thất bại. Vui lòng thử lại sau.",
+    "submitting": "Đang gửi...",
+    "submit": "Xác nhận đặt mua",
+    "backToBooks": "Quay lại trang sách"
+  },
+  "author": {
+    "title": "Về tác giả",
+    "name": "Dương Thu Hương",
+    "role": "Tác giả & CEO HDP Holdings",
+    "photoAlt": "Dương Thu Hương - Tác giả",
+    "degree1Title": "Cử nhân Ngôn ngữ Hàn Quốc",
+    "degree1School": "Đại học Hà Nội",
+    "degree2Title": "Thạc sĩ Quản trị Kinh doanh",
+    "degree2School": "Đại học Soongsil, Hàn Quốc",
+    "bio1": "Nhà sáng lập kiêm Giám đốc điều hành Công ty",
+    "bio1Company": "HDP HOLDINGS",
+    "bio1Rest": ", đơn vị tư vấn chiến lược và cung cấp giải pháp toàn diện cho doanh nghiệp Việt Nam và doanh nghiệp FDI, đặc biệt là doanh nghiệp Hàn Quốc.",
+    "bio2": "Hiện là chuyên gia cố vấn cho nhiều hiệp hội doanh nghiệp, cơ quan xúc tiến đầu tư - thương mại của Việt Nam và Hàn Quốc, với kinh nghiệm sâu rộng trong lĩnh vực phát triển doanh nghiệp, hợp tác quốc tế và đào tạo nguồn nhân lực chất lượng cao."
+  },
+  "cta": {
+    "badge": "Còn đúng 74 cuốn • Đang cận kề",
+    "title": "Đăng ký mua",
+    "titleHighlight": "sách ngay",
+    "description": "Số lượng đợt in đầu đang gần hết. Đặt mua ngay để nhận ưu đãi",
+    "discountHighlight": "giảm 10%",
+    "descriptionEnd": " và sớm sở hữu cẩm nang thực chiến cho môi trường sản xuất Hàn Quốc.",
+    "originalPriceLabel": "Giá gốc",
+    "offerLabel": "Ưu đãi",
+    "discountLabel": "Giảm 10%",
+    "button": "Đăng ký mua sách ngay",
+    "footer": "Giao hàng toàn quốc • Đóng gói cẩn thận • Đảm bảo chất lượng"
+  }
+}

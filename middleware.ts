@@ -11,17 +11,44 @@ const PROTECTED_PREFIXES = [
   '/books',
   '/contact-us',
   '/teacher-applicant',
+  '/teacher-center',
+  '/career',
+  '/business',
+  '/experts',
 ];
 
-async function getOnboardingGate(email: string) {
+async function getSession(email: string) {
   try {
-    return await getConvexClient().query(api.onboarding.getOnboardingStatus, {
+    return await getConvexClient().query(api.auth.getSessionByEmail, {
       email: email.trim().toLowerCase(),
     });
   } catch {
     return null;
   }
 }
+
+function clearUserEmailCookie(response: NextResponse) {
+  response.cookies.set({
+    name: 'user_email',
+    value: '',
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 0,
+  });
+}
+
+const AUTH_REQUIRED_PATHS = [
+  '/business/internal-training',
+  '/business/hr-management',
+  '/business/recruitment',
+  '/teacher-center/training-management',
+  '/teacher-center/admission-crm',
+  '/teacher-center/business-development',
+  '/teacher-center/reporting',
+  '/career/profile',
+];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -31,24 +58,66 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  const requiresAuth = AUTH_REQUIRED_PATHS.some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`)
+  );
+
+  if (requiresAuth && !email) {
+    return NextResponse.redirect(new URL('/auth?mode=signin', request.url));
+  }
+
+  if (requiresAuth && email) {
+    const session = await getSession(email);
+    if (!session) {
+      const response = NextResponse.redirect(new URL('/auth?mode=signin', request.url));
+      clearUserEmailCookie(response);
+      return response;
+    }
+
+    if (session.onboarding.required && !session.onboarding.completed) {
+      return NextResponse.redirect(new URL('/onboarding', request.url));
+    }
+
+    return NextResponse.next();
+  }
+
   if (pathname.startsWith('/onboarding')) {
     if (!email) {
       return NextResponse.redirect(new URL('/auth', request.url));
     }
 
-    const status = await getOnboardingGate(email);
-    if (status && (!status.required || status.completed)) {
+    const session = await getSession(email);
+    if (!session) {
+      const response = NextResponse.redirect(new URL('/auth', request.url));
+      clearUserEmailCookie(response);
+      return response;
+    }
+
+    const { onboarding } = session;
+    if (!onboarding.required || onboarding.completed) {
       return NextResponse.redirect(new URL('/dashboard', request.url));
     }
 
     return NextResponse.next();
   }
 
-  if (pathname.startsWith('/auth') && email) {
-    const status = await getOnboardingGate(email);
-    if (status?.required && !status.completed) {
+  if (pathname.startsWith('/auth')) {
+    if (!email) {
+      return NextResponse.next();
+    }
+
+    const session = await getSession(email);
+    if (!session) {
+      const response = NextResponse.next();
+      clearUserEmailCookie(response);
+      return response;
+    }
+
+    const { onboarding } = session;
+    if (onboarding.required && !onboarding.completed) {
       return NextResponse.redirect(new URL('/onboarding', request.url));
     }
+
     return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
@@ -60,9 +129,14 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const status = await getOnboardingGate(email);
+  const session = await getSession(email);
+  if (!session) {
+    const response = NextResponse.next();
+    clearUserEmailCookie(response);
+    return response;
+  }
 
-  if (status?.required && !status.completed) {
+  if (session.onboarding.required && !session.onboarding.completed) {
     return NextResponse.redirect(new URL('/onboarding', request.url));
   }
 
@@ -78,6 +152,11 @@ export const config = {
     '/books/:path*',
     '/contact-us/:path*',
     '/teacher-applicant/:path*',
+    '/teacher-center',
+    '/teacher-center/:path*',
+    '/career/:path*',
+    '/business/:path*',
+    '/experts/:path*',
     '/auth',
     '/onboarding/:path*',
   ],

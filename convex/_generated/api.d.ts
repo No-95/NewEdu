@@ -14,6 +14,7 @@ import type * as classrooms from "../classrooms.js";
 import type * as community from "../community.js";
 import type * as contact from "../contact.js";
 import type * as courses from "../courses.js";
+import type * as ecosystem from "../ecosystem.js";
 import type * as homeworks from "../homeworks.js";
 import type * as onboarding from "../onboarding.js";
 import type * as progress from "../progress.js";
@@ -35,6 +36,7 @@ declare const fullApi: ApiFromModules<{
   community: typeof community;
   contact: typeof contact;
   courses: typeof courses;
+  ecosystem: typeof ecosystem;
   homeworks: typeof homeworks;
   onboarding: typeof onboarding;
   progress: typeof progress;

@@ -14,6 +14,7 @@ import {
 import { formatVndPrice } from '@/lib/currency';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { COURSE_TEXT, getCourseLanguage } from '@/lib/courses/localization';
+import { GiftBookHoverBadge } from '@/components/books/GiftBookHoverBadge';
 
 type CourseActionProps = {
   courseSlug: string;
@@ -214,33 +215,38 @@ export default function CourseAction({
     if (hasAccess) {
       if (giftClaimed) {
         return (
-          <span
-            className={`${giftBadgeClass} cursor-default bg-amber-400/20 text-amber-100`}
-          >
-            {text.alreadyClaimedGift}
-          </span>
+          <GiftBookHoverBadge side="top" align="center">
+            <span
+              className={`${giftBadgeClass} cursor-default bg-amber-400/20 text-amber-100`}
+            >
+              {text.alreadyClaimedGift}
+            </span>
+          </GiftBookHoverBadge>
         );
       }
 
       return (
-        <button
-          type="button"
-          onClick={handleGiftOpen}
-          disabled={giftSubmitting}
-          className={`${giftBadgeClass} bg-amber-400/25 text-amber-50 transition hover:bg-amber-400/40 disabled:cursor-not-allowed disabled:opacity-60`}
-        >
-          {text.claimFreeBook}
-        </button>
+        <GiftBookHoverBadge side="top" align="center">
+          <button
+            type="button"
+            onClick={handleGiftOpen}
+            disabled={giftSubmitting}
+            className={`${giftBadgeClass} bg-amber-400/25 text-amber-50 transition hover:bg-amber-400/40 disabled:cursor-not-allowed disabled:opacity-60`}
+          >
+            {text.claimFreeBook}
+          </button>
+        </GiftBookHoverBadge>
       );
     }
 
     return (
-      <span
-        className={`${giftBadgeClass} cursor-default select-none bg-amber-400/20 text-amber-100`}
-        aria-hidden
-      >
-        {text.giftBookBadge}
-      </span>
+      <GiftBookHoverBadge side="top" align="center">
+        <span
+          className={`${giftBadgeClass} cursor-help bg-amber-400/20 text-amber-100`}
+        >
+          {text.giftBookBadge}
+        </span>
+      </GiftBookHoverBadge>
     );
   };
 

@@ -1,0 +1,119 @@
+{
+  "giftBook": {
+    "badge": "Free book with course",
+    "priceLabel": "Book price",
+    "stockLabel": "Stock",
+    "stockUnit": "copies",
+    "viewDetails": "View book details",
+    "title": "Korean for Manufacturing Plants",
+    "subtitle": "Practical communication guide for Korean industrial workplaces",
+    "description": "Production-focused Korean vocabulary, context, and real workplace scenarios in Korean factories.",
+    "coverAlt": "Korean for Manufacturing Plants - Book cover",
+    "stockStatus": "Almost sold out",
+    "highlights": [
+      "PPC, IQC, SMT, Assembly, QC, Maintenance",
+      "Bilingual terminology for manufacturing",
+      "For technicians, QA-QC, team leaders"
+    ]
+  },
+  "hero": {
+    "badge": "Book — \"Korean for Manufacturing Plants\"",
+    "title": "A practical guide built for",
+    "titleHighlight": "manufacturing environments",
+    "subtitle": "Understand processes, terminology, communication context, and work confidently with Korean managers.",
+    "remainingLabel": "Remaining",
+    "remainingCount": "74 copies",
+    "inStock": "In stock",
+    "statusLabel": "Status",
+    "almostSoldOut": "Almost sold out",
+    "firstPrint": "First print run",
+    "discountBadge": "-10%",
+    "savingsNote": "First-run offer • Save 25,000₫",
+    "cta": "Order the book now",
+    "imageAlts": [
+      "Korean for Manufacturing Plants - Book cover",
+      "Back cover with author bio",
+      "Book on desk",
+      "Title page",
+      "SMT department content",
+      "Bilingual terminology table"
+    ]
+  },
+  "overview": {
+    "introLabel": "Introduction",
+    "title": "About the book",
+    "paragraph1Bold": "Korean in manufacturing plants",
+    "paragraph1": " — A practical communication guide for Korean industrial workplaces. In factories with Korean investment, language affects performance, safety, and promotion opportunities.",
+    "paragraph2": "This book provides production-focused Korean you can use with the right vocabulary, context, and workplace situations.",
+    "focusTitle": "Core content",
+    "focusItems": [
+      "PPC, IQC, Metal stamping, Injection molding, SMT, Painting & coating",
+      "Assembly, In-process QC, Maintenance, Automation",
+      "Product engineering, Process engineering, R&D, OQC..."
+    ],
+    "audienceTitle": "Who it's for",
+    "audienceItems": [
+      "Workers in Korean-owned factories",
+      "Technicians, QA-QC, team leaders, production managers",
+      "Engineering students and candidates interviewing at Korean companies"
+    ],
+    "valueTitle": "What you'll gain",
+    "valueItems": [
+      "Accurate communication on the production floor",
+      "Confidence working with Korean managers",
+      "Fewer mistakes from misunderstandings",
+      "Better promotion opportunities"
+    ],
+    "backCoverNote": "Back cover",
+    "backCoverDesc": " with a detailed author biography.",
+    "highlightsTitle": "Highlights",
+    "statValues": ["12+", "500+", "100+", "Real"],
+    "statLabels": ["Topics", "Vocabulary", "Sample sentences", "Scenarios"]
+  },
+  "purchase": {
+    "badge": "Book order",
+    "title": "Delivery information",
+    "subtitle": "Enter your shipping details; HDP EDU will contact you to confirm and deliver your book.",
+    "success": "Your book order was submitted. We will contact you soon to confirm and ship.",
+    "fullName": "Full name",
+    "fullNamePlaceholder": "Enter your full name",
+    "phone": "Phone number",
+    "phonePlaceholder": "Enter your phone number",
+    "address": "Shipping address",
+    "addressPlaceholder": "Enter your full shipping address",
+    "note": "Note for delivery (optional)",
+    "notePlaceholder": "e.g. call before delivery, business hours only...",
+    "validationError": "Please enter your full name, phone number, and shipping address.",
+    "submitError": "Failed to submit order. Please try again later.",
+    "submitting": "Submitting...",
+    "submit": "Confirm order",
+    "backToBooks": "Back to books page"
+  },
+  "author": {
+    "title": "About the author",
+    "name": "Duong Thu Huong",
+    "role": "Author & CEO, HDP Holdings",
+    "photoAlt": "Duong Thu Huong - Author",
+    "degree1Title": "B.A. in Korean Language",
+    "degree1School": "Hanoi University",
+    "degree2Title": "MBA",
+    "degree2School": "Soongsil University, Korea",
+    "bio1": "Founder and CEO of",
+    "bio1Company": "HDP HOLDINGS",
+    "bio1Rest": ", a strategic consulting firm providing comprehensive solutions for Vietnamese and FDI businesses, especially Korean enterprises.",
+    "bio2": "She advises business associations and investment promotion agencies in Vietnam and Korea, with deep experience in business development, international cooperation, and high-quality workforce training."
+  },
+  "cta": {
+    "badge": "Only 74 copies left • Running low",
+    "title": "Order the",
+    "titleHighlight": "book now",
+    "description": "The first print run is almost gone. Order now for a",
+    "discountHighlight": "10% discount",
+    "descriptionEnd": " and get this practical guide for Korean manufacturing workplaces.",
+    "originalPriceLabel": "Original price",
+    "offerLabel": "Offer",
+    "discountLabel": "10% off",
+    "button": "Order the book now",
+    "footer": "Nationwide delivery • Careful packaging • Quality guaranteed"
+  }
+}

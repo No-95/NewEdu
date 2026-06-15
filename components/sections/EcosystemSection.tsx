@@ -18,36 +18,32 @@ const personaSlides = [
     href: '/courses',
     prefix: 'home.ecosystem.learners',
     descriptionField: 'description' as const,
-    image:
-      'https://images.unsplash.com/photo-1514369118554-e20d93546b30?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+    image: '/homepage/section21.png',
   },
   {
     key: 'teachers',
-    href: '/teacher-applicant',
+    href: '/teacher-center',
     prefix: 'home.ecosystem.teachers',
     descriptionField: 'description' as const,
-    image:
-      'https://images.unsplash.com/photo-1588873281272-14886ba1f737?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+    image: '/homepage/section22.png',
   },
   {
     key: 'jobSeekers',
-    href: '/jobs',
+    href: '/career/jobs',
     prefix: 'home.ecosystem.jobSeekers',
     descriptionField: 'description' as const,
-    image:
-      'https://images.unsplash.com/photo-1573497620053-ea5300f94f21?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+    image: '/homepage/section23.png',
   },
   {
     key: 'employers',
-    href: '/jobs',
+    href: '/business/recruitment',
     prefix: 'home.ecosystem.employers',
     descriptionField: 'description' as const,
-    image:
-      'https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+    image: '/homepage/section24.png',
   },
   {
     key: 'experts',
-    href: '/community',
+    href: '/experts/network',
     prefix: 'home.ecosystem.experts',
     descriptionField: 'description' as const,
     image:
@@ -58,8 +54,7 @@ const personaSlides = [
     href: '/community',
     prefix: 'home.community',
     descriptionField: 'subtitle' as const,
-    image:
-      'https://images.unsplash.com/photo-1568992688065-536aad8a12f6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+    image: '/homepage/section25.png',
   },
 ] as const;
 
@@ -215,7 +210,7 @@ export const EcosystemSection: React.FC<EcosystemSectionProps> = ({ pageNumber, 
                       transition={{ duration: 0.6, delay: 0.9 }}
                     >
                       <Link
-                        href="/auth"
+                        href={activeSlide.href}
                         className="inline-flex self-start rounded-lg bg-gradient-to-r from-primary to-secondary px-8 py-4 font-semibold text-primary-foreground shadow-lg transition-all hover:shadow-[0_0_28px_rgba(0,217,255,0.45)]"
                       >
                         {slideContent.cta}

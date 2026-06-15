@@ -1,0 +1,327 @@
+{
+  "shared": {
+    "loading": "Loading data...",
+    "emptyTable": "No data",
+    "emptyChart": "No chart data yet",
+    "chartValue": "Value",
+    "followUp": "Follow-up:",
+    "dashboard": "Dashboard",
+    "overview": "Overview",
+    "all": "All",
+    "search": "Search...",
+    "kanban": "Kanban",
+    "tableView": "Table",
+    "online": "Online",
+    "registered": "registered",
+    "speakers": "Speakers:",
+    "experience": "Experience:",
+    "rating": "Rating:",
+    "classes": "Classes:",
+    "completion": "Completion:",
+    "people": "people",
+    "required": "Required",
+    "optional": "Optional",
+    "status": {
+      "active": "Active",
+      "onLeave": "On leave",
+      "teaching": "Teaching",
+      "open": "Open",
+      "closed": "Closed",
+      "draft": "Draft",
+      "completed": "Completed",
+      "pending": "Pending",
+      "converted": "Converted",
+      "upcoming": "Upcoming",
+      "done": "Completed"
+    },
+    "leadStages": {
+      "new_lead": "New lead",
+      "contacted": "Contacted",
+      "interested": "Interested",
+      "trial_class": "Trial class",
+      "enrolled": "Enrolled"
+    },
+    "recruitmentStages": {
+      "applied": "Applied",
+      "screening": "Screening",
+      "interview": "Interview",
+      "offer": "Offer",
+      "rejected": "Rejected"
+    },
+    "trainingModules": {
+      "students": { "title": "Student management", "description": "Profiles, progress, and class assignment" },
+      "teachers": { "title": "Teacher management", "description": "Assignments and schedules" },
+      "classes": { "title": "Class management", "description": "Schedules and capacity" },
+      "attendance": { "title": "Attendance", "description": "Track attendance" },
+      "grades": { "title": "Grades", "description": "Scores and assessments" },
+      "scheduling": { "title": "Course scheduling", "description": "Rooms and timetables" }
+    },
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "source": "Source",
+      "stage": "Stage",
+      "notes": "Notes",
+      "department": "Department",
+      "role": "Role",
+      "joinDate": "Join date",
+      "status": "Status",
+      "head": "Head",
+      "staff": "Staff",
+      "period": "Period",
+      "score": "Score",
+      "title": "Title",
+      "applicants": "Applicants",
+      "postedAt": "Posted",
+      "position": "Position",
+      "class": "Class",
+      "teacher": "Teacher",
+      "subject": "Subject",
+      "students": "Students",
+      "schedule": "Schedule",
+      "capacity": "Capacity",
+      "course": "Course",
+      "enrolled": "Enrolled",
+      "progress": "Progress",
+      "compliance": "Compliance",
+      "partner": "Partner",
+      "type": "Type",
+      "referrals": "Referrals",
+      "revenue": "Revenue",
+      "commission": "Commission",
+      "student": "Student",
+      "date": "Date",
+      "amount": "Amount",
+      "category": "Category",
+      "format": "Format",
+      "uploadedBy": "Uploaded by",
+      "downloads": "Downloads",
+      "updated": "Updated"
+    }
+  },
+  "internalTraining": {
+    "title": "Internal Training",
+    "subtitle": "Corporate learning management for your organization.",
+    "coursesSection": "Internal courses",
+    "progressSection": "Employee progress",
+    "emptyCourses": "No internal courses yet. Data will appear for your account.",
+    "emptyProgress": "No employee progress data yet.",
+    "metrics": {
+      "completionRate": "Training completion",
+      "courseCount": "Internal courses",
+      "certificatesIssued": "Certificates issued",
+      "complianceRate": "Compliance"
+    }
+  },
+  "hrManagement": {
+    "title": "Human Resources",
+    "subtitle": "Manage staff, departments, and performance reviews.",
+    "managementSection": "Management",
+    "tabs": { "employees": "Employees", "departments": "Departments", "reviews": "Reviews" },
+    "emptyEmployees": "No employees in your organization yet.",
+    "emptyDepartments": "No departments yet.",
+    "emptyReviews": "No performance reviews yet.",
+    "metrics": {
+      "employeeCount": "Employees",
+      "departmentCount": "Departments",
+      "reviewCount": "Quarterly reviews",
+      "retentionRate": "Retention rate"
+    }
+  },
+  "trainingManagement": {
+    "title": "Training Management",
+    "subtitle": "Training dashboard for schools and centers.",
+    "modulesSection": "Modules",
+    "dataSection": "Data",
+    "tabs": { "students": "Students", "teachers": "Teachers", "classes": "Classes" },
+    "actions": {
+      "createClass": "Create class",
+      "assignTeacher": "Assign teacher",
+      "addStudent": "Add student",
+      "exportReport": "Export report"
+    },
+    "emptyStudents": "No students yet.",
+    "emptyTeachers": "No teachers yet.",
+    "emptyClasses": "No classes yet.",
+    "attendance": "Attendance",
+    "metrics": {
+      "totalStudents": "Total students",
+      "activeClasses": "Active classes",
+      "teacherCount": "Teachers",
+      "attendanceRate": "Attendance rate",
+      "completionRate": "Course completion"
+    }
+  },
+  "admissionCrm": {
+    "title": "Admission CRM",
+    "subtitle": "Manage enrollment, lead pipeline, and follow-ups.",
+    "leadSource": "Lead sources",
+    "conversionMetrics": "Conversion metrics",
+    "conversionRate": "Conversion rate",
+    "enrollmentRevenue": "Enrollment revenue",
+    "pipelineSection": "Admission pipeline",
+    "actions": {
+      "addLead": "Add lead",
+      "scheduleFollowUp": "Schedule follow-up",
+      "moveStage": "Move stage"
+    },
+    "emptyPipeline": "No leads in your pipeline yet.",
+    "emptyLeads": "No leads yet.",
+    "metrics": {
+      "newLeadsMonth": "New leads (month)",
+      "conversionRate": "Conversion rate",
+      "enrollmentRevenue": "Enrollment revenue",
+      "followUpNeeded": "Needs follow-up"
+    }
+  },
+  "businessDevelopment": {
+    "title": "Partners & Revenue",
+    "subtitle": "Manage partners, affiliates, and revenue analytics.",
+    "businessMetrics": "Business metrics",
+    "monthlyRevenue": "Monthly revenue",
+    "partnersSection": "Partner directory",
+    "referralsSection": "Referrals & commission",
+    "emptyPartners": "No partners yet.",
+    "emptyReferrals": "No referrals yet.",
+    "metrics": {
+      "monthlyRevenue": "Monthly revenue",
+      "activePartners": "Active partners",
+      "conversionRate": "Conversion rate",
+      "monthlyCommission": "Monthly commission"
+    }
+  },
+  "reporting": {
+    "title": "Reporting System",
+    "subtitle": "Analytics and reports for training centers.",
+    "monthlyRevenue": "Monthly revenue",
+    "studentGrowth": "Student growth",
+    "completionByCourse": "Completion by course",
+    "teacherReports": "Teacher reports",
+    "emptyTeachers": "No teacher data yet.",
+    "actions": { "exportPdf": "Export PDF", "exportExcel": "Export Excel", "exportCsv": "Export CSV" },
+    "metrics": {
+      "monthlyRevenue": "Monthly revenue",
+      "newStudents": "New students",
+      "courseCompletion": "Course completion",
+      "teacherRating": "Teacher rating"
+    }
+  },
+  "resourceLibrary": {
+    "title": "Resource Library",
+    "subtitle": "Manage materials, lesson plans, and templates.",
+    "searchPlaceholder": "Search resources...",
+    "categoryFilter": "Category",
+    "materialsSection": "Materials",
+    "actions": { "upload": "Upload", "edit": "Edit", "delete": "Delete" }
+  },
+  "recruitment": {
+    "title": "Recruitment",
+    "subtitle": "Recruitment portal for employers.",
+    "openPositions": "Open positions",
+    "interviewPipeline": "Interview pipeline",
+    "actions": {
+      "postJob": "Post job",
+      "viewCandidates": "View candidates",
+      "scheduleInterview": "Schedule interview"
+    },
+    "emptyJobs": "No job postings yet.",
+    "emptyCandidates": "No candidates in the pipeline yet.",
+    "metrics": {
+      "openPositions": "Open positions",
+      "totalApplicants": "Applications received",
+      "interviewing": "In interview",
+      "pendingOffers": "Offers pending"
+    }
+  },
+  "careerProfile": {
+    "title": "Competency Profile",
+    "subtitle": "Build your professional profile and download your CV.",
+    "completionTitle": "Profile completion",
+    "completionHint": "Add experience and certificates to increase your score",
+    "skillsSection": "Skill analysis",
+    "educationSection": "Education",
+    "certificatesSection": "Certificates",
+    "experienceSection": "Experience",
+    "languagesSection": "Languages",
+    "noName": "Name not set",
+    "noHeadline": "Add a professional headline to complete your profile",
+    "noPhone": "No phone number",
+    "noLocation": "No location",
+    "emptySkills": "No skills yet.",
+    "emptyEducation": "No education information yet.",
+    "emptyCertificates": "No certificates yet.",
+    "emptyExperience": "No work experience yet.",
+    "emptyLanguages": "No language information yet.",
+    "actions": { "edit": "Edit profile", "downloadCv": "Download CV", "downloadPdf": "Download PDF" }
+  },
+  "careerJobs": {
+    "title": "Jobs",
+    "subtitle": "Open roles at HDP EDU — apply to teach on our platform.",
+    "searchPlaceholder": "Search jobs, companies...",
+    "filters": { "country": "Country", "industry": "Industry", "jobType": "Job type" },
+    "jobsCount": "{{count}} jobs",
+    "actions": { "viewProfile": "View profile", "apply": "Apply now", "viewDetails": "View full details" },
+    "heroEyebrow": "Careers · HDP EDU",
+    "featuredBadge": "Featured opening",
+    "revenueStat": "92%",
+    "revenueStatLabel": "Teacher revenue share",
+    "ctaNote": "Applications reviewed within 48 hours",
+    "emptySearch": "No jobs match your search. Try different keywords.",
+    "teacherListing": {
+      "title": "Start Teaching with HDP EDU",
+      "company": "HDP EDU",
+      "location": "Remote",
+      "country": "Global",
+      "industry": "Education",
+      "salary": "92% teacher revenue share",
+      "jobTypeLabel": "Remote",
+      "requirements": [
+        "Fully remote — choose your own schedule",
+        "92% income share for teachers (8% platform fee)",
+        "Deliver practical, learner-focused lessons",
+        "Best fit: Korean language educators and subject mentors"
+      ]
+    }
+  },
+  "careerSupport": {
+    "title": "Career Support",
+    "subtitle": "CV review, interview coaching, and career counseling.",
+    "bookSection": "Book a service",
+    "selectService": "Select service",
+    "selectExpert": "Select expert",
+    "date": "Date",
+    "time": "Time",
+    "confirmBooking": "Confirm booking",
+    "upcomingSection": "Upcoming sessions",
+    "historySection": "Session history"
+  },
+  "aiMatching": {
+    "title": "AI Matching",
+    "subtitle": "AI recommendations for careers, jobs, and courses.",
+    "uploadCv": "Upload CV",
+    "uploadCertificates": "Upload certificates",
+    "uploadPortfolio": "Upload portfolio",
+    "aiAnalysis": "AI analysis",
+    "aiAnalysisBody": "Upload your CV and certificates for AI to analyze skill gaps and suggest a career path.",
+    "matchingJobs": "Matching jobs",
+    "suggestedCourses": "Suggested courses",
+    "suggestedMentors": "Suggested mentors"
+  },
+  "expertNetwork": {
+    "title": "Expert Network",
+    "subtitle": "Discover and connect with experts across industries.",
+    "searchPlaceholder": "Search experts, fields...",
+    "filters": { "industry": "Industry", "country": "Country" },
+    "expertsCount": "{{count}} experts",
+    "actions": { "bookConsultation": "Book consultation", "sendRequest": "Send request", "follow": "Follow" }
+  },
+  "expertEvents": {
+    "title": "Expert Topics",
+    "subtitle": "Events, webinars, workshops, and professional forums.",
+    "searchPlaceholder": "Search events...",
+    "typeFilter": "Type",
+    "scheduleSection": "Event schedule",
+    "register": "Register"
+  }
+}

@@ -263,6 +263,44 @@
       "resourcesDesc": "Use our comprehensive curriculum and teaching tools"
     }
   },
+  "teacherCenter": {
+    "title": "Teachers & Training Centers",
+    "subtitle": "Grow your training business on the HDP EDU digital platform — where teachers, centers, and learners connect across the Vietnam–Korea ecosystem.",
+    "whyJoinTitle": "Why become a training partner?",
+    "whyJoinItems": [
+      "Create and sell online courses.",
+      "Manage classes, learners, and teaching schedules.",
+      "Use admission CRM and learner care tools.",
+      "Build your personal or center brand.",
+      "Reach learners nationwide."
+    ],
+    "benefitsTitle": "Benefits of partnering with HDP EDU",
+    "toolsTitle": "Tools built for partners",
+    "ctaApply": "Apply to become a teacher",
+    "ctaSignUp": "Create a partner account",
+    "tools": {
+      "training": {
+        "title": "Training management",
+        "description": "Schedule classes, track progress, and manage instructors."
+      },
+      "crm": {
+        "title": "Admission CRM",
+        "description": "Manage leads, nurture prospects, and convert enrollments."
+      },
+      "business": {
+        "title": "Business development",
+        "description": "Expand your brand, run campaigns, and build partnerships."
+      },
+      "reports": {
+        "title": "Reports & analytics",
+        "description": "Track training outcomes, revenue, and learner growth."
+      },
+      "library": {
+        "title": "Resource library",
+        "description": "Access curricula, materials, and ready-to-use teaching tools."
+      }
+    }
+  },
   "contactUsPage": {
     "badge": "Support & Feedback",
     "title": "Contact Us",

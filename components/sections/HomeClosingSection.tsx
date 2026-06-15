@@ -15,9 +15,9 @@ interface HomeClosingSectionProps {
 const FEATURE_ICONS = ['🎓', '💼', '🏢', '🤝', '🌏', '📚'];
 
 const SECTION_IMAGES = [
-  'https://images.unsplash.com/photo-1519389950473-47ba0277781c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',
-  'https://images.unsplash.com/photo-1675716921224-e087a0cca69a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',
-  'https://images.unsplash.com/photo-1565350831386-8c52421af9fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',
+  '/homepage/section3.png',
+  '/homepage/section4.png',
+  '/homepage/CTAsection.png',
 ];
 
 const TITLE_KEYS = ['home.whyChoose.title', 'home.cta.headline', 'home.cta.ecosystemBadge'] as const;

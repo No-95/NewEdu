@@ -145,13 +145,13 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, lockNavigation = fal
               ) : (
                 <>
                   <Link
-                    href="/auth"
+                    href="/auth?mode=signin"
                     className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-all"
                   >
                     {t('common.signIn')}
                   </Link>
                   <Link
-                    href="/auth"
+                    href="/auth?mode=signup"
                     className="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all"
                   >
                     {t('common.signUp')}
@@ -234,14 +234,14 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, lockNavigation = fal
                   ) : (
                     <>
                       <Link
-                        href="/auth"
+                        href="/auth?mode=signin"
                         onClick={() => setMobileMenuOpen(false)}
                         className="flex-1 px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground border border-border rounded-lg transition-all text-center"
                       >
                         {t('common.signIn')}
                       </Link>
                       <Link
-                        href="/auth"
+                        href="/auth?mode=signup"
                         onClick={() => setMobileMenuOpen(false)}
                         className="flex-1 px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all text-center"
                       >

@@ -254,4 +254,212 @@ export default defineSchema({
   })
     .index('by_identifier_dateKey', ['identifier', 'dateKey'])
     .index('by_dateKey', ['dateKey']),
+
+  hrEmployees: defineTable({
+    ownerId: v.id('users'),
+    name: v.string(),
+    department: v.string(),
+    role: v.string(),
+    joinDate: v.string(),
+    status: v.union(v.literal('active'), v.literal('on_leave')),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index('by_ownerId', ['ownerId']),
+
+  hrDepartments: defineTable({
+    ownerId: v.id('users'),
+    name: v.string(),
+    head: v.string(),
+    employees: v.number(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index('by_ownerId', ['ownerId']),
+
+  hrReviews: defineTable({
+    ownerId: v.id('users'),
+    employee: v.string(),
+    period: v.string(),
+    rating: v.number(),
+    status: v.union(v.literal('draft'), v.literal('completed')),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index('by_ownerId', ['ownerId']),
+
+  internalCourses: defineTable({
+    ownerId: v.id('users'),
+    title: v.string(),
+    enrolled: v.number(),
+    completed: v.number(),
+    compliance: v.boolean(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index('by_ownerId', ['ownerId']),
+
+  internalEmployeeProgress: defineTable({
+    ownerId: v.id('users'),
+    employeeName: v.string(),
+    progress: v.number(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index('by_ownerId', ['ownerId']),
+
+  trainingStudents: defineTable({
+    ownerId: v.id('users'),
+    name: v.string(),
+    email: v.string(),
+    className: v.string(),
+    status: v.union(v.literal('active'), v.literal('inactive'), v.literal('graduated')),
+    attendanceRate: v.number(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index('by_ownerId', ['ownerId']),
+
+  trainingTeachers: defineTable({
+    ownerId: v.id('users'),
+    name: v.string(),
+    subject: v.string(),
+    classes: v.number(),
+    students: v.number(),
+    status: v.union(v.literal('active'), v.literal('on_leave')),
+    rating: v.optional(v.number()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index('by_ownerId', ['ownerId']),
+
+  trainingClasses: defineTable({
+    ownerId: v.id('users'),
+    name: v.string(),
+    teacher: v.string(),
+    schedule: v.string(),
+    students: v.number(),
+    capacity: v.number(),
+    completionRate: v.number(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index('by_ownerId', ['ownerId']),
+
+  crmLeads: defineTable({
+    ownerId: v.id('users'),
+    name: v.string(),
+    phone: v.string(),
+    source: v.string(),
+    stage: v.union(
+      v.literal('new_lead'),
+      v.literal('contacted'),
+      v.literal('interested'),
+      v.literal('trial_class'),
+      v.literal('enrolled')
+    ),
+    followUpDate: v.string(),
+    notes: v.string(),
+    revenueAmount: v.optional(v.number()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index('by_ownerId', ['ownerId']),
+
+  businessPartners: defineTable({
+    ownerId: v.id('users'),
+    name: v.string(),
+    type: v.string(),
+    referrals: v.number(),
+    revenue: v.string(),
+    commission: v.string(),
+    status: v.union(v.literal('active'), v.literal('pending')),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index('by_ownerId', ['ownerId']),
+
+  businessReferrals: defineTable({
+    ownerId: v.id('users'),
+    partner: v.string(),
+    student: v.string(),
+    date: v.string(),
+    amount: v.string(),
+    amountValue: v.optional(v.number()),
+    status: v.union(v.literal('converted'), v.literal('pending')),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index('by_ownerId', ['ownerId']),
+
+  businessRevenuePoints: defineTable({
+    ownerId: v.id('users'),
+    label: v.string(),
+    value: v.number(),
+    createdAt: v.number(),
+  }).index('by_ownerId', ['ownerId']),
+
+  studentGrowthPoints: defineTable({
+    ownerId: v.id('users'),
+    label: v.string(),
+    value: v.number(),
+    createdAt: v.number(),
+  }).index('by_ownerId', ['ownerId']),
+
+  careerProfiles: defineTable({
+    userId: v.id('users'),
+    location: v.optional(v.string()),
+    education: v.array(
+      v.object({
+        school: v.string(),
+        degree: v.string(),
+        year: v.string(),
+      })
+    ),
+    skills: v.array(
+      v.object({
+        name: v.string(),
+        level: v.number(),
+      })
+    ),
+    certificates: v.array(
+      v.object({
+        name: v.string(),
+        issuer: v.string(),
+        year: v.string(),
+      })
+    ),
+    experience: v.array(
+      v.object({
+        company: v.string(),
+        role: v.string(),
+        period: v.string(),
+        description: v.string(),
+      })
+    ),
+    languages: v.array(
+      v.object({
+        name: v.string(),
+        level: v.string(),
+      })
+    ),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index('by_userId', ['userId']),
+
+  recruitmentJobPostings: defineTable({
+    ownerId: v.id('users'),
+    title: v.string(),
+    department: v.string(),
+    applicants: v.number(),
+    status: v.union(v.literal('open'), v.literal('closed'), v.literal('draft')),
+    postedAt: v.string(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index('by_ownerId', ['ownerId']),
+
+  recruitmentCandidates: defineTable({
+    ownerId: v.id('users'),
+    name: v.string(),
+    position: v.string(),
+    stage: v.union(
+      v.literal('applied'),
+      v.literal('screening'),
+      v.literal('interview'),
+      v.literal('offer'),
+      v.literal('rejected')
+    ),
+    score: v.number(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index('by_ownerId', ['ownerId']),
 });

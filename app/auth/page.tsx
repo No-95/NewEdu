@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import { useAction, useMutation, useQuery } from 'convex/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Header } from '@/components/Header';
 import { ParticleBackground } from '@/components/DarkmodeParticleBackground';
 import { useLanguage } from '@/lib/context/LanguageContext';
@@ -17,10 +17,11 @@ async function hashPassword(password: string): Promise<string> {
     .join('');
 }
 
-function AuthPageContent() {
+function AuthPageContent({ initialSignIn }: { initialSignIn: boolean }) {
   const { t } = useLanguage();
   const router = useRouter();
-  const [isSignIn, setIsSignIn] = useState(true);
+  const searchParams = useSearchParams();
+  const [isSignIn, setIsSignIn] = useState(initialSignIn);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -44,6 +45,15 @@ function AuthPageContent() {
   const sendOtp = useAction(api.auth.sendOtp);
   const verifyOtp = useMutation(api.auth.verifyOtp);
   const createOrUpdateUser = useMutation(api.auth.createOrUpdateUser);
+
+  React.useEffect(() => {
+    const mode = searchParams.get('mode');
+    if (mode === 'signup') {
+      setIsSignIn(false);
+    } else if (mode === 'signin') {
+      setIsSignIn(true);
+    }
+  }, [searchParams]);
 
   const establishSession = async (email: string) => {
     const response = await fetch('/api/auth/session', {
@@ -202,7 +212,9 @@ function AuthPageContent() {
   };
 
   const toggleAuthMode = () => {
-    setIsSignIn((prev) => !prev);
+    const nextIsSignIn = !isSignIn;
+    setIsSignIn(nextIsSignIn);
+    router.replace(nextIsSignIn ? '/auth?mode=signin' : '/auth?mode=signup', { scroll: false });
     setOtpSent(false);
     setOtpVerified(false);
     setOtpLoading(false);
@@ -473,6 +485,14 @@ function AuthPageContent() {
   );
 }
 
+function AuthPageWithParams() {
+  const searchParams = useSearchParams();
+  const mode = searchParams.get('mode');
+  const initialSignIn = mode !== 'signup';
+
+  return <AuthPageContent initialSignIn={initialSignIn} />;
+}
+
 export default function AuthPage() {
   const [mounted, setMounted] = useState(false);
 
@@ -484,5 +504,9 @@ export default function AuthPage() {
     return null;
   }
 
-  return <AuthPageContent />;
+  return (
+    <Suspense fallback={null}>
+      <AuthPageWithParams />
+    </Suspense>
+  );
 }

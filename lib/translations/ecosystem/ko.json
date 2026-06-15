@@ -1,0 +1,327 @@
+{
+  "shared": {
+    "loading": "데이터 불러오는 중...",
+    "emptyTable": "데이터 없음",
+    "emptyChart": "차트 데이터 없음",
+    "chartValue": "값",
+    "followUp": "팔로우업:",
+    "dashboard": "대시보드",
+    "overview": "개요",
+    "all": "전체",
+    "search": "검색...",
+    "kanban": "칸반",
+    "tableView": "표",
+    "online": "온라인",
+    "registered": "등록",
+    "speakers": "연사:",
+    "experience": "경력:",
+    "rating": "평점:",
+    "classes": "수업:",
+    "completion": "완료:",
+    "people": "명",
+    "required": "필수",
+    "optional": "선택",
+    "status": {
+      "active": "활동",
+      "onLeave": "휴직",
+      "teaching": "강의 중",
+      "open": "모집 중",
+      "closed": "마감",
+      "draft": "초안",
+      "completed": "완료",
+      "pending": "대기",
+      "converted": "전환됨",
+      "upcoming": "예정",
+      "done": "완료"
+    },
+    "leadStages": {
+      "new_lead": "신규 리드",
+      "contacted": "연락 완료",
+      "interested": "관심",
+      "trial_class": "체험 수업",
+      "enrolled": "등록 완료"
+    },
+    "recruitmentStages": {
+      "applied": "지원 완료",
+      "screening": "서류 심사",
+      "interview": "면접",
+      "offer": "오퍼",
+      "rejected": "불합격"
+    },
+    "trainingModules": {
+      "students": { "title": "학습자 관리", "description": "프로필, 진도, 반 배정" },
+      "teachers": { "title": "강사 관리", "description": "배정 및 일정" },
+      "classes": { "title": "수업 관리", "description": "일정 및定원" },
+      "attendance": { "title": "출석", "description": "출석 추적" },
+      "grades": { "title": "성적 관리", "description": "점수 및 평가" },
+      "scheduling": { "title": "수업 일정", "description": "강의실 및 시간표" }
+    },
+    "table": {
+      "name": "이름",
+      "email": "이메일",
+      "phone": "전화",
+      "source": "유입",
+      "stage": "단계",
+      "notes": "메모",
+      "department": "부서",
+      "role": "역할",
+      "joinDate": "입사일",
+      "status": "상태",
+      "head": "부서장",
+      "staff": "인원",
+      "period": "기간",
+      "score": "점수",
+      "title": "직무",
+      "applicants": "지원자",
+      "postedAt": "게시일",
+      "position": "포지션",
+      "class": "반",
+      "teacher": "강사",
+      "subject": "과목",
+      "students": "학습자",
+      "schedule": "일정",
+      "capacity": "定원",
+      "course": "과정",
+      "enrolled": "등록",
+      "progress": "진도",
+      "compliance": "준수",
+      "partner": "파트너",
+      "type": "유형",
+      "referrals": "추천",
+      "revenue": "매출",
+      "commission": "수수료",
+      "student": "학습자",
+      "date": "날짜",
+      "amount": "금액",
+      "category": "카테고리",
+      "format": "형식",
+      "uploadedBy": "업로더",
+      "downloads": "다운로드",
+      "updated": "업데이트"
+    }
+  },
+  "internalTraining": {
+    "title": "사내 교육",
+    "subtitle": "기업 내부 학습 관리 시스템.",
+    "coursesSection": "내부 과정",
+    "progressSection": "직원 진도",
+    "emptyCourses": "내부 과정이 없습니다. 계정 데이터가 표시됩니다.",
+    "emptyProgress": "직원 진도 데이터가 없습니다.",
+    "metrics": {
+      "completionRate": "교육 완료율",
+      "courseCount": "내부 과정",
+      "certificatesIssued": "발급 인증서",
+      "complianceRate": "준수율"
+    }
+  },
+  "hrManagement": {
+    "title": "인사 관리",
+    "subtitle": "직원, 부서, 성과 평가를 관리합니다.",
+    "managementSection": "관리",
+    "tabs": { "employees": "직원", "departments": "부서", "reviews": "평가" },
+    "emptyEmployees": "등록된 직원이 없습니다.",
+    "emptyDepartments": "부서가 없습니다.",
+    "emptyReviews": "성과 평가가 없습니다.",
+    "metrics": {
+      "employeeCount": "직원",
+      "departmentCount": "부서",
+      "reviewCount": "분기 평가",
+      "retentionRate": "유지율"
+    }
+  },
+  "trainingManagement": {
+    "title": "교육 관리",
+    "subtitle": "학교 및 교육 센터용 교육 대시보드.",
+    "modulesSection": "모듈",
+    "dataSection": "데이터",
+    "tabs": { "students": "학습자", "teachers": "강사", "classes": "수업" },
+    "actions": {
+      "createClass": "반 만들기",
+      "assignTeacher": "강사 배정",
+      "addStudent": "학습자 추가",
+      "exportReport": "보고서 내보내기"
+    },
+    "emptyStudents": "학습자가 없습니다.",
+    "emptyTeachers": "강사가 없습니다.",
+    "emptyClasses": "수업이 없습니다.",
+    "attendance": "출석",
+    "metrics": {
+      "totalStudents": "총 학습자",
+      "activeClasses": "진행 중 수업",
+      "teacherCount": "강사",
+      "attendanceRate": "출석률",
+      "completionRate": "과정 완료율"
+    }
+  },
+  "admissionCrm": {
+    "title": "입학 CRM",
+    "subtitle": "입학, 리드 파이프라인, 후속 관리.",
+    "leadSource": "리드 유입",
+    "conversionMetrics": "전환 지표",
+    "conversionRate": "전환율",
+    "enrollmentRevenue": "입학 매출",
+    "pipelineSection": "입학 파이프라인",
+    "actions": {
+      "addLead": "리드 추가",
+      "scheduleFollowUp": "팔로우업 예약",
+      "moveStage": "단계 변경"
+    },
+    "emptyPipeline": "파이프라인에 리드가 없습니다.",
+    "emptyLeads": "리드가 없습니다.",
+    "metrics": {
+      "newLeadsMonth": "신규 리드 (월)",
+      "conversionRate": "전환율",
+      "enrollmentRevenue": "입학 매출",
+      "followUpNeeded": "팔로우업 필요"
+    }
+  },
+  "businessDevelopment": {
+    "title": "파트너 & 매출",
+    "subtitle": "파트너, 제휴, 매출 분석 관리.",
+    "businessMetrics": "비즈니스 지표",
+    "monthlyRevenue": "월별 매출",
+    "partnersSection": "파트너 목록",
+    "referralsSection": "추천 & 수수료",
+    "emptyPartners": "파트너가 없습니다.",
+    "emptyReferrals": "추천이 없습니다.",
+    "metrics": {
+      "monthlyRevenue": "월 매출",
+      "activePartners": "활성 파트너",
+      "conversionRate": "전환율",
+      "monthlyCommission": "월 수수료"
+    }
+  },
+  "reporting": {
+    "title": "리포트 시스템",
+    "subtitle": "교육 센터 분석 및 보고.",
+    "monthlyRevenue": "월별 매출",
+    "studentGrowth": "학습자 성장",
+    "completionByCourse": "과정별 완료율",
+    "teacherReports": "강사 보고",
+    "emptyTeachers": "강사 데이터가 없습니다.",
+    "actions": { "exportPdf": "PDF 내보내기", "exportExcel": "Excel 내보내기", "exportCsv": "CSV 내보내기" },
+    "metrics": {
+      "monthlyRevenue": "월 매출",
+      "newStudents": "신규 학습자",
+      "courseCompletion": "과정 완료",
+      "teacherRating": "강사 평점"
+    }
+  },
+  "resourceLibrary": {
+    "title": "자료 라이브러리",
+    "subtitle": "교재, 교안, 템플릿 관리.",
+    "searchPlaceholder": "자료 검색...",
+    "categoryFilter": "카테고리",
+    "materialsSection": "자료",
+    "actions": { "upload": "업로드", "edit": "편집", "delete": "삭제" }
+  },
+  "recruitment": {
+    "title": "채용",
+    "subtitle": "기업용 채용 포털.",
+    "openPositions": "모집 중 포지션",
+    "interviewPipeline": "면접 파이프라인",
+    "actions": {
+      "postJob": "채용 공고",
+      "viewCandidates": "지원자 보기",
+      "scheduleInterview": "면접 일정"
+    },
+    "emptyJobs": "채용 공고가 없습니다.",
+    "emptyCandidates": "파이프라인에 지원자가 없습니다.",
+    "metrics": {
+      "openPositions": "모집 포지션",
+      "totalApplicants": "접수 지원서",
+      "interviewing": "면접 중",
+      "pendingOffers": "오퍼 대기"
+    }
+  },
+  "careerProfile": {
+    "title": "역량 프로필",
+    "subtitle": "전문 프로필을 만들고 CV를 다운로드하세요.",
+    "completionTitle": "프로필 완성도",
+    "completionHint": "경력과 자격증을 추가해 점수를 높이세요",
+    "skillsSection": "스킬 분석",
+    "educationSection": "학력",
+    "certificatesSection": "자격증",
+    "experienceSection": "경력",
+    "languagesSection": "언어",
+    "noName": "이름 미입력",
+    "noHeadline": "직업 헤드라인을 추가하세요",
+    "noPhone": "전화번호 없음",
+    "noLocation": "위치 없음",
+    "emptySkills": "스킬이 없습니다.",
+    "emptyEducation": "학력 정보가 없습니다.",
+    "emptyCertificates": "자격증이 없습니다.",
+    "emptyExperience": "경력이 없습니다.",
+    "emptyLanguages": "언어 정보가 없습니다.",
+    "actions": { "edit": "프로필 편집", "downloadCv": "CV 다운로드", "downloadPdf": "PDF 다운로드" }
+  },
+  "careerJobs": {
+    "title": "채용",
+    "subtitle": "HDP EDU 채용 — 플랫폼에서 강의할 강사를 모집합니다.",
+    "searchPlaceholder": "직무, 회사 검색...",
+    "filters": { "country": "국가", "industry": "산업", "jobType": "고용 형태" },
+    "jobsCount": "채용 {{count}}건",
+    "actions": { "viewProfile": "프로필 보기", "apply": "지금 지원", "viewDetails": "상세 보기" },
+    "heroEyebrow": "채용 · HDP EDU",
+    "featuredBadge": "추천 포지션",
+    "revenueStat": "92%",
+    "revenueStatLabel": "강사 수익 배분",
+    "ctaNote": "48시간 이내 지원서 검토",
+    "emptySearch": "검색 결과가 없습니다. 다른 키워드를 시도해 보세요.",
+    "teacherListing": {
+      "title": "HDP EDU와 함께 강의 시작하기",
+      "company": "HDP EDU",
+      "location": "원격",
+      "country": "글로벌",
+      "industry": "교육",
+      "salary": "강사 수익 92% 배분",
+      "jobTypeLabel": "원격",
+      "requirements": [
+        "완전 원격 — 본인 일정에 맞게 강의",
+        "강사 92% 수익 배분 (플랫폼 수수료 8%)",
+        "실무 중심, 학습자 중심 강의 제공",
+        "적합: 한국어 강사 및 분야 멘토"
+      ]
+    }
+  },
+  "careerSupport": {
+    "title": "커리어 지원",
+    "subtitle": "CV 리뷰, 면접 코칭, 커리어 상담.",
+    "bookSection": "서비스 예약",
+    "selectService": "서비스 선택",
+    "selectExpert": "전문가 선택",
+    "date": "날짜",
+    "time": "시간",
+    "confirmBooking": "예약 확인",
+    "upcomingSection": "예정 세션",
+    "historySection": "세션 기록"
+  },
+  "aiMatching": {
+    "title": "AI 매칭",
+    "subtitle": "커리어, 채용, 과정 AI 추천.",
+    "uploadCv": "CV 업로드",
+    "uploadCertificates": "자격증 업로드",
+    "uploadPortfolio": "포트폴리오 업로드",
+    "aiAnalysis": "AI 분석",
+    "aiAnalysisBody": "CV와 자격증을 업로드하면 AI가 스킬 갭을 분석하고 커리어 경로를 제안합니다.",
+    "matchingJobs": "맞춤 채용",
+    "suggestedCourses": "추천 과정",
+    "suggestedMentors": "추천 멘토"
+  },
+  "expertNetwork": {
+    "title": "전문가 네트워크",
+    "subtitle": "다양한 분야의 전문가를 발견하고 연결하세요.",
+    "searchPlaceholder": "전문가, 분야 검색...",
+    "filters": { "industry": "분야", "country": "국가" },
+    "expertsCount": "전문가 {{count}}명",
+    "actions": { "bookConsultation": "상담 예약", "sendRequest": "요청 보내기", "follow": "팔로우" }
+  },
+  "expertEvents": {
+    "title": "전문 주제",
+    "subtitle": "이벤트, 웨비나, 워크숍, 전문 포럼.",
+    "searchPlaceholder": "이벤트 검색...",
+    "typeFilter": "유형",
+    "scheduleSection": "이벤트 일정",
+    "register": "등록"
+  }
+}

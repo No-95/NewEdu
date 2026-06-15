@@ -1,0 +1,327 @@
+{
+  "shared": {
+    "loading": "Đang tải dữ liệu...",
+    "emptyTable": "Không có dữ liệu",
+    "emptyChart": "Chưa có dữ liệu biểu đồ",
+    "chartValue": "Giá trị",
+    "followUp": "Follow-up:",
+    "dashboard": "Dashboard",
+    "overview": "Tổng quan",
+    "all": "Tất cả",
+    "search": "Tìm kiếm...",
+    "kanban": "Kanban",
+    "tableView": "Bảng",
+    "online": "Online",
+    "registered": "đăng ký",
+    "speakers": "Diễn giả:",
+    "experience": "Kinh nghiệm:",
+    "rating": "Đánh giá:",
+    "classes": "Lớp:",
+    "completion": "Hoàn thành:",
+    "people": "người",
+    "required": "Bắt buộc",
+    "optional": "Tùy chọn",
+    "status": {
+      "active": "Hoạt động",
+      "onLeave": "Nghỉ phép",
+      "teaching": "Đang dạy",
+      "open": "Đang tuyển",
+      "closed": "Đã đóng",
+      "draft": "Nháp",
+      "completed": "Hoàn thành",
+      "pending": "Chờ xử lý",
+      "converted": "Đã chuyển đổi",
+      "upcoming": "Sắp tới",
+      "done": "Hoàn thành"
+    },
+    "leadStages": {
+      "new_lead": "Lead mới",
+      "contacted": "Đã liên hệ",
+      "interested": "Quan tâm",
+      "trial_class": "Học thử",
+      "enrolled": "Đã ghi danh"
+    },
+    "recruitmentStages": {
+      "applied": "Đã ứng tuyển",
+      "screening": "Sàng lọc",
+      "interview": "Phỏng vấn",
+      "offer": "Offer",
+      "rejected": "Từ chối"
+    },
+    "trainingModules": {
+      "students": { "title": "Quản lý học viên", "description": "Hồ sơ, tiến độ và phân lớp" },
+      "teachers": { "title": "Quản lý giáo viên", "description": "Phân công và lịch dạy" },
+      "classes": { "title": "Quản lý lớp học", "description": "Lịch học và sĩ số" },
+      "attendance": { "title": "Điểm danh", "description": "Theo dõi chuyên cần" },
+      "grades": { "title": "Quản lý điểm", "description": "Bảng điểm và đánh giá" },
+      "scheduling": { "title": "Lịch khóa học", "description": "Xếp lịch và phòng học" }
+    },
+    "table": {
+      "name": "Họ tên",
+      "email": "Email",
+      "phone": "Điện thoại",
+      "source": "Nguồn",
+      "stage": "Giai đoạn",
+      "notes": "Ghi chú",
+      "department": "Phòng ban",
+      "role": "Vai trò",
+      "joinDate": "Ngày vào",
+      "status": "Trạng thái",
+      "head": "Trưởng phòng",
+      "staff": "Nhân sự",
+      "period": "Kỳ",
+      "score": "Điểm",
+      "title": "Vị trí",
+      "applicants": "Hồ sơ",
+      "postedAt": "Ngày đăng",
+      "position": "Vị trí",
+      "class": "Lớp",
+      "teacher": "Giáo viên",
+      "subject": "Môn",
+      "students": "Học viên",
+      "schedule": "Lịch học",
+      "capacity": "Sĩ số",
+      "course": "Khóa học",
+      "enrolled": "Đăng ký",
+      "progress": "Tiến độ",
+      "compliance": "Tuân thủ",
+      "partner": "Đối tác",
+      "type": "Loại",
+      "referrals": "Giới thiệu",
+      "revenue": "Doanh thu",
+      "commission": "Hoa hồng",
+      "student": "Học viên",
+      "date": "Ngày",
+      "amount": "Giá trị",
+      "category": "Danh mục",
+      "format": "Định dạng",
+      "uploadedBy": "Người tải",
+      "downloads": "Lượt tải",
+      "updated": "Cập nhật"
+    }
+  },
+  "internalTraining": {
+    "title": "Đào Tạo Nội Bộ",
+    "subtitle": "Hệ thống quản lý học tập nội bộ doanh nghiệp.",
+    "coursesSection": "Khóa học nội bộ",
+    "progressSection": "Tiến độ nhân viên",
+    "emptyCourses": "Chưa có khóa học nội bộ. Dữ liệu sẽ hiển thị theo tài khoản của bạn.",
+    "emptyProgress": "Chưa có dữ liệu tiến độ nhân viên.",
+    "metrics": {
+      "completionRate": "Hoàn thành đào tạo",
+      "courseCount": "Khóa nội bộ",
+      "certificatesIssued": "Chứng chỉ cấp",
+      "complianceRate": "Tuân thủ"
+    }
+  },
+  "hrManagement": {
+    "title": "Nhân Sự",
+    "subtitle": "Quản lý nhân sự, phòng ban và đánh giá hiệu suất.",
+    "managementSection": "Quản lý",
+    "tabs": { "employees": "Nhân viên", "departments": "Phòng ban", "reviews": "Đánh giá" },
+    "emptyEmployees": "Chưa có nhân viên nào trong hệ thống của bạn.",
+    "emptyDepartments": "Chưa có phòng ban nào.",
+    "emptyReviews": "Chưa có đánh giá hiệu suất.",
+    "metrics": {
+      "employeeCount": "Nhân viên",
+      "departmentCount": "Phòng ban",
+      "reviewCount": "Đánh giá quý",
+      "retentionRate": "Tỷ lệ giữ chân"
+    }
+  },
+  "trainingManagement": {
+    "title": "Quản lý đào tạo",
+    "subtitle": "Bảng điều khiển quản lý đào tạo dành cho trường học và trung tâm.",
+    "modulesSection": "Modules",
+    "dataSection": "Dữ liệu",
+    "tabs": { "students": "Học viên", "teachers": "Giáo viên", "classes": "Lớp học" },
+    "actions": {
+      "createClass": "Tạo lớp",
+      "assignTeacher": "Phân công GV",
+      "addStudent": "Thêm học viên",
+      "exportReport": "Xuất báo cáo"
+    },
+    "emptyStudents": "Chưa có học viên nào.",
+    "emptyTeachers": "Chưa có giáo viên nào.",
+    "emptyClasses": "Chưa có lớp học nào.",
+    "attendance": "Điểm danh",
+    "metrics": {
+      "totalStudents": "Tổng học viên",
+      "activeClasses": "Lớp đang hoạt động",
+      "teacherCount": "Giáo viên",
+      "attendanceRate": "Tỷ lệ điểm danh",
+      "completionRate": "Hoàn thành khóa"
+    }
+  },
+  "admissionCrm": {
+    "title": "CRM Tuyển Sinh",
+    "subtitle": "Quản lý tuyển sinh, pipeline lead và theo dõi ghi danh.",
+    "leadSource": "Nguồn lead",
+    "conversionMetrics": "Chỉ số chuyển đổi",
+    "conversionRate": "Tỷ lệ chuyển đổi",
+    "enrollmentRevenue": "Doanh thu tuyển sinh",
+    "pipelineSection": "Pipeline tuyển sinh",
+    "actions": {
+      "addLead": "Thêm lead",
+      "scheduleFollowUp": "Lên lịch follow-up",
+      "moveStage": "Chuyển giai đoạn"
+    },
+    "emptyPipeline": "Chưa có lead nào trong pipeline của bạn.",
+    "emptyLeads": "Chưa có lead nào.",
+    "metrics": {
+      "newLeadsMonth": "Lead mới (tháng)",
+      "conversionRate": "Tỷ lệ chuyển đổi",
+      "enrollmentRevenue": "Doanh thu tuyển sinh",
+      "followUpNeeded": "Cần follow-up"
+    }
+  },
+  "businessDevelopment": {
+    "title": "Đối Tác & Doanh Thu",
+    "subtitle": "Quản lý đối tác, affiliate và phân tích doanh thu.",
+    "businessMetrics": "Chỉ số kinh doanh",
+    "monthlyRevenue": "Doanh thu theo tháng",
+    "partnersSection": "Danh mục đối tác",
+    "referralsSection": "Giới thiệu & hoa hồng",
+    "emptyPartners": "Chưa có đối tác nào.",
+    "emptyReferrals": "Chưa có giới thiệu nào.",
+    "metrics": {
+      "monthlyRevenue": "Doanh thu tháng",
+      "activePartners": "Đối tác hoạt động",
+      "conversionRate": "Tỷ lệ chuyển đổi",
+      "monthlyCommission": "Hoa hồng tháng"
+    }
+  },
+  "reporting": {
+    "title": "Hệ Thống Báo Cáo",
+    "subtitle": "Trung tâm phân tích và báo cáo cho trung tâm đào tạo.",
+    "monthlyRevenue": "Doanh thu theo tháng",
+    "studentGrowth": "Tăng trưởng học viên",
+    "completionByCourse": "Tỷ lệ hoàn thành theo khóa",
+    "teacherReports": "Báo cáo giáo viên",
+    "emptyTeachers": "Chưa có dữ liệu giáo viên.",
+    "actions": { "exportPdf": "Xuất PDF", "exportExcel": "Xuất Excel", "exportCsv": "Xuất CSV" },
+    "metrics": {
+      "monthlyRevenue": "Doanh thu tháng",
+      "newStudents": "Học viên mới",
+      "courseCompletion": "Hoàn thành khóa",
+      "teacherRating": "Đánh giá GV"
+    }
+  },
+  "resourceLibrary": {
+    "title": "Kho Tài Liệu",
+    "subtitle": "Quản lý tài liệu, giáo án và mẫu biểu cho giáo viên và trung tâm.",
+    "searchPlaceholder": "Tìm tài liệu...",
+    "categoryFilter": "Danh mục",
+    "materialsSection": "Tài liệu",
+    "actions": { "upload": "Tải lên", "edit": "Chỉnh sửa", "delete": "Xóa" }
+  },
+  "recruitment": {
+    "title": "Tuyển Dụng",
+    "subtitle": "Cổng tuyển dụng dành cho doanh nghiệp.",
+    "openPositions": "Vị trí đang tuyển",
+    "interviewPipeline": "Pipeline phỏng vấn",
+    "actions": {
+      "postJob": "Đăng tin tuyển",
+      "viewCandidates": "Xem ứng viên",
+      "scheduleInterview": "Lên lịch PV"
+    },
+    "emptyJobs": "Chưa có tin tuyển dụng nào.",
+    "emptyCandidates": "Chưa có ứng viên nào trong pipeline.",
+    "metrics": {
+      "openPositions": "Vị trí đang tuyển",
+      "totalApplicants": "Hồ sơ nhận được",
+      "interviewing": "Đang phỏng vấn",
+      "pendingOffers": "Offer chờ duyệt"
+    }
+  },
+  "careerProfile": {
+    "title": "Hồ Sơ Năng Lực",
+    "subtitle": "Xây dựng hồ sơ năng lực chuyên nghiệp và tải CV.",
+    "completionTitle": "Mức hoàn thiện hồ sơ",
+    "completionHint": "Thêm kinh nghiệm và chứng chỉ để tăng điểm",
+    "skillsSection": "Phân tích kỹ năng",
+    "educationSection": "Học vấn",
+    "certificatesSection": "Chứng chỉ",
+    "experienceSection": "Kinh nghiệm",
+    "languagesSection": "Ngôn ngữ",
+    "noName": "Chưa cập nhật tên",
+    "noHeadline": "Thêm tiêu đề nghề nghiệp để hoàn thiện hồ sơ",
+    "noPhone": "Chưa có số điện thoại",
+    "noLocation": "Chưa có địa điểm",
+    "emptySkills": "Chưa có kỹ năng nào.",
+    "emptyEducation": "Chưa có thông tin học vấn.",
+    "emptyCertificates": "Chưa có chứng chỉ nào.",
+    "emptyExperience": "Chưa có kinh nghiệm làm việc.",
+    "emptyLanguages": "Chưa có thông tin ngôn ngữ.",
+    "actions": { "edit": "Chỉnh sửa hồ sơ", "downloadCv": "Tải CV", "downloadPdf": "Tải PDF" }
+  },
+  "careerJobs": {
+    "title": "Việc Làm",
+    "subtitle": "Cơ hội việc làm tại HDP EDU — đăng ký trở thành giáo viên trên nền tảng.",
+    "searchPlaceholder": "Tìm việc làm, công ty...",
+    "filters": { "country": "Quốc gia", "industry": "Ngành", "jobType": "Loại hình" },
+    "jobsCount": "{{count}} việc làm",
+    "actions": { "viewProfile": "Xem hồ sơ", "apply": "Ứng tuyển ngay", "viewDetails": "Xem chi tiết" },
+    "heroEyebrow": "Tuyển dụng · HDP EDU",
+    "featuredBadge": "Vị trí nổi bật",
+    "revenueStat": "92%",
+    "revenueStatLabel": "Thu nhập giáo viên",
+    "ctaNote": "Hồ sơ được duyệt trong 48 giờ",
+    "emptySearch": "Không có việc làm phù hợp. Thử từ khóa khác.",
+    "teacherListing": {
+      "title": "Bắt đầu giảng dạy cùng HDP EDU",
+      "company": "HDP EDU",
+      "location": "Làm remote",
+      "country": "Toàn cầu",
+      "industry": "Giáo dục",
+      "salary": "Giáo viên nhận 92% doanh thu",
+      "jobTypeLabel": "Remote",
+      "requirements": [
+        "Làm việc hoàn toàn remote — tự chọn lịch dạy",
+        "Giáo viên nhận 92% thu nhập (phí nền tảng 8%)",
+        "Giảng dạy thực chiến, tập trung vào người học",
+        "Phù hợp: giáo viên tiếng Hàn và mentor chuyên môn"
+      ]
+    }
+  },
+  "careerSupport": {
+    "title": "Hỗ Trợ Nghề Nghiệp",
+    "subtitle": "Dịch vụ review CV, coaching phỏng vấn và tư vấn nghề nghiệp.",
+    "bookSection": "Đặt lịch dịch vụ",
+    "selectService": "Chọn dịch vụ",
+    "selectExpert": "Chọn chuyên gia",
+    "date": "Ngày",
+    "time": "Giờ",
+    "confirmBooking": "Xác nhận đặt lịch",
+    "upcomingSection": "Phiên sắp tới",
+    "historySection": "Lịch sử phiên"
+  },
+  "aiMatching": {
+    "title": "AI Matching",
+    "subtitle": "Hệ thống gợi ý nghề nghiệp, việc làm và khóa học bằng AI.",
+    "uploadCv": "Tải CV",
+    "uploadCertificates": "Tải chứng chỉ",
+    "uploadPortfolio": "Tải portfolio",
+    "aiAnalysis": "Phân tích AI",
+    "aiAnalysisBody": "Tải CV và chứng chỉ để AI phân tích khoảng cách kỹ năng và gợi ý lộ trình nghề nghiệp.",
+    "matchingJobs": "Việc làm phù hợp",
+    "suggestedCourses": "Khóa học đề xuất",
+    "suggestedMentors": "Mentor đề xuất"
+  },
+  "expertNetwork": {
+    "title": "Mạng Lưới Chuyên Gia",
+    "subtitle": "Khám phá và kết nối với chuyên gia trong nhiều lĩnh vực.",
+    "searchPlaceholder": "Tìm chuyên gia, lĩnh vực...",
+    "filters": { "industry": "Lĩnh vực", "country": "Quốc gia" },
+    "expertsCount": "{{count}} chuyên gia",
+    "actions": { "bookConsultation": "Đặt tư vấn", "sendRequest": "Gửi yêu cầu", "follow": "Theo dõi" }
+  },
+  "expertEvents": {
+    "title": "Chuyên Đề",
+    "subtitle": "Sự kiện, webinar, workshop và diễn đàn chuyên môn.",
+    "searchPlaceholder": "Tìm sự kiện...",
+    "typeFilter": "Loại",
+    "scheduleSection": "Lịch sự kiện",
+    "register": "Đăng ký"
+  }
+}

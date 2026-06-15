@@ -1,0 +1,119 @@
+{
+  "giftBook": {
+    "badge": "강의 포함 도서",
+    "priceLabel": "도서 가격",
+    "stockLabel": "재고",
+    "stockUnit": "권",
+    "viewDetails": "도서 상세 보기",
+    "title": "생산 공장에서의 한국어",
+    "subtitle": "한국 산업 현장을 위한 실전 커뮤니케이션 가이드",
+    "description": "한국 공장 현장에 맞춘 생산 전문 한국어 — 어휘, 맥락, 실무 상황.",
+    "coverAlt": "생산 공장에서의 한국어 - 표지",
+    "stockStatus": "품절 임박",
+    "highlights": [
+      "PPC, IQC, SMT, 조립, 공정 QC, 유지보수",
+      "제조 현장을 위한 이중언어 용어",
+      "기술자, QA-QC, 조장에게 적합"
+    ]
+  },
+  "hero": {
+    "badge": "도서 — \"생산 공장에서의 한국어\"",
+    "title": "실전 가이드,",
+    "titleHighlight": "생산 현장을 위해",
+    "subtitle": "공정, 용어, 커뮤니케이션 맥락을 이해하고 한국 관리자와 자신 있게 일하세요.",
+    "remainingLabel": "남은 수량",
+    "remainingCount": "74권",
+    "inStock": "재고 있음",
+    "statusLabel": "상태",
+    "almostSoldOut": "품절 임박",
+    "firstPrint": "1차 인쇄",
+    "discountBadge": "-10%",
+    "savingsNote": "1차 인쇄 할인 • 25,000₫ 절약",
+    "cta": "지금 도서 주문",
+    "imageAlts": [
+      "생산 공장에서의 한국어 - 표지",
+      "저자 소개가 있는 뒷표지",
+      "책상 위의 책",
+      "표제 페이지",
+      "SMT 부서 내용",
+      "이중언어 용어 표"
+    ]
+  },
+  "overview": {
+    "introLabel": "소개",
+    "title": "도서 소개",
+    "paragraph1Bold": "생산 공장에서의 한국어",
+    "paragraph1": " — 한국 산업 현장을 위한 실전 커뮤니케이션 가이드. 한국 자본 공장에서 언어는 성과, 안전, 승진 기회에 직접 영향을 줍니다.",
+    "paragraph2": "이 책은 생산 현장에 맞는 한국어 체계를 제공하여 올바른 어휘, 맥락, 업무 상황에서 사용할 수 있도록 돕습니다.",
+    "focusTitle": "핵심 내용",
+    "focusItems": [
+      "PPC, IQC, 금속 프레스, 사출 성형, SMT, 도장·코팅",
+      "조립, 공정 QC, 유지보수, Automation",
+      "제품 기술, 공정 기술, R&D, OQC..."
+    ],
+    "audienceTitle": "대상 독자",
+    "audienceItems": [
+      "한국계 공장 근로자",
+      "기술자, QA-QC, 조장, 생산 관리자",
+      "공대 학생 및 한국 기업 면접 준비생"
+    ],
+    "valueTitle": "얻을 수 있는 가치",
+    "valueItems": [
+      "생산 현장에서 정확한 커뮤니케이션",
+      "한국 관리자와 자신 있게 협업",
+      "오해로 인한 실수 감소",
+      "승진 기회 향상"
+    ],
+    "backCoverNote": "뒷표지",
+    "backCoverDesc": "에 저자 상세 소개.",
+    "highlightsTitle": "하이라이트",
+    "statValues": ["12+", "500+", "100+", "Real"],
+    "statLabels": ["주제", "어휘", "예문", "상황"]
+  },
+  "purchase": {
+    "badge": "도서 주문",
+    "title": "배송 정보",
+    "subtitle": "배송 정보를 입력하세요. HDP EDU가 주문 확인 후 배송해 드립니다.",
+    "success": "도서 주문이 접수되었습니다. 확인 및 배송을 위해 곧 연락드리겠습니다.",
+    "fullName": "성명",
+    "fullNamePlaceholder": "성명을 입력하세요",
+    "phone": "전화번호",
+    "phonePlaceholder": "전화번호를 입력하세요",
+    "address": "배송 주소",
+    "addressPlaceholder": "상세 배송 주소를 입력하세요",
+    "note": "배송 메모 (선택)",
+    "notePlaceholder": "예: 배송 전 연락, 근무 시간 내 배송...",
+    "validationError": "성명, 전화번호, 배송 주소를 모두 입력해 주세요.",
+    "submitError": "주문 접수에 실패했습니다. 나중에 다시 시도해 주세요.",
+    "submitting": "제출 중...",
+    "submit": "주문 확인",
+    "backToBooks": "도서 페이지로 돌아가기"
+  },
+  "author": {
+    "title": "저자 소개",
+    "name": "Duong Thu Huong",
+    "role": "저자 & HDP Holdings CEO",
+    "photoAlt": "Duong Thu Huong - 저자",
+    "degree1Title": "한국어학 학사",
+    "degree1School": "하노이대학교",
+    "degree2Title": "경영학 석사",
+    "degree2School": "숭실대학교, 한국",
+    "bio1": "전략 컨설팅 및 종합 솔루션을 제공하는",
+    "bio1Company": "HDP HOLDINGS",
+    "bio1Rest": " 창립자 겸 CEO. 베트남 및 FDI 기업, 특히 한국 기업을 지원합니다.",
+    "bio2": "베트남과 한국의 기업 협회 및 투자·무역 진흥 기관 자문 전문가로, 기업 개발, 국제 협력, 고품질 인력 양성 분야에서 풍부한 경험을 보유하고 있습니다."
+  },
+  "cta": {
+    "badge": "74권 남음 • 품절 임박",
+    "title": "지금",
+    "titleHighlight": "도서 주문",
+    "description": "1차 인쇄 수량이 거의 소진되었습니다. 지금 주문하면",
+    "discountHighlight": "10% 할인",
+    "descriptionEnd": " 혜택과 함께 한국 생산 현장 실전 가이드를 받을 수 있습니다.",
+    "originalPriceLabel": "정가",
+    "offerLabel": "할인",
+    "discountLabel": "10% 할인",
+    "button": "지금 도서 주문",
+    "footer": "전국 배송 • 꼼꼼한 포장 • 품질 보증"
+  }
+}

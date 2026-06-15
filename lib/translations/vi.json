@@ -263,6 +263,44 @@
       "resourcesDesc": "Sử dụng chương trình giảng dạy và công cụ giảng dạy toàn diện của chúng tôi"
     }
   },
+  "teacherCenter": {
+    "title": "Giáo viên & Trung tâm đào tạo",
+    "subtitle": "Phát triển hoạt động đào tạo và mở rộng quy mô kinh doanh trên nền tảng số HDP EDU — nơi giáo viên, trung tâm và học viên kết nối trong hệ sinh thái Việt Nam – Hàn Quốc.",
+    "whyJoinTitle": "Vì sao nên trở thành đối tác đào tạo?",
+    "whyJoinItems": [
+      "Tạo và kinh doanh khóa học trực tuyến.",
+      "Quản lý lớp học, học viên và lịch giảng dạy.",
+      "Sử dụng CRM tuyển sinh và chăm sóc học viên.",
+      "Xây dựng thương hiệu cá nhân hoặc thương hiệu trung tâm.",
+      "Tiếp cận cộng đồng học viên trên toàn quốc."
+    ],
+    "benefitsTitle": "Lợi ích khi đồng hành cùng HDP EDU",
+    "toolsTitle": "Bộ công cụ dành cho đối tác",
+    "ctaApply": "Đăng ký trở thành giáo viên",
+    "ctaSignUp": "Tạo tài khoản đối tác",
+    "tools": {
+      "training": {
+        "title": "Quản lý đào tạo",
+        "description": "Lên lịch lớp học, theo dõi tiến độ và quản lý giảng viên."
+      },
+      "crm": {
+        "title": "CRM tuyển sinh",
+        "description": "Quản lý học viên tiềm năng, chăm sóc và chuyển đổi tuyển sinh."
+      },
+      "business": {
+        "title": "Phát triển kinh doanh",
+        "description": "Mở rộng thương hiệu, chiến dịch marketing và hợp tác đối tác."
+      },
+      "reports": {
+        "title": "Báo cáo & phân tích",
+        "description": "Theo dõi hiệu quả đào tạo, doanh thu và tăng trưởng học viên."
+      },
+      "library": {
+        "title": "Thư viện tài nguyên",
+        "description": "Truy cập giáo trình, tài liệu và công cụ giảng dạy sẵn có."
+      }
+    }
+  },
   "contactUsPage": {
     "badge": "Hỗ trợ & Phản hồi",
     "title": "Liên hệ với chúng tôi",
