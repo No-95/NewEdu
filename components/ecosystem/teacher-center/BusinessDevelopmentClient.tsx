@@ -1,20 +1,28 @@
 'use client';
 
-import { useQuery } from 'convex/react';
+import { useState } from 'react';
+import { useMutation, useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
+import type { Id } from '@/convex/_generated/dataModel';
 import { AppPageShell } from '@/components/ecosystem/shared/AppPageShell';
 import { EcosystemMetricGrid } from '@/components/ecosystem/shared/EcosystemMetricGrid';
 import { EcosystemBarChart } from '@/components/ecosystem/shared/EcosystemBarChart';
 import { EcosystemDataTable } from '@/components/ecosystem/shared/EcosystemDataTable';
 import { EcosystemSection } from '@/components/ecosystem/shared/EcosystemSection';
 import { EcosystemPageLoader } from '@/components/ecosystem/shared/EcosystemPageLoader';
+import { EcosystemActionBar } from '@/components/ecosystem/shared/EcosystemActionBar';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { translateMetrics } from '@/lib/ecosystem/i18n';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { CreatePartnerDialog } from '@/components/ecosystem/teacher-center/TeacherOpsDialogs';
 
 export function BusinessDevelopmentClient({ userEmail }: { userEmail: string }) {
   const { t } = useLanguage();
+  const [partnerOpen, setPartnerOpen] = useState(false);
   const data = useQuery(api.ecosystem.getBusinessDevelopmentDashboard, { email: userEmail });
+  const updatePartnerStatus = useMutation(api.teacherOps.updatePartnerStatus);
+  const createReferral = useMutation(api.teacherOps.createReferral);
 
   if (data === undefined) {
     return (
@@ -31,7 +39,20 @@ export function BusinessDevelopmentClient({ userEmail }: { userEmail: string }) 
     <AppPageShell
       title={t('ecosystemPages.businessDevelopment.title')}
       subtitle={t('ecosystemPages.businessDevelopment.subtitle')}
+      actions={
+        <EcosystemActionBar
+          actions={[
+            {
+              label: t('teacherOps.addPartner'),
+              variant: 'default',
+              onClick: () => setPartnerOpen(true),
+            },
+          ]}
+        />
+      }
     >
+      <CreatePartnerDialog userEmail={userEmail} open={partnerOpen} onOpenChange={setPartnerOpen} />
+
       <EcosystemSection title={t('ecosystemPages.businessDevelopment.businessMetrics')}>
         <EcosystemMetricGrid stats={metrics} />
       </EcosystemSection>
@@ -55,17 +76,36 @@ export function BusinessDevelopmentClient({ userEmail }: { userEmail: string }) 
                 key: 'status',
                 header: t('ecosystemPages.shared.table.status'),
                 render: (row) => (
-                  <Badge
-                    className={
-                      row.status === 'active'
-                        ? 'bg-emerald-500/20 text-emerald-300'
-                        : 'bg-amber-500/20 text-amber-300'
-                    }
-                  >
-                    {row.status === 'active'
-                      ? t('ecosystemPages.shared.status.active')
-                      : t('ecosystemPages.shared.status.pending')}
-                  </Badge>
+                  <div className="flex items-center gap-2">
+                    <Badge
+                      className={
+                        row.status === 'active'
+                          ? 'bg-emerald-500/20 text-emerald-300'
+                          : 'bg-amber-500/20 text-amber-300'
+                      }
+                    >
+                      {row.status === 'active'
+                        ? t('ecosystemPages.shared.status.active')
+                        : t('ecosystemPages.shared.status.pending')}
+                    </Badge>
+                    {row.status === 'pending' ? (
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        className="h-7 text-xs"
+                        onClick={() =>
+                          void updatePartnerStatus({
+                            email: userEmail,
+                            partnerId: row.id as Id<'businessPartners'>,
+                            status: 'active',
+                          })
+                        }
+                      >
+                        {t('teacherOps.activate')}
+                      </Button>
+                    ) : null}
+                  </div>
                 ),
               },
             ]}
@@ -100,6 +140,23 @@ export function BusinessDevelopmentClient({ userEmail }: { userEmail: string }) 
               },
             ]}
           />
+          {data.partners.length > 0 ? (
+            <Button
+              type="button"
+              variant="outline"
+              className="mt-4"
+              onClick={() =>
+                void createReferral({
+                  email: userEmail,
+                  partner: data.partners[0].name,
+                  student: 'New referral',
+                  amount: '0 ₫',
+                })
+              }
+            >
+              {t('teacherOps.addReferral')}
+            </Button>
+          ) : null}
         </EcosystemSection>
       </div>
     </AppPageShell>

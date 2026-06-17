@@ -2,17 +2,10 @@ import { action, internalMutation, mutation, query } from './_generated/server';
 import { v } from 'convex/values';
 
 import { api, internal } from './_generated/api';
+import { escapeHtml, sendEmail } from './lib/email';
 
 const DEFAULT_NOTIFY_EMAIL = 'minhhoangd852@gmail.com';
 const COURSE_GIFT_SOURCE = 'course_gift';
-
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
 
 async function sendBookOrderEmail(args: {
   orderId: string;
@@ -25,13 +18,7 @@ async function sendBookOrderEmail(args: {
   emailHeading: string;
   extraRows?: Array<{ label: string; value: string }>;
 }) {
-  const resendApiKey = process.env.RESEND_API_KEY;
-  if (!resendApiKey) {
-    throw new Error('RESEND_API_KEY is missing on server.');
-  }
-
   const notifyTo = (process.env.BOOK_ORDER_NOTIFY_EMAIL || DEFAULT_NOTIFY_EMAIL).trim();
-  const from = process.env.RESEND_FROM_EMAIL || 'HDP EDU <onboarding@resend.dev>';
   const submittedAt = new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
 
   const extraHtml = (args.extraRows ?? [])
@@ -41,17 +28,10 @@ async function sendBookOrderEmail(args: {
     )
     .join('');
 
-  const response = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${resendApiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      from,
-      to: notifyTo,
-      subject: `${args.subjectPrefix} — ${args.fullName}`,
-      html: `
+  const result = await sendEmail({
+    to: notifyTo,
+    subject: `${args.subjectPrefix} — ${args.fullName}`,
+    html: `
           <div style="font-family:Arial,sans-serif;line-height:1.6;color:#111">
             <h2 style="margin:0 0 12px">${escapeHtml(args.emailHeading)}</h2>
             <p style="margin:0 0 16px;color:#555">${escapeHtml(args.sourceLabel)}</p>
@@ -66,12 +46,10 @@ async function sendBookOrderEmail(args: {
             </table>
           </div>
         `,
-    }),
   });
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error('Resend book order email failed:', errorText);
+  if (!result.ok) {
+    console.error('Resend book order email failed:', result.error);
     throw new Error('Không gửi được email thông báo. Vui lòng thử lại sau.');
   }
 }

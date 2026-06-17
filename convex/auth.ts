@@ -1,6 +1,7 @@
 import { action, internalMutation, mutation, query } from './_generated/server';
 import { v } from 'convex/values';
 import { internal } from './_generated/api';
+import { sendEmail } from './lib/email';
 
 async function sha256Hex(input: string): Promise<string> {
   const bytes = new TextEncoder().encode(input);
@@ -69,18 +70,10 @@ export const sendOtp = action({
       createdAt: Date.now(),
     });
 
-    const from = process.env.RESEND_FROM_EMAIL || 'HDP EDU <onboarding@resend.dev>';
-    const response = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${resendApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from,
-        to: normalizedEmail,
-        subject: 'Your HDP EDU OTP Code',
-        html: `
+    const result = await sendEmail({
+      to: normalizedEmail,
+      subject: 'Your HDP EDU OTP Code',
+      html: `
           <div style="font-family:Arial,sans-serif;line-height:1.5">
             <h2>HDP EDU OTP Verification</h2>
             <p>Your OTP code is:</p>
@@ -89,11 +82,10 @@ export const sendOtp = action({
             <p>If you did not request this, please ignore this email.</p>
           </div>
         `,
-      }),
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
+    if (!result.ok) {
+      const errorText = result.error ?? 'Unknown error';
       const allowDevOtpFallback = process.env.AUTH_DEV_OTP_FALLBACK === 'true';
 
       // In non-production environments, allow OTP flow to continue even if email delivery fails.

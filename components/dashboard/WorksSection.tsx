@@ -1,182 +1,170 @@
-"use client"
-
-import React, { useEffect, useState } from 'react'
-import Link from 'next/link'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Progress } from '@/components/ui/progress'
-import { Badge } from '@/components/ui/badge'
-import { CheckCircle, Clock, BookOpen } from 'lucide-react'
-
-type Homework = {
-  id: string
-  courseTitle: string
-  assignmentTitle: string
-  progress: number
-  status: 'completed' | 'in-progress' | 'pending'
-  dueDate: string
-  modules: number
-  completedModules: number
-}
-
-const getStatusBadge = (status: string) => {
-  switch (status) {
-    case 'completed':
-      return <Badge className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">Completed</Badge>
-    case 'in-progress':
-      return <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">In Progress</Badge>
-    case 'pending':
-      return <Badge variant="outline">Pending</Badge>
-    default:
-      return null
-  }
-}
-
-const getStatusIcon = (status: string) => {
-  switch (status) {
-    case 'completed':
-      return <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
-    case 'in-progress':
-      return <Clock className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-    default:
-      return <BookOpen className="h-5 w-5 text-muted-foreground" />
-  }
-}
-
-export default function WorksSection(): React.ReactElement {
-  const [homeworks, setHomeworks] = useState<Homework[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    let mounted = true
-    ;(async () => {
-      try {
-        const res = await fetch('/api/dashboard/homeworks', { credentials: 'same-origin', cache: 'no-store' })
-        if (!res.ok) return
-        const payload = await res.json()
-        const hw = (payload.homeworks || []).map((h: any) => ({
-          id: h._id || h.id,
-          courseTitle: h.courseId || 'Course',
-          assignmentTitle: h.title || h.assignmentTitle || '',
-          progress: 0,
-          status: h.status === 'completed' ? 'completed' : h.status === 'in-progress' ? 'in-progress' : 'pending',
-          dueDate: h.dueDate ? new Date(h.dueDate).toISOString().split('T')[0] : '',
-          modules: 0,
-          completedModules: 0,
-        }))
-        if (mounted) setHomeworks(hw)
-      } catch (err) {
-        // ignore
-      } finally {
-        if (mounted) setLoading(false)
-      }
-    })()
-    return () => { mounted = false }
-  }, [])
-
-  if (!loading && homeworks.length === 0) {
-    return (
-      <Card className="border border-border glow-edge">
-        <CardHeader>
-          <CardTitle>No Assignments</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground">You got no homework, you're free for now.</p>
-        </CardContent>
-      </Card>
-    )
-  }
-
-  const overallProgress = homeworks.length ? Math.round(homeworks.reduce((sum, hw) => sum + (hw.progress || 0), 0) / homeworks.length) : 0
-  const completedCount = homeworks.filter(hw => hw.status === 'completed').length
-  const inProgressCount = homeworks.filter(hw => hw.status === 'in-progress').length
-  const pendingCount = homeworks.filter(hw => hw.status === 'pending').length
-
-  return (
-    <div className="space-y-6">
-      <div className="grid gap-4 md:grid-cols-4">
-        <Card className="border border-border glow-edge">
-          <CardContent className="pt-6">
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-muted-foreground">Overall Progress</p>
-              <div className="text-3xl font-bold text-primary">{overallProgress}%</div>
-              <Progress value={overallProgress} className="h-2" />
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border border-border glow-edge">
-          <CardContent className="pt-6">
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-muted-foreground">Completed</p>
-              <div className="text-3xl font-bold text-green-600 dark:text-green-400">{completedCount}</div>
-              <p className="text-xs text-muted-foreground">assignments</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border border-border glow-edge">
-          <CardContent className="pt-6">
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-muted-foreground">In Progress</p>
-              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">{inProgressCount}</div>
-              <p className="text-xs text-muted-foreground">assignments</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="border border-border glow-edge">
-          <CardContent className="pt-6">
-            <div className="space-y-2">
-              <p className="text-sm font-medium text-muted-foreground">Pending</p>
-              <div className="text-3xl font-bold text-muted-foreground">{pendingCount}</div>
-              <p className="text-xs text-muted-foreground">assignments</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Card className="border border-border">
-        <CardHeader>
-          <CardTitle className="text-foreground">Your Assignments</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {homeworks.map((homework) => (
-              <div key={homework.id} className="flex flex-col gap-4 rounded-lg border border-border p-4 transition-colors hover:bg-muted/50">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex items-start gap-3 flex-1">
-                    <div className="mt-1">{getStatusIcon(homework.status)}</div>
-                    <div className="flex-1">
-                      <div className="space-y-1">
-                        <p className="text-sm font-medium text-muted-foreground">{homework.courseTitle}</p>
-                        <h3 className="font-semibold text-foreground text-base">{homework.assignmentTitle}</h3>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">{getStatusBadge(homework.status)}</div>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <p className="text-xs font-medium text-muted-foreground">Progress: {homework.completedModules} of {homework.modules} modules</p>
-                      <p className="text-xs font-semibold text-foreground">{homework.progress}%</p>
-                    </div>
-                    <Progress value={homework.progress} className="h-2" />
-                  </div>
-
-                  <div className="flex items-center justify-between pt-2">
-                    <p className="text-xs text-muted-foreground">Due: {homework.dueDate}</p>
-                    {homework.status !== 'completed' && (
-                      <Button size="sm" variant="outline" className="text-xs" asChild>
-                        <Link href="/courses">Continue</Link>
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  )
-}
+'use client';
+
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { useMutation, useQuery } from 'convex/react';
+import { api } from '@/convex/_generated/api';
+import type { Id } from '@/convex/_generated/dataModel';
+import { useLanguage } from '@/lib/context/LanguageContext';
+import {
+  DashboardEmptyState,
+  DashboardSection,
+} from '@/components/dashboard/shared/DashboardPrimitives';
+
+type HomeworkItem = {
+  id: string;
+  title: string;
+  courseTitle: string;
+  courseSlug?: string;
+  status: 'pending' | 'in-progress' | 'completed';
+  dueDate: number | null;
+};
+
+const DUE_SOON_MS = 3 * 24 * 60 * 60 * 1000;
+
+function formatDueDate(timestamp: number | null, locale: string) {
+  if (!timestamp) return '—';
+  return new Date(timestamp).toLocaleDateString(locale, {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
+
+function getDueUrgency(dueDate: number | null): 'overdue' | 'due-soon' | null {
+  if (!dueDate) return null;
+  const now = Date.now();
+  if (dueDate < now) return 'overdue';
+  if (dueDate - now <= DUE_SOON_MS) return 'due-soon';
+  return null;
+}
+
+export function LearnerHomeworkList({
+  items,
+  userEmail,
+}: {
+  items: HomeworkItem[];
+  userEmail?: string;
+}) {
+  const { t, language } = useLanguage();
+  const locale = language === 'ko' ? 'ko-KR' : language === 'vi' ? 'vi-VN' : 'en-US';
+  const completeHomework = useMutation(api.homeworks.completeHomework);
+  const [completingId, setCompletingId] = useState<string | null>(null);
+  const [notes, setNotes] = useState<Record<string, string>>({});
+
+  if (items.length === 0) {
+    return <DashboardEmptyState message={t('dashboard.learner.homeworkEmpty')} />;
+  }
+
+  const handleComplete = async (homeworkId: string) => {
+    if (!userEmail) return;
+    setCompletingId(homeworkId);
+    try {
+      const note = notes[homeworkId]?.trim();
+      await completeHomework({
+        learnerEmail: userEmail,
+        homeworkId: homeworkId as Id<'homeworks'>,
+        note: note || undefined,
+      });
+      setNotes((prev) => {
+        const next = { ...prev };
+        delete next[homeworkId];
+        return next;
+      });
+    } finally {
+      setCompletingId(null);
+    }
+  };
+
+  return (
+    <ul className="space-y-3">
+      {items.map((item) => {
+        const urgency = getDueUrgency(item.dueDate);
+        const cardClass =
+          urgency === 'overdue'
+            ? 'border-red-500/40 bg-red-500/10'
+            : urgency === 'due-soon'
+              ? 'border-amber-500/40 bg-amber-500/10'
+              : 'border-white/10 bg-white/5';
+
+        return (
+          <li key={item.id} className={`rounded-lg border px-4 py-3 text-sm ${cardClass}`}>
+            <p className="font-medium text-foreground">{item.title}</p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {item.courseSlug ? (
+                <Link href={`/courses/${item.courseSlug}`} className="text-primary hover:underline">
+                  {item.courseTitle}
+                </Link>
+              ) : (
+                item.courseTitle
+              )}
+            </p>
+            <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+              <span>{t(`dashboard.learner.homeworkStatus.${item.status}`)}</span>
+              {item.dueDate ? (
+                <>
+                  <span>·</span>
+                  <span
+                    className={
+                      urgency === 'overdue'
+                        ? 'font-medium text-red-400'
+                        : urgency === 'due-soon'
+                          ? 'font-medium text-amber-400'
+                          : undefined
+                    }
+                  >
+                    {urgency === 'overdue'
+                      ? t('dashboard.learner.homeworkOverdue')
+                      : urgency === 'due-soon'
+                        ? t('dashboard.learner.homeworkDueSoon')
+                        : t('dashboard.learner.homeworkDue')}
+                    : {formatDueDate(item.dueDate, locale)}
+                  </span>
+                </>
+              ) : null}
+            </div>
+            {userEmail && item.status !== 'completed' ? (
+              <div className="mt-3 space-y-2">
+                <textarea
+                  value={notes[item.id] ?? ''}
+                  onChange={(e) =>
+                    setNotes((prev) => ({ ...prev, [item.id]: e.target.value }))
+                  }
+                  placeholder={t('dashboard.learner.homeworkNotePlaceholder')}
+                  rows={2}
+                  className="w-full rounded-md border border-white/10 bg-black/20 px-3 py-2 text-xs text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:outline-none"
+                />
+                <button
+                  type="button"
+                  onClick={() => void handleComplete(item.id)}
+                  disabled={completingId === item.id}
+                  className="rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+                >
+                  {completingId === item.id
+                    ? t('dashboard.loadingData')
+                    : t('dashboard.learner.completeHomework')}
+                </button>
+              </div>
+            ) : null}
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+export default function WorksSection({ userEmail }: { userEmail: string }): React.ReactElement {
+  const { t } = useLanguage();
+  const data = useQuery(api.dashboard.getLearnerDashboard, { email: userEmail });
+
+  return (
+    <DashboardSection title={t('dashboard.learner.homeworkTitle')}>
+      {data === undefined ? (
+        <DashboardEmptyState message={t('dashboard.loadingData')} />
+      ) : (
+        <LearnerHomeworkList items={data.homeworkItems} userEmail={userEmail} />
+      )}
+    </DashboardSection>
+  );
+}
+

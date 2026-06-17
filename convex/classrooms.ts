@@ -8,6 +8,7 @@ export const upsertClassroom = mutation({
     roomID: v.string(),
     title: v.string(),
     hostName: v.string(),
+    hostUserId: v.optional(v.id('users')),
     roomPassword: v.optional(v.string()),
     status: v.union(v.literal('live'), v.literal('ended')),
   },
@@ -26,6 +27,7 @@ export const upsertClassroom = mutation({
         status: 'live' | 'ended';
         lastActiveAt: number;
         roomPassword?: string;
+        hostUserId?: typeof args.hostUserId;
       } = {
         title: args.title,
         hostName: args.hostName,
@@ -35,6 +37,9 @@ export const upsertClassroom = mutation({
 
       if (args.roomPassword !== undefined) {
         patchData.roomPassword = args.roomPassword;
+      }
+      if (args.hostUserId !== undefined) {
+        patchData.hostUserId = args.hostUserId;
       }
 
       await ctx.db.patch(existing._id, {
@@ -47,6 +52,7 @@ export const upsertClassroom = mutation({
       roomID: args.roomID,
       title: args.title,
       hostName: args.hostName,
+      hostUserId: args.hostUserId,
       roomPassword: args.roomPassword,
       status: args.status,
       startedAt: now,

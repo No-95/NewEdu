@@ -2,13 +2,22 @@
 
 import type { Lead, LeadStage } from '@/lib/ecosystem/types';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 export function EcosystemPipeline({
   stages,
   leads,
+  onAdvanceLead,
+  advanceLabel,
+  terminalStages = ['enrolled'],
+  highlightLeadId,
 }: {
   stages: readonly { key: string; label: string }[];
   leads: Lead[];
+  onAdvanceLead?: (leadId: string) => void;
+  advanceLabel?: string;
+  terminalStages?: string[];
+  highlightLeadId?: string;
 }) {
   return (
     <div className="grid gap-3 overflow-x-auto lg:grid-cols-5">
@@ -26,11 +35,27 @@ export function EcosystemPipeline({
               {stageLeads.map((lead) => (
                 <div
                   key={lead.id}
-                  className="rounded-lg border border-white/10 bg-white/5 p-3 text-sm transition-colors hover:border-primary/20"
+                  id={`lead-${lead.id}`}
+                  className={`rounded-lg border bg-white/5 p-3 text-sm transition-colors hover:border-primary/20 ${
+                    highlightLeadId === lead.id
+                      ? 'border-primary ring-2 ring-primary/40'
+                      : 'border-white/10'
+                  }`}
                 >
                   <p className="font-medium text-foreground">{lead.name}</p>
                   <p className="mt-1 text-xs text-muted-foreground">{lead.source}</p>
                   <p className="mt-1 text-xs text-primary">Follow-up: {lead.followUpDate}</p>
+                  {onAdvanceLead && !terminalStages.includes(lead.stage) ? (
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      className="mt-2 h-7 text-xs"
+                      onClick={() => onAdvanceLead(lead.id)}
+                    >
+                      {advanceLabel ?? 'Advance'}
+                    </Button>
+                  ) : null}
                 </div>
               ))}
             </div>

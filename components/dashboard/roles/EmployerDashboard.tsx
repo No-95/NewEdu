@@ -1,27 +1,20 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import {
   DashboardBulletList,
-  DashboardChipList,
   DashboardGrid,
+  DashboardKeyValueList,
   DashboardLinkList,
   DashboardLoadingState,
+  DashboardNextStepCta,
   DashboardSection,
   DashboardStatGrid,
 } from '@/components/dashboard/shared/DashboardPrimitives';
-
-function useLinkSection(t: ReturnType<typeof useLanguage>['t'], labelKey: string, hrefs: string[]) {
-  const labels = t(labelKey, { returnObjects: true });
-  const labelList = Array.isArray(labels) ? labels : [];
-  return labelList.map((label, index) => ({
-    label,
-    href: hrefs[index] ?? '/dashboard',
-  }));
-}
 
 export function EmployerDashboard({ userEmail }: { userEmail: string }) {
   const { t } = useLanguage();
@@ -32,7 +25,11 @@ export function EmployerDashboard({ userEmail }: { userEmail: string }) {
   }
 
   return (
-    <DashboardGrid>
+    <>
+      {data.nextStep ? (
+        <DashboardNextStepCta labelKey={data.nextStep.labelKey} href={data.nextStep.href} />
+      ) : null}
+      <DashboardGrid>
       <DashboardSection title={t('dashboard.employer.recruitingOverviewTitle')} span={2} delay={0.05}>
         <DashboardStatGrid
           stats={[
@@ -44,52 +41,60 @@ export function EmployerDashboard({ userEmail }: { userEmail: string }) {
         />
       </DashboardSection>
 
-      <DashboardSection title={t('dashboard.employer.recruitingMgmtTitle')} delay={0.1}>
-        <DashboardLinkList
-          items={useLinkSection(t, 'dashboard.employer.recruitingMgmt', [
-            '/business/recruitment',
-            '/business/recruitment',
-            '/contact-us',
-          ])}
+      <DashboardSection title={t('dashboard.employer.openJobsTitle')} delay={0.08} action={t('dashboard.viewAll')} actionHref="/business/recruitment">
+        {data.openJobSummaries.length > 0 ? (
+          <DashboardLinkList
+            items={data.openJobSummaries.map((job) => ({
+              label: job.label,
+              href: job.href,
+            }))}
+          />
+        ) : (
+          <p className="text-sm text-muted-foreground">{t('dashboard.employer.emptyOpenJobs')}</p>
+        )}
+      </DashboardSection>
+
+      <DashboardSection title={t('dashboard.employer.pipelineTitle')} delay={0.1} action={t('dashboard.viewAll')} actionHref="/business/recruitment">
+        <DashboardKeyValueList
+          rows={[
+            { label: t('ecosystemPages.shared.recruitmentStages.applied'), value: String(data.pipelineCounts.applied) },
+            { label: t('ecosystemPages.shared.recruitmentStages.screening'), value: String(data.pipelineCounts.screening) },
+            { label: t('ecosystemPages.shared.recruitmentStages.interview'), value: String(data.pipelineCounts.interview) },
+            { label: t('ecosystemPages.shared.recruitmentStages.offer'), value: String(data.pipelineCounts.offer) },
+          ]}
         />
       </DashboardSection>
 
-      <DashboardSection title={t('dashboard.employer.talentPoolTitle')} delay={0.12} action={t('dashboard.viewAll')} actionHref="/business/recruitment">
-        <p className="mb-3 text-sm text-muted-foreground">{t('dashboard.employer.talentPoolSubtitle')}</p>
-        <DashboardChipList items={data.talentPoolTags} />
+      <DashboardSection title={t('dashboard.employer.topCandidatesTitle')} delay={0.12} action={t('dashboard.viewAll')} actionHref="/business/recruitment">
+        {data.topCandidates.length > 0 ? (
+          <DashboardLinkList
+            items={data.topCandidates.map((c) => ({
+              label: c.label,
+              href: c.href,
+            }))}
+          />
+        ) : (
+          <p className="text-sm text-muted-foreground">{t('dashboard.employer.emptyCandidates')}</p>
+        )}
       </DashboardSection>
 
       <DashboardSection title={t('dashboard.employer.trainingTitle')} delay={0.14} action={t('dashboard.viewAll')} actionHref="/business/internal-training">
-        <DashboardBulletList items={data.trainingItems.length > 0 ? data.trainingItems : data.employeeProgress} />
+        {data.trainingItems.length > 0 ? (
+          <DashboardBulletList items={data.trainingItems.map((item) => item.label)} />
+        ) : (
+          <p className="text-sm text-muted-foreground">{t('dashboard.employer.emptyTraining')}</p>
+        )}
       </DashboardSection>
 
-      <DashboardSection title={t('dashboard.employer.matchingTitle')} delay={0.16} action={t('dashboard.viewAll')} actionHref="/business/recruitment">
-        <DashboardBulletList items={data.matchingItems} />
-      </DashboardSection>
-
-      <DashboardSection title={t('dashboard.employer.expertsTitle')} delay={0.18}>
+      <DashboardSection title={t('dashboard.employer.hrTitle')} delay={0.16} action={t('dashboard.viewAll')} actionHref="/business/hr-management">
         <DashboardLinkList
-          items={useLinkSection(t, 'dashboard.employer.experts', [
-            '/experts/network',
-            '/career/career-support',
-            '/contact-us',
-          ])}
+          items={[
+            { label: t('dashboard.employer.hrEmployees'), href: '/business/hr-management' },
+            { label: t('dashboard.employer.hrDepartments'), href: '/business/hr-management' },
+          ]}
         />
-      </DashboardSection>
-
-      <DashboardSection title={t('dashboard.employer.reportsTitle')} delay={0.2}>
-        <DashboardLinkList
-          items={useLinkSection(t, 'dashboard.employer.reports', [
-            '/business/hr-management',
-            '/business/internal-training',
-            '/business/recruitment',
-          ])}
-        />
-      </DashboardSection>
-
-      <DashboardSection title={t('dashboard.employer.eventsTitle')} delay={0.22} action={t('dashboard.viewAll')} actionHref="/events">
-        <DashboardBulletList items={data.events} />
       </DashboardSection>
     </DashboardGrid>
+    </>
   );
 }

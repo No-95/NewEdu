@@ -1,19 +1,22 @@
 'use client';
 
+import { useState } from 'react';
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { AppPageShell } from '@/components/ecosystem/shared/AppPageShell';
 import { EcosystemActionBar } from '@/components/ecosystem/shared/EcosystemActionBar';
 import { EcosystemSection } from '@/components/ecosystem/shared/EcosystemSection';
 import { EcosystemPageLoader } from '@/components/ecosystem/shared/EcosystemPageLoader';
+import { CareerProfileEditor } from '@/components/ecosystem/career/CareerProfileEditor';
 import { useLanguage } from '@/lib/context/LanguageContext';
-import { buildContactHref, downloadTextFile, formatCareerProfileDocument } from '@/lib/utils/client-actions';
+import { downloadTextFile, formatCareerProfileDocument } from '@/lib/utils/client-actions';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 
 export function CareerProfileClient({ userEmail }: { userEmail: string }) {
   const { t } = useLanguage();
   const profile = useQuery(api.ecosystem.getCareerProfile, { email: userEmail });
+  const [editOpen, setEditOpen] = useState(false);
 
   if (profile === undefined) {
     return (
@@ -46,18 +49,16 @@ export function CareerProfileClient({ userEmail }: { userEmail: string }) {
             {
               label: t('ecosystemPages.careerProfile.actions.edit'),
               variant: 'default',
-              href: buildContactHref({
-                topic: 'profile-update',
-                role: 'job_seeker',
-                message: 'I would like to update my career profile on HDP EDU.',
-              }),
+              onClick: () => setEditOpen(true),
             },
             { label: t('ecosystemPages.careerProfile.actions.downloadCv'), variant: 'outline', onClick: downloadCv },
-            { label: t('ecosystemPages.careerProfile.actions.downloadPdf'), variant: 'outline', onClick: downloadPdf },
+            { label: t('ecosystemPages.careerProfile.actions.downloadTxt'), variant: 'outline', onClick: downloadPdf },
+            { label: t('ecosystemPages.aiMatching.uploadCv'), variant: 'outline', href: '/career/ai-matching' },
           ]}
         />
       }
     >
+      <CareerProfileEditor userEmail={userEmail} open={editOpen} onOpenChange={setEditOpen} />
       <div className="mb-8 grid gap-5 lg:grid-cols-3">
         <div className="home-card lg:col-span-2">
           <h2 className="text-xl font-bold text-foreground">{profile.fullName || t('ecosystemPages.careerProfile.noName')}</h2>

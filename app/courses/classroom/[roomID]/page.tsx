@@ -6,7 +6,9 @@ import { useMutation } from 'convex/react';
 import { useQuery } from 'convex/react';
 
 import { api } from '@/convex/_generated/api';
+import type { Id } from '@/convex/_generated/dataModel';
 import { useLanguage } from '@/lib/context/LanguageContext';
+import { useUserEmail } from '@/hooks/useUserSession';
 
 const FALLBACK_APP_ID = 'vpaas-magic-cookie-acd82c59b18f421aa23114905dfe4ca3';
 
@@ -25,6 +27,8 @@ export default function ClassroomRoomPage() {
   const upsertClassroom = useMutation(api.classrooms.upsertClassroom);
   const touchClassroom = useMutation(api.classrooms.touchClassroom);
   const validateClassroomPassword = useMutation(api.classrooms.validateClassroomPassword);
+  const userEmail = useUserEmail();
+  const userSettings = useQuery(api.users.getUserSettings, userEmail ? { email: userEmail } : 'skip');
 
   const roomID = decodeURIComponent(params.roomID ?? '');
   const isHost = searchParams.get('host') === '1';
@@ -141,6 +145,7 @@ export default function ClassroomRoomPage() {
         roomID,
         title: roomTitle,
         hostName,
+        hostUserId: userSettings?.userId ? (userSettings.userId as Id<'users'>) : undefined,
         roomPassword: undefined,
         status: 'live',
       });
@@ -152,7 +157,7 @@ export default function ClassroomRoomPage() {
       void touchClassroom({ roomID });
     }, 15000);
     return () => window.clearInterval(interval);
-  }, [canAccessRoom, hostName, isHost, roomID, roomTitle, touchClassroom, upsertClassroom]);
+  }, [canAccessRoom, hostName, isHost, roomID, roomTitle, touchClassroom, upsertClassroom, userSettings?.userId]);
 
   const handleUnlockRoom = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

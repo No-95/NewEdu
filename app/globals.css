@@ -682,6 +682,91 @@
   .site-mode-lightmode2 .experts-network-page .experts-btn-outline:hover * {
     color: inherit !important;
   }
+
+  /* Light modes — tests page readability */
+  .site-mode-lightmode1 .tests-page,
+  .site-mode-lightmode2 .tests-page {
+    --tests-card-shadow: 0 12px 40px -20px color-mix(in srgb, var(--primary) 10%, transparent);
+    --tests-btn-shadow: 0 8px 20px color-mix(in srgb, var(--primary) 18%, transparent);
+  }
+
+  .site-mode-lightmode1 .tests-page .home-card,
+  .site-mode-lightmode1 .tests-page .home-grid-bg,
+  .site-mode-lightmode1 .tests-page .home-card-muted,
+  .site-mode-lightmode2 .tests-page .home-card,
+  .site-mode-lightmode2 .tests-page .home-grid-bg,
+  .site-mode-lightmode2 .tests-page .home-card-muted {
+    background: var(--card) !important;
+    border-color: var(--border) !important;
+    box-shadow: var(--tests-card-shadow) !important;
+  }
+
+  .site-mode-lightmode1 .tests-page .text-primary,
+  .site-mode-lightmode2 .tests-page .text-primary,
+  .site-mode-lightmode1 .tests-page [class*='text-primary'],
+  .site-mode-lightmode2 .tests-page [class*='text-primary'] {
+    color: var(--primary) !important;
+  }
+
+  .site-mode-lightmode1 .tests-page .text-muted-foreground,
+  .site-mode-lightmode2 .tests-page .text-muted-foreground {
+    color: color-mix(in srgb, var(--foreground) 62%, transparent) !important;
+  }
+
+  .site-mode-lightmode1 .tests-page .tests-badge,
+  .site-mode-lightmode2 .tests-page .tests-badge {
+    background: var(--muted) !important;
+    color: var(--foreground) !important;
+    border-color: var(--border) !important;
+  }
+
+  .site-mode-lightmode1 .tests-page [data-slot='input'],
+  .site-mode-lightmode1 .tests-page [data-slot='select-trigger'],
+  .site-mode-lightmode2 .tests-page [data-slot='input'],
+  .site-mode-lightmode2 .tests-page [data-slot='select-trigger'] {
+    background: var(--input) !important;
+    border-color: var(--border) !important;
+    color: var(--foreground) !important;
+  }
+
+  .site-mode-lightmode1 .tests-page .tests-btn-primary,
+  .site-mode-lightmode2 .tests-page .tests-btn-primary {
+    background: var(--primary) !important;
+    color: var(--primary-foreground) !important;
+    box-shadow: var(--tests-btn-shadow) !important;
+  }
+
+  .site-mode-lightmode1 .tests-page .tests-btn-primary:hover,
+  .site-mode-lightmode2 .tests-page .tests-btn-primary:hover {
+    background: color-mix(in srgb, var(--primary) 88%, #000) !important;
+    color: var(--primary-foreground) !important;
+  }
+
+  .site-mode-lightmode1 .tests-page .tests-btn-primary *,
+  .site-mode-lightmode2 .tests-page .tests-btn-primary *,
+  .site-mode-lightmode1 .tests-page .tests-btn-primary:hover *,
+  .site-mode-lightmode2 .tests-page .tests-btn-primary:hover * {
+    color: inherit !important;
+  }
+
+  .site-mode-lightmode1 .tests-page .tests-btn-outline,
+  .site-mode-lightmode2 .tests-page .tests-btn-outline {
+    background: var(--card) !important;
+    color: var(--foreground) !important;
+    border-color: var(--border) !important;
+  }
+
+  .site-mode-lightmode1 .tests-page .tests-btn-outline:hover,
+  .site-mode-lightmode2 .tests-page .tests-btn-outline:hover {
+    background: color-mix(in srgb, var(--primary) 8%, var(--card)) !important;
+    color: var(--primary) !important;
+    border-color: color-mix(in srgb, var(--primary) 35%, var(--border)) !important;
+  }
+
+  .site-mode-lightmode1 .tests-page .tests-btn-outline:hover *,
+  .site-mode-lightmode2 .tests-page .tests-btn-outline:hover * {
+    color: inherit !important;
+  }
 }
 
 /* Animations */

@@ -50,6 +50,7 @@ Set under **Workers & Pages → newedu → Settings → Variables** (encrypted s
 - `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`
 - `RESEND_API_KEY`, `AI_WORKER_INTERNAL_TOKEN`, `GEMINI_API_KEY` (if used on worker)
 - `CONVEX_SITE_URL`, `CONVEX_DEPLOYMENT` (optional)
+- `SITE_URL` — email notification CTA base URL (optional; defaults to `https://hdpedu.com`)
 
 Plaintext runtime vars (or use [`wrangler.jsonc`](wrangler.jsonc) `vars`):
 
@@ -67,13 +68,54 @@ node scripts/sync-wrangler-secrets.mjs
 - Form submits to `POST /api/books/order` → Convex `bookOrders.submitBookOrder` → Resend email.
 - On **Convex dashboard**, set `RESEND_API_KEY` and `RESEND_FROM_EMAIL` (same as OTP). Optional: `BOOK_ORDER_NOTIFY_EMAIL` (default `minhhoangd852@gmail.com`).
 
-## 5. PayOS webhook
+## 5. Transactional email notifications
+
+In-app notifications also send email via `notifyUser` → Resend when the user has email notifications enabled (default **on**).
+
+**Convex environment variables:**
+
+| Variable | Purpose |
+|----------|---------|
+| `RESEND_API_KEY` | Required for OTP, book orders, and notification emails |
+| `RESEND_FROM_EMAIL` | Sender address |
+| `SITE_URL` | Base URL for email CTA buttons (default `https://hdpedu.com`) |
+
+Users can disable email in **Settings → Notification preferences**. In-app notifications are unaffected.
+
+## 6. CV parsing (`/career/ai-matching`)
+
+Requires on **Next.js runtime** (Cloudflare worker):
+
+- `AI_WORKER_URL` — Gemini worker endpoint
+- `AI_WORKER_INTERNAL_TOKEN` — shared secret for worker auth
+
+Requires on **Convex**: file storage (upload URL) only; parsing runs in Next API route.
+
+Supported formats: **PDF** (text-based) and **TXT**. Word documents are rejected with a clear message.
+
+## 7. Recruitment stage history backfill (one-time)
+
+After deploying the `recruitmentStageEvents` schema, run once to populate timelines for existing candidates:
+
+```bash
+npx convex run employerOps:backfillRecruitmentStageEvents
+```
+
+Optional admin gate:
+
+```bash
+npx convex run employerOps:backfillRecruitmentStageEvents '{"adminEmail":"admin@example.com"}'
+```
+
+Safe to re-run: skips candidates that already have events.
+
+## 8. PayOS webhook
 
 ```
 https://hdpedu.com/api/purchase/notify/payos
 ```
 
-## 5. Debugging 500 errors
+## 9. Debugging 500 errors
 
 ```bash
 pnpm exec wrangler tail newedu
@@ -87,7 +129,7 @@ Common causes:
 - Next **16.2.x** on OpenNext can 500 with `ComponentMod.handler is not a function` → stay on **Next 15.5.x** until upstream fixes ([issue #1258](https://github.com/opennextjs/opennextjs-cloudflare/issues/1258))
 - Windows build: run `node scripts/patch-opennext-symlink.mjs` before build (standalone symlink EPERM)
 
-## 6. Course test price
+## 10. Course test price
 
 ```powershell
 $env:NEXT_PUBLIC_CONVEX_URL="https://adept-tapir-159.convex.cloud"
@@ -95,6 +137,6 @@ $env:COURSE_PRICE="399000"
 node scripts/set-course-price.mjs
 ```
 
-## 7. Do not use parallel deploy paths
+## 11. Do not use parallel deploy paths
 
 Avoid mixing **34+ manual dashboard uploads** with CLI deploys without the same env. Pick **CLI `deploy:prod`** or Workers Builds with **Build variables** matching `.env.production`.

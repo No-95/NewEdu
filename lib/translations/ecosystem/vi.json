@@ -1,6 +1,8 @@
 {
   "shared": {
     "loading": "Đang tải dữ liệu...",
+    "saving": "Đang lưu…",
+    "cancel": "Hủy",
     "emptyTable": "Không có dữ liệu",
     "emptyChart": "Chưa có dữ liệu biểu đồ",
     "chartValue": "Giá trị",
@@ -97,7 +99,8 @@
       "format": "Định dạng",
       "uploadedBy": "Người tải",
       "downloads": "Lượt tải",
-      "updated": "Cập nhật"
+      "updated": "Cập nhật",
+      "actions": "Thao tác"
     }
   },
   "internalTraining": {
@@ -134,7 +137,7 @@
     "subtitle": "Bảng điều khiển quản lý đào tạo dành cho trường học và trung tâm.",
     "modulesSection": "Modules",
     "dataSection": "Dữ liệu",
-    "tabs": { "students": "Học viên", "teachers": "Giáo viên", "classes": "Lớp học" },
+    "tabs": { "students": "Học viên", "teachers": "Giáo viên", "classes": "Lớp học", "submissions": "Bài nộp" },
     "actions": {
       "createClass": "Tạo lớp",
       "assignTeacher": "Phân công GV",
@@ -144,6 +147,7 @@
     "emptyStudents": "Chưa có học viên nào.",
     "emptyTeachers": "Chưa có giáo viên nào.",
     "emptyClasses": "Chưa có lớp học nào.",
+    "emptySubmissions": "Chưa có bài tập đã hoàn thành.",
     "attendance": "Điểm danh",
     "metrics": {
       "totalStudents": "Tổng học viên",
@@ -199,7 +203,12 @@
     "completionByCourse": "Tỷ lệ hoàn thành theo khóa",
     "teacherReports": "Báo cáo giáo viên",
     "emptyTeachers": "Chưa có dữ liệu giáo viên.",
-    "actions": { "exportPdf": "Xuất PDF", "exportExcel": "Xuất Excel", "exportCsv": "Xuất CSV" },
+    "actions": { "exportSummary": "Xuất tóm tắt (TXT)", "exportPdf": "Xuất PDF", "exportExcel": "Xuất CSV", "exportCsv": "Xuất CSV" },
+    "filters": {
+      "all": "Tất cả",
+      "last30": "30 ngày qua",
+      "last90": "90 ngày qua"
+    },
     "metrics": {
       "monthlyRevenue": "Doanh thu tháng",
       "newStudents": "Học viên mới",
@@ -213,6 +222,8 @@
     "searchPlaceholder": "Tìm tài liệu...",
     "categoryFilter": "Danh mục",
     "materialsSection": "Tài liệu",
+    "emptyMaterials": "Chưa có tài liệu nào.",
+    "emptyHint": "Nhấn Tải lên để gửi tài liệu để được duyệt.",
     "actions": { "upload": "Tải lên", "edit": "Chỉnh sửa", "delete": "Xóa" }
   },
   "recruitment": {
@@ -267,6 +278,11 @@
     "revenueStat": "92%",
     "revenueStatLabel": "Thu nhập giáo viên",
     "ctaNote": "Hồ sơ được duyệt trong 48 giờ",
+    "saveJob": "Lưu việc làm",
+    "unsaveJob": "Bỏ lưu",
+    "teacherApplyTitle": "Dạy tiếng Hàn cùng HDP EDU",
+    "teacherApplyBody": "Chia sẻ kỹ năng ngôn ngữ và tham gia mạng lưới giáo viên.",
+    "teacherApplyCta": "Đăng ký giảng dạy",
     "emptySearch": "Không có việc làm phù hợp. Thử từ khóa khác.",
     "teacherListing": {
       "title": "Bắt đầu giảng dạy cùng HDP EDU",
@@ -288,13 +304,82 @@
     "title": "Hỗ Trợ Nghề Nghiệp",
     "subtitle": "Dịch vụ review CV, coaching phỏng vấn và tư vấn nghề nghiệp.",
     "bookSection": "Đặt lịch dịch vụ",
-    "selectService": "Chọn dịch vụ",
-    "selectExpert": "Chọn chuyên gia",
+    "selectService": "Dịch vụ cần hỗ trợ",
+    "selectExpert": "Chuyên gia hoặc lĩnh vực mong muốn",
+    "servicePlaceholder": "VD: review CV, phỏng vấn thử, tư vấn nghề nghiệp",
+    "expertPlaceholder": "Tùy chọn — HR, tech, thị trường việc làm Hàn…",
+    "notes": "Ghi chú thêm",
+    "notesPlaceholder": "Mục tiêu, kinh nghiệm hoặc câu hỏi cho cố vấn",
     "date": "Ngày",
     "time": "Giờ",
     "confirmBooking": "Xác nhận đặt lịch",
+    "bookingValidation": "Vui lòng điền dịch vụ, chọn chuyên gia và thông tin liên hệ.",
+    "bookingSuccess": "Đã gửi yêu cầu. Chúng tôi sẽ phản hồi qua email.",
+    "consultationSubmitted": "Đã gửi yêu cầu tư vấn. Chuyên gia sẽ đề xuất thời gian họp.",
+    "scheduleHint": "Chuyên gia sẽ đề xuất ngày, giờ và link họp sau khi bạn gửi yêu cầu.",
+    "viewConsultations": "Xem tư vấn của tôi",
+    "requestConsultation": "Yêu cầu tư vấn",
+    "generalInquiry": "Câu hỏi chung",
+    "browseNetwork": "Duyệt mạng chuyên gia",
     "upcomingSection": "Phiên sắp tới",
-    "historySection": "Lịch sử phiên"
+    "historySection": "Lịch sử phiên",
+    "emptyUpcoming": "Chưa có phiên sắp tới. Đặt lịch dịch vụ để bắt đầu.",
+    "emptyHistory": "Chưa có phiên đã hoàn thành."
+  },
+  "careerApplications": {
+    "title": "Đơn ứng tuyển",
+    "subtitle": "Theo dõi trạng thái tuyển dụng.",
+    "listSection": "Lịch sử ứng tuyển",
+    "empty": "Bạn chưa ứng tuyển công việc nào."
+  },
+  "careerApplicationDetail": {
+    "title": "Chi tiết đơn ứng tuyển",
+    "subtitle": "Trạng thái và giai đoạn tuyển dụng.",
+    "notFound": "Không tìm thấy đơn",
+    "notFoundBody": "Đơn này có thể đã bị xóa hoặc bạn không có quyền truy cập.",
+    "backToList": "Quay lại danh sách",
+    "viewJobPosting": "Xem tin tuyển dụng",
+    "lowScoreHint": "Điểm phù hợp của bạn thấp hơn mức trung bình. Củng cố hồ sơ năng lực để cải thiện các lần ứng tuyển sau.",
+    "improveProfile": "Cải thiện hồ sơ",
+    "stageSection": "Quy trình tuyển dụng",
+    "rejectedMessage": "Đơn ứng tuyển này chưa được chọn tại thời điểm hiện tại.",
+    "stageHistory": {
+      "title": "Lịch sử giai đoạn",
+      "empty": "Chưa ghi nhận thay đổi giai đoạn.",
+      "entered": "Vào giai đoạn {{stage}}",
+      "moved": "Chuyển từ {{from}} sang {{to}}"
+    }
+  },
+  "careerConsultations": {
+    "title": "Tư vấn chuyên gia",
+    "subtitle": "Các yêu cầu bạn đã gửi tới chuyên gia.",
+    "listSection": "Yêu cầu tư vấn",
+    "empty": "Chưa có yêu cầu tư vấn.",
+    "status": {
+      "new": "Chờ xử lý",
+      "accepted": "Đã lên lịch",
+      "closed": "Đã đóng"
+    },
+    "scheduledAt": "Thời gian hẹn",
+    "meetingUrl": "Link họp",
+    "joinMeeting": "Tham gia họp",
+    "acceptTitle": "Lên lịch tư vấn",
+    "acceptHint": "Chọn ngày giờ. Người yêu cầu sẽ nhận thông báo kèm link họp.",
+    "duration": "Thời lượng",
+    "timezone": "Múi giờ",
+    "scheduleRequired": "Vui lòng chọn ngày và giờ.",
+    "scheduleFuture": "Thời gian phải ở tương lai.",
+    "confirmSchedule": "Xác nhận lịch",
+    "browseExperts": "Yêu cầu tư vấn mới"
+  },
+  "candidateDetail": {
+    "title": "Hồ sơ ứng viên",
+    "subtitle": "Xem chi tiết và hồ sơ năng lực.",
+    "notFound": "Không tìm thấy ứng viên",
+    "notFoundBody": "Ứng viên này có thể đã bị xóa hoặc bạn không có quyền truy cập.",
+    "backToRecruitment": "Quay lại tuyển dụng",
+    "profileSnapshot": "Hồ sơ năng lực",
+    "noProfile": "Chưa có hồ sơ năng lực liên kết. Có thể là ứng viên thêm thủ công."
   },
   "aiMatching": {
     "title": "AI Matching",
@@ -306,7 +391,32 @@
     "aiAnalysisBody": "Tải CV và chứng chỉ để AI phân tích khoảng cách kỹ năng và gợi ý lộ trình nghề nghiệp.",
     "matchingJobs": "Việc làm phù hợp",
     "suggestedCourses": "Khóa học đề xuất",
-    "suggestedMentors": "Mentor đề xuất"
+    "suggestedMentors": "Mentor đề xuất",
+    "emptyJobs": "Tải CV để nhận gợi ý việc làm. Chưa có đề xuất.",
+    "emptyCourses": "Hoàn thiện hồ sơ và tải tài liệu để xem gợi ý khóa học.",
+    "emptyMentors": "Chưa có gợi ý mentor. Xem mạng lưới chuyên gia trong lúc chờ.",
+    "completeProfile": "Hoàn thiện hồ sơ nghề nghiệp",
+    "improveProfile": "Thêm kỹ năng còn thiếu vào hồ sơ",
+    "skillGapsTitle": "Khoảng cách kỹ năng cần bổ sung",
+    "browseJobs": "Xem việc làm",
+    "browseCourses": "Xem khóa học",
+    "browseExperts": "Xem chuyên gia",
+    "uploading": "Đang tải lên…",
+    "uploadSuccess": "Đã tải CV thành công",
+    "parsingCv": "Đang phân tích CV bằng AI…",
+    "parseFailed": "Không phân tích được CV. Thử PDF dạng text.",
+    "reparseCv": "Phân tích lại CV",
+    "cvOnFile": "Đã có CV",
+    "reviewCvTitle": "Xem lại hồ sơ trích xuất",
+    "reviewCvHint": "Chỉnh sửa bên dưới, rồi áp dụng vào hồ sơ nghề nghiệp.",
+    "applyCvToProfile": "Áp dụng vào hồ sơ",
+    "applyingCv": "Đang áp dụng…"
+  },
+  "savedJobs": {
+    "title": "Việc làm đã lưu",
+    "subtitle": "Các tin tuyển dụng bạn đã đánh dấu.",
+    "listSection": "Danh sách việc làm đã lưu",
+    "empty": "Bạn chưa lưu việc làm nào. Duyệt bảng việc làm và lưu các vị trí quan tâm."
   },
   "expertNetwork": {
     "title": "Mạng Lưới Chuyên Gia",
@@ -314,7 +424,13 @@
     "searchPlaceholder": "Tìm chuyên gia, lĩnh vực...",
     "filters": { "industry": "Lĩnh vực", "country": "Quốc gia" },
     "expertsCount": "{{count}} chuyên gia",
-    "actions": { "bookConsultation": "Đặt tư vấn", "sendRequest": "Gửi yêu cầu", "follow": "Theo dõi" }
+    "verified": "Đã xác minh",
+    "emptyExperts": "Chưa có chuyên gia công khai.",
+    "consultationTitle": "Yêu cầu tư vấn",
+    "consultationTopic": "Chủ đề",
+    "consultationMessage": "Tin nhắn",
+    "consultationScheduleHint": "Sau khi gửi yêu cầu, chuyên gia sẽ đề xuất ngày, giờ và link họp. Theo dõi tại Sự nghiệp → Tư vấn.",
+    "actions": { "bookConsultation": "Đặt tư vấn", "sendRequest": "Gửi yêu cầu", "viewProfile": "Xem hồ sơ", "follow": "Theo dõi" }
   },
   "expertEvents": {
     "title": "Chuyên Đề",

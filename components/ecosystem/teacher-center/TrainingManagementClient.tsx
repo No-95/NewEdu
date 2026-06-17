@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useQuery } from 'convex/react';
+import { useState, useRef } from 'react';
+import { useMutation, useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AppPageShell } from '@/components/ecosystem/shared/AppPageShell';
@@ -14,14 +14,78 @@ import { EcosystemPageLoader } from '@/components/ecosystem/shared/EcosystemPage
 import { buildTrainingModules } from '@/lib/ecosystem/constants';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { translateMetrics } from '@/lib/ecosystem/i18n';
-import { buildContactHref, downloadCsv } from '@/lib/utils/client-actions';
+import { downloadCsv, downloadTextFile } from '@/lib/utils/client-actions';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
+  AssignHomeworkDialog,
+  CreateClassDialog,
+  CreateStudentDialog,
+} from '@/components/ecosystem/teacher-center/TeacherOpsDialogs';
+
+type CsvPreviewRow = { name: string; studentEmail: string; className: string };
+
+const CSV_TEMPLATE = 'Name,Email,Class\nNguyen Van A,student@example.com,Korean A1\nTran Thi B,student2@example.com,Korean A2';
+
+function parseCsvRows(text: string): CsvPreviewRow[] {
+  const lines = text.split(/\r?\n/).filter(Boolean);
+  return lines.slice(1).map((line) => {
+    const [name, email, className] = line.split(',').map((cell) => cell.trim());
+    return { name: name ?? '', studentEmail: email ?? '', className: className ?? '' };
+  });
+}
 
 export function TrainingManagementClient({ userEmail }: { userEmail: string }) {
   const { t } = useLanguage();
   const [tab, setTab] = useState('students');
+  const [studentOpen, setStudentOpen] = useState(false);
+  const [classOpen, setClassOpen] = useState(false);
+  const [homeworkOpen, setHomeworkOpen] = useState(false);
   const data = useQuery(api.ecosystem.getTrainingManagementDashboard, { email: userEmail });
+  const homework = useQuery(api.homeworks.listHomeworksByAssigner, { email: userEmail });
+  const submissions = useQuery(api.homeworks.listHomeworksByAssigner, {
+    email: userEmail,
+    status: 'completed',
+  });
+  const importStudents = useMutation(api.teacherOps.importStudentsBatch);
+  const csvInputRef = useRef<HTMLInputElement>(null);
+  const [importMessage, setImportMessage] = useState('');
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewRows, setPreviewRows] = useState<CsvPreviewRow[]>([]);
+  const [importing, setImporting] = useState(false);
+
+  const handleCsvImport = async (rows: CsvPreviewRow[]) => {
+    setImporting(true);
+    setImportMessage('');
+    try {
+      const result = await importStudents({ email: userEmail, rows });
+      const errorSummary =
+        result.errors.length > 0
+          ? ` ${result.errors.length} error(s): ${result.errors.slice(0, 3).map((e) => `row ${e.row} (${e.reason})`).join('; ')}.`
+          : '';
+      setImportMessage(`Imported ${result.imported}, skipped ${result.skipped}.${errorSummary}`);
+      setPreviewOpen(false);
+      setPreviewRows([]);
+    } finally {
+      setImporting(false);
+    }
+  };
+
+  const handleFileSelected = async (file: File) => {
+    setImportMessage('');
+    const text = await file.text();
+    const rows = parseCsvRows(text);
+    setPreviewRows(rows);
+    setPreviewOpen(true);
+  };
 
   if (data === undefined) {
     return (
@@ -45,17 +109,27 @@ export function TrainingManagementClient({ userEmail }: { userEmail: string }) {
             {
               label: t('ecosystemPages.trainingManagement.actions.createClass'),
               variant: 'default',
-              href: buildContactHref({ topic: 'create-class', role: 'teacher', message: 'Request to create a new class' }),
-            },
-            {
-              label: t('ecosystemPages.trainingManagement.actions.assignTeacher'),
-              variant: 'outline',
-              href: buildContactHref({ topic: 'assign-teacher', role: 'teacher', message: 'Request teacher assignment' }),
+              onClick: () => setClassOpen(true),
             },
             {
               label: t('ecosystemPages.trainingManagement.actions.addStudent'),
               variant: 'outline',
-              href: buildContactHref({ topic: 'add-student', role: 'teacher', message: 'Request to add a student' }),
+              onClick: () => setStudentOpen(true),
+            },
+            {
+              label: t('teacherOps.assignHomework'),
+              variant: 'outline',
+              onClick: () => setHomeworkOpen(true),
+            },
+            {
+              label: t('employerOps.importStudentsCsv'),
+              variant: 'outline',
+              onClick: () => csvInputRef.current?.click(),
+            },
+            {
+              label: t('teacherOps.downloadCsvTemplate'),
+              variant: 'outline',
+              onClick: () => downloadTextFile('students-import-template.csv', CSV_TEMPLATE, 'text/csv;charset=utf-8'),
             },
             {
               label: t('ecosystemPages.trainingManagement.actions.exportReport'),
@@ -84,6 +158,56 @@ export function TrainingManagementClient({ userEmail }: { userEmail: string }) {
         />
       }
     >
+      <input
+        ref={csvInputRef}
+        type="file"
+        accept=".csv,text/csv"
+        className="hidden"
+        onChange={(e) => {
+          const file = e.target.files?.[0];
+          if (file) void handleFileSelected(file);
+          e.target.value = '';
+        }}
+      />
+      <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t('teacherOps.csvPreviewTitle')}</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground">
+            {t('teacherOps.csvPreviewSubtitle', {
+              params: { total: previewRows.length, shown: Math.min(5, previewRows.length) },
+            })}
+          </p>
+          <EcosystemDataTable
+            rows={previewRows.slice(0, 5).map((row, index) => ({
+              id: String(index),
+              name: row.name,
+              email: row.studentEmail,
+              className: row.className,
+            }))}
+            emptyMessage={t('teacherOps.csvPreviewEmpty')}
+            columns={[
+              { key: 'name', header: t('ecosystemPages.shared.table.name') },
+              { key: 'email', header: t('ecosystemPages.shared.table.email') },
+              { key: 'className', header: t('ecosystemPages.shared.table.class') },
+            ]}
+          />
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setPreviewOpen(false)}>
+              {t('teacherOps.cancelImport')}
+            </Button>
+            <Button disabled={importing || previewRows.length === 0} onClick={() => void handleCsvImport(previewRows)}>
+              {importing ? t('ecosystemPages.shared.saving') : t('teacherOps.confirmImport')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      {importMessage ? <p className="mb-4 text-sm text-muted-foreground">{importMessage}</p> : null}
+      <CreateStudentDialog userEmail={userEmail} open={studentOpen} onOpenChange={setStudentOpen} />
+      <CreateClassDialog userEmail={userEmail} open={classOpen} onOpenChange={setClassOpen} />
+      <AssignHomeworkDialog userEmail={userEmail} open={homeworkOpen} onOpenChange={setHomeworkOpen} />
+
       <EcosystemSection title={t('ecosystemPages.shared.overview')}>
         <EcosystemMetricGrid stats={metrics} />
       </EcosystemSection>
@@ -91,18 +215,26 @@ export function TrainingManagementClient({ userEmail }: { userEmail: string }) {
       <EcosystemSection title={t('ecosystemPages.trainingManagement.modulesSection')}>
         <EcosystemModuleGrid
           modules={trainingModules}
-          onModuleClick={(moduleId) => {
-            if (moduleId === 'students' || moduleId === 'teachers' || moduleId === 'classes') {
-              setTab(moduleId);
-              return;
-            }
-            window.location.href = buildContactHref({
-              topic: `training-${moduleId}`,
-              role: 'teacher',
-              message: `Request access to training module: ${moduleId}`,
-            });
-          }}
+          onModuleClick={(moduleId) => setTab(moduleId)}
         />
+      </EcosystemSection>
+
+      <EcosystemSection title={t('teacherOps.assignedHomework')}>
+        {(homework ?? []).length === 0 ? (
+          <div className="rounded-lg border border-white/10 bg-white/5 px-4 py-8 text-center text-sm text-muted-foreground">
+            {t('teacherOps.noHomeworkAssigned')}
+          </div>
+        ) : (
+          <EcosystemDataTable
+            rows={homework ?? []}
+            emptyMessage={t('teacherOps.noHomeworkAssigned')}
+            columns={[
+              { key: 'title', header: t('teacherOps.homeworkTitle') },
+              { key: 'assigneeEmail', header: t('teacherOps.learnerEmail') },
+              { key: 'status', header: t('ecosystemPages.shared.table.status') },
+            ]}
+          />
+        )}
       </EcosystemSection>
 
       <EcosystemSection title={t('ecosystemPages.trainingManagement.dataSection')}>
@@ -111,6 +243,7 @@ export function TrainingManagementClient({ userEmail }: { userEmail: string }) {
             <TabsTrigger value="students">{t('ecosystemPages.trainingManagement.tabs.students')}</TabsTrigger>
             <TabsTrigger value="teachers">{t('ecosystemPages.trainingManagement.tabs.teachers')}</TabsTrigger>
             <TabsTrigger value="classes">{t('ecosystemPages.trainingManagement.tabs.classes')}</TabsTrigger>
+            <TabsTrigger value="submissions">{t('ecosystemPages.trainingManagement.tabs.submissions')}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="students">
@@ -185,6 +318,28 @@ export function TrainingManagementClient({ userEmail }: { userEmail: string }) {
                   key: 'completionRate',
                   header: t('ecosystemPages.shared.table.progress'),
                   render: (row) => `${row.completionRate}%`,
+                },
+              ]}
+            />
+          </TabsContent>
+
+          <TabsContent value="submissions">
+            <EcosystemDataTable
+              rows={submissions ?? []}
+              emptyMessage={t('ecosystemPages.trainingManagement.emptySubmissions')}
+              columns={[
+                { key: 'title', header: t('teacherOps.homeworkTitle') },
+                { key: 'assigneeName', header: t('ecosystemPages.shared.table.name') },
+                {
+                  key: 'learnerNote',
+                  header: t('teacherOps.learnerNote'),
+                  render: (row) => row.learnerNote?.trim() || '—',
+                },
+                {
+                  key: 'completedAt',
+                  header: t('teacherOps.completedAt'),
+                  render: (row) =>
+                    row.completedAt ? new Date(row.completedAt).toLocaleDateString() : '—',
                 },
               ]}
             />

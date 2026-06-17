@@ -29,6 +29,39 @@ export const submitContactSubmission = mutation({
   },
 });
 
+export const listContactSubmissionsByEmail = query({
+  args: {
+    email: v.string(),
+    roleFilter: v.optional(v.string()),
+  },
+  returns: v.array(
+    v.object({
+      id: v.string(),
+      fullName: v.string(),
+      feedback: v.string(),
+      status: v.string(),
+      createdAt: v.number(),
+    })
+  ),
+  handler: async (ctx, args) => {
+    const email = args.email.trim().toLowerCase();
+    const submissions = await ctx.db.query('contactSubmissions').order('desc').collect();
+    return submissions
+      .filter((entry) => {
+        if (entry.email !== email) return false;
+        if (args.roleFilter && !entry.role?.includes(args.roleFilter)) return false;
+        return true;
+      })
+      .map((entry) => ({
+        id: entry._id.toString(),
+        fullName: entry.fullName,
+        feedback: entry.feedback,
+        status: entry.status,
+        createdAt: entry.createdAt,
+      }));
+  },
+});
+
 export const listRecentContactSubmissions = query({
   args: {
     limit: v.optional(v.number()),

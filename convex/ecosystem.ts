@@ -2,6 +2,7 @@ import { query } from './_generated/server';
 import type { QueryCtx } from './_generated/server';
 import { v } from 'convex/values';
 import type { Doc } from './_generated/dataModel';
+import { computeCareerCompletionScoreFromProfile } from './lib/careerScore';
 
 async function requireUser(ctx: QueryCtx, email: string) {
   const user = await ctx.db
@@ -39,17 +40,7 @@ function computeCareerCompletionScore(
   profile: Doc<'careerProfiles'> | null,
   headline: string | null
 ) {
-  let score = 0;
-  if (user.fullName?.trim()) score += 15;
-  if (user.phone?.trim()) score += 10;
-  if (headline?.trim()) score += 15;
-  if (profile?.location?.trim()) score += 10;
-  if (profile?.education?.length) score += 15;
-  if (profile?.skills?.length) score += 15;
-  if (profile?.experience?.length) score += 10;
-  if (profile?.certificates?.length) score += 5;
-  if (profile?.languages?.length) score += 5;
-  return Math.min(100, score);
+  return computeCareerCompletionScoreFromProfile(user, profile, headline);
 }
 
 export const getInternalTrainingDashboard = query({
@@ -67,6 +58,49 @@ export const getInternalTrainingDashboard = query({
       .query('internalEmployeeProgress')
       .withIndex('by_ownerId', (q) => q.eq('ownerId', ownerId))
       .collect();
+
+    const employees = await ctx.db
+      .query('hrEmployees')
+      .withIndex('by_ownerId', (q) => q.eq('ownerId', ownerId))
+      .collect();
+    const employeeById = new Map(employees.map((e) => [e._id.toString(), e]));
+
+    async function resolveProgress(row: Doc<'internalEmployeeProgress'>) {
+      if (!row.platformCourseSlug) return row.progress;
+      const employee = row.employeeId ? employeeById.get(row.employeeId.toString()) : undefined;
+      const employeeEmail = employee?.email?.trim().toLowerCase();
+      if (!employeeEmail) return row.progress;
+
+      const platformUser = await ctx.db
+        .query('users')
+        .withIndex('by_email', (q) => q.eq('email', employeeEmail))
+        .first();
+      if (!platformUser) return row.progress;
+
+      const course = await ctx.db
+        .query('courses')
+        .withIndex('by_slug', (q) => q.eq('slug', row.platformCourseSlug!))
+        .first();
+      if (!course) return row.progress;
+
+      const userProgress = await ctx.db
+        .query('userCourseProgress')
+        .withIndex('by_user_course', (q) =>
+          q.eq('userId', platformUser._id).eq('courseId', course._id)
+        )
+        .first();
+      if (!userProgress || userProgress.totalLectures <= 0) return row.progress;
+
+      return Math.round((userProgress.completedLectures / userProgress.totalLectures) * 100);
+    }
+
+    const syncedProgress = await Promise.all(
+      employeeProgress.map(async (row) => ({
+        id: row._id.toString(),
+        name: row.employeeName,
+        progress: await resolveProgress(row),
+      }))
+    );
 
     const totalEnrolled = courses.reduce((sum, course) => sum + course.enrolled, 0);
     const totalCompleted = courses.reduce((sum, course) => sum + course.completed, 0);
@@ -92,11 +126,7 @@ export const getInternalTrainingDashboard = query({
         completed: course.completed,
         compliance: course.compliance,
       })),
-      employeeProgress: employeeProgress.map((row) => ({
-        id: row._id.toString(),
-        name: row.employeeName,
-        progress: row.progress,
-      })),
+      employeeProgress: syncedProgress,
     };
   },
 });
@@ -355,15 +385,19 @@ export const getBusinessDevelopmentDashboard = query({
 });
 
 export const getReportingDashboard = query({
-  args: { email: v.string() },
+  args: {
+    email: v.string(),
+    since: v.optional(v.number()),
+  },
   handler: async (ctx, args) => {
     const user = await requireUser(ctx, args.email);
     const ownerId = user._id;
+    const sinceMs = args.since ?? 0;
 
-    const students = await ctx.db
+    const students = (await ctx.db
       .query('trainingStudents')
       .withIndex('by_ownerId', (q) => q.eq('ownerId', ownerId))
-      .collect();
+      .collect()).filter((student) => student.createdAt >= sinceMs);
 
     const teachers = await ctx.db
       .query('trainingTeachers')
@@ -507,6 +541,9 @@ export const getRecruitmentDashboard = query({
         id: posting._id.toString(),
         title: posting.title,
         department: posting.department,
+        location: posting.location,
+        salary: posting.salary,
+        description: posting.description,
         applicants: posting.applicants,
         status: posting.status,
         postedAt: posting.postedAt,

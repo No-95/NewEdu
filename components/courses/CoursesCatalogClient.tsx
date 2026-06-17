@@ -1,12 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useMutation, useQuery } from 'convex/react';
 
 import { Header } from '@/components/Header';
 import { ParticleBackground } from '@/components/DarkmodeParticleBackground';
 import { api } from '@/convex/_generated/api';
+import { readProgress } from '@/hooks/useCourseProgress';
+import { useUserEmail } from '@/hooks/useUserSession';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { COURSE_TEXT, getCourseLanguage } from '@/lib/courses/localization';
 import { GiftBookHoverBadge } from '@/components/books/GiftBookHoverBadge';
@@ -17,6 +19,11 @@ export function CoursesCatalogClient() {
   const locale = getCourseLanguage(language);
   const text = COURSE_TEXT[locale].catalog;
   const courses = useQuery(api.courses.getPublishedCourses, {});
+  const userEmail = useUserEmail();
+  const serverProgress = useQuery(
+    api.progress.listProgressByEmail,
+    userEmail ? { email: userEmail } : 'skip'
+  );
   const seedCatalog = useMutation(api.courses.seedCourseCatalog);
   const hasSeededRef = useRef(false);
 
@@ -31,11 +38,35 @@ export function CoursesCatalogClient() {
     }
   }, [courses, seedCatalog]);
 
-  const course = courses?.[0];
+  const progressBySlug = useMemo(() => {
+    const map = new Map<
+      string,
+      { progressPercent: number; lastVideoId?: string }
+    >();
+    for (const row of serverProgress ?? []) {
+      map.set(row.courseSlug, {
+        progressPercent: row.progressPercent,
+        lastVideoId: row.lastVideoId,
+      });
+    }
+    return map;
+  }, [serverProgress]);
+
+  const getCourseProgress = (slug: string, totalLectures: number) => {
+    const server = progressBySlug.get(slug);
+    if (server) return server;
+    const local = readProgress(slug);
+    if (local.completed.length === 0 && !local.lastVideoId) return null;
+    return {
+      progressPercent:
+        totalLectures > 0 ? Math.round((local.completed.length / totalLectures) * 100) : 0,
+      lastVideoId: local.lastVideoId ?? local.completed[local.completed.length - 1],
+    };
+  };
+
   const totalCourses = courses?.length ?? 0;
   const totalVideos = courses?.reduce((sum, item) => sum + item.lectures.length, 0) ?? 0;
-  const hasFreeCourse = courses?.some((item) => item.isFree) ?? false;
-  const forcePurchase = (process.env.NEXT_PUBLIC_FORCE_PURCHASE || '') === '1'
+  const forcePurchase = (process.env.NEXT_PUBLIC_FORCE_PURCHASE || '') === '1';
 
   return (
     <div className="min-h-screen bg-background">
@@ -88,72 +119,97 @@ export function CoursesCatalogClient() {
             </div>
           </div>
 
-          {!course ? (
+          {!courses ? (
+            <div className="rounded-2xl border border-border/50 bg-background/70 p-6 text-muted-foreground">
+              {text.loading}
+            </div>
+          ) : courses.length === 0 ? (
             <div className="rounded-2xl border border-border/50 bg-background/70 p-6 text-muted-foreground">
               {text.loading}
             </div>
           ) : (
-            <Link
-              href={`/courses/${course.slug}`}
-              className="group block overflow-hidden rounded-3xl border border-border/60 bg-background/80 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-[0_20px_45px_-30px_rgba(34,211,238,0.7)]"
-            >
-              <div className="grid gap-0 md:grid-cols-[1.6fr_1fr]">
-                <div className="p-7 md:p-8">
-                  <div className="mb-4 flex flex-wrap items-center gap-2">
-                    {!course.isFree && course.badge ? (
-                      <span className="rounded-full border border-emerald-300/40 bg-emerald-400/15 px-3 py-1 text-xs font-semibold text-emerald-200">
-                        {course.badge}
-                      </span>
-                    ) : null}
-                    {!course.isFree ? (
-                      <GiftBookHoverBadge side="bottom" align="start">
-                        <span className="rounded-full border border-amber-300/50 bg-amber-400/20 px-3 py-1 text-xs font-semibold text-amber-100 cursor-help">
-                          {text.giftBookTag}
-                        </span>
-                      </GiftBookHoverBadge>
-                    ) : null}
-                    <span className="rounded-full border border-border/60 bg-muted/40 px-3 py-1 text-xs font-semibold text-muted-foreground">
-                      {text.teacherTeam}
-                    </span>
-                  </div>
+            <div className="grid gap-6">
+              {courses.map((course) => {
+                const totalLectures = course.lectures.length || course.totalVideos;
+                const progress = getCourseProgress(course.slug, totalLectures);
+                const href = progress?.lastVideoId
+                  ? `/courses/${course.slug}/${progress.lastVideoId}`
+                  : `/courses/${course.slug}`;
 
-                  <h3 className="text-2xl font-bold text-foreground transition-colors group-hover:text-primary md:text-3xl">
-                    {course.title}
-                  </h3>
-                  <p className="mt-3 text-sm text-muted-foreground md:text-base">{course.subtitle}</p>
+                return (
+                  <Link
+                    key={course.slug}
+                    href={href}
+                    className="group block overflow-hidden rounded-3xl border border-border/60 bg-background/80 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-[0_20px_45px_-30px_rgba(34,211,238,0.7)]"
+                  >
+                    <div className="grid gap-0 md:grid-cols-[1.6fr_1fr]">
+                      <div className="p-7 md:p-8">
+                        <div className="mb-4 flex flex-wrap items-center gap-2">
+                          {progress ? (
+                            <span className="rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                              {text.progressBadge.replace('{percent}', String(progress.progressPercent))}
+                            </span>
+                          ) : null}
+                          {!course.isFree && course.badge ? (
+                            <span className="rounded-full border border-emerald-300/40 bg-emerald-400/15 px-3 py-1 text-xs font-semibold text-emerald-200">
+                              {course.badge}
+                            </span>
+                          ) : null}
+                          {!course.isFree ? (
+                            <GiftBookHoverBadge side="bottom" align="start">
+                              <span className="rounded-full border border-amber-300/50 bg-amber-400/20 px-3 py-1 text-xs font-semibold text-amber-100 cursor-help">
+                                {text.giftBookTag}
+                              </span>
+                            </GiftBookHoverBadge>
+                          ) : null}
+                          <span className="rounded-full border border-border/60 bg-muted/40 px-3 py-1 text-xs font-semibold text-muted-foreground">
+                            {text.teacherTeam}
+                          </span>
+                        </div>
 
-                  <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                    <div className="rounded-xl border border-border/50 bg-background/60 p-3">
-                      <p className="text-xs uppercase tracking-[0.12em] text-muted-foreground">{text.videosReady}</p>
-                      <p className="mt-1 text-xl font-bold text-foreground">{course.lectures.length}</p>
+                        <h3 className="text-2xl font-bold text-foreground transition-colors group-hover:text-primary md:text-3xl">
+                          {course.title}
+                        </h3>
+                        <p className="mt-3 text-sm text-muted-foreground md:text-base">{course.subtitle}</p>
+
+                        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                          <div className="rounded-xl border border-border/50 bg-background/60 p-3">
+                            <p className="text-xs uppercase tracking-[0.12em] text-muted-foreground">{text.videosReady}</p>
+                            <p className="mt-1 text-xl font-bold text-foreground">{course.lectures.length}</p>
+                          </div>
+                          <div className="rounded-xl border border-border/50 bg-background/60 p-3">
+                            <p className="text-xs uppercase tracking-[0.12em] text-muted-foreground">{text.streaming}</p>
+                            <p className="mt-1 text-xl font-bold text-cyan-300">{text.hlsStreaming}</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col justify-between border-l border-border/50 bg-muted/20 p-7 md:p-8">
+                        <div>
+                          <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{text.flowTitle}</p>
+                          <ul className="mt-4 space-y-3 text-sm text-foreground/90">
+                            <li>{text.flowItem1}</li>
+                            <li>{text.flowItem2}</li>
+                            <li>{text.flowItem3}</li>
+                          </ul>
+                          {progress?.lastVideoId ? (
+                            <p className="mt-4 text-sm font-medium text-primary">{text.resumeHint}</p>
+                          ) : null}
+                        </div>
+
+                        <div onClick={(e) => e.preventDefault()} onKeyDown={(e) => e.stopPropagation()}>
+                          <CourseAction
+                            courseSlug={course.slug}
+                            isFree={forcePurchase ? false : course.isFree}
+                            price={course.price}
+                          />
+                        </div>
+                      </div>
                     </div>
-                    <div className="rounded-xl border border-border/50 bg-background/60 p-3">
-                      <p className="text-xs uppercase tracking-[0.12em] text-muted-foreground">{text.streaming}</p>
-                      <p className="mt-1 text-xl font-bold text-cyan-300">{text.hlsStreaming}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex flex-col justify-between border-l border-border/50 bg-muted/20 p-7 md:p-8">
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{text.flowTitle}</p>
-                    <ul className="mt-4 space-y-3 text-sm text-foreground/90">
-                      <li>{text.flowItem1}</li>
-                      <li>{text.flowItem2}</li>
-                      <li>{text.flowItem3}</li>
-                    </ul>
-                  </div>
-
-                  <div onClick={(e) => e.preventDefault()} onKeyDown={(e) => e.stopPropagation()}>
-                    <CourseAction
-                      courseSlug={course.slug}
-                      isFree={forcePurchase ? false : course.isFree}
-                      price={course.price}
-                    />
-                  </div>
-                </div>
-              </div>
-            </Link>
+                  </Link>
+                );
+              })}
+            </div>
           )}
         </section>
       </main>

@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { AppPageShell } from '@/components/ecosystem/shared/AppPageShell';
@@ -14,7 +15,10 @@ import { downloadCsv, downloadTextFile } from '@/lib/utils/client-actions';
 
 export function ReportingClient({ userEmail }: { userEmail: string }) {
   const { t } = useLanguage();
-  const data = useQuery(api.ecosystem.getReportingDashboard, { email: userEmail });
+  const [sinceDays, setSinceDays] = useState<number | null>(null);
+  const since =
+    sinceDays === null ? undefined : Date.now() - sinceDays * 24 * 60 * 60 * 1000;
+  const data = useQuery(api.ecosystem.getReportingDashboard, { email: userEmail, since });
 
   if (data === undefined) {
     return (
@@ -27,7 +31,7 @@ export function ReportingClient({ userEmail }: { userEmail: string }) {
 
   const metrics = translateMetrics(data.metrics, t, 'ecosystemPages.reporting.metrics');
 
-  const exportReport = (format: 'pdf' | 'excel' | 'csv') => {
+  const exportReport = (format: 'txt' | 'csv') => {
     const rows = [
       ...data.revenueChart.map((point) => ({ section: 'Revenue', label: point.label, value: point.value })),
       ...data.studentGrowthChart.map((point) => ({ section: 'Student Growth', label: point.label, value: point.value })),
@@ -39,9 +43,9 @@ export function ReportingClient({ userEmail }: { userEmail: string }) {
       })),
     ];
 
-    if (format === 'csv' || format === 'excel') {
+    if (format === 'csv') {
       downloadCsv(
-        format === 'excel' ? 'hdp-edu-report.csv' : 'hdp-edu-report.csv',
+        'hdp-edu-report.csv',
         rows.map((row) => ({ section: row.section, label: row.label, value: String(row.value) })),
         [
           { key: 'section', label: 'Section' },
@@ -69,13 +73,32 @@ export function ReportingClient({ userEmail }: { userEmail: string }) {
       actions={
         <EcosystemActionBar
           actions={[
-            { label: t('ecosystemPages.reporting.actions.exportPdf'), variant: 'default', onClick: () => exportReport('pdf') },
-            { label: t('ecosystemPages.reporting.actions.exportExcel'), variant: 'outline', onClick: () => exportReport('excel') },
+            { label: t('ecosystemPages.reporting.actions.exportSummary'), variant: 'default', onClick: () => exportReport('txt') },
             { label: t('ecosystemPages.reporting.actions.exportCsv'), variant: 'outline', onClick: () => exportReport('csv') },
           ]}
         />
       }
     >
+      <div className="mb-4 flex flex-wrap gap-2">
+        {[
+          { label: t('ecosystemPages.reporting.filters.all'), days: null },
+          { label: t('ecosystemPages.reporting.filters.last30'), days: 30 },
+          { label: t('ecosystemPages.reporting.filters.last90'), days: 90 },
+        ].map((filter) => (
+          <button
+            key={filter.label}
+            type="button"
+            onClick={() => setSinceDays(filter.days)}
+            className={`rounded-lg px-3 py-1.5 text-sm ${
+              sinceDays === filter.days
+                ? 'bg-primary text-primary-foreground'
+                : 'border border-border/60 bg-muted text-muted-foreground'
+            }`}
+          >
+            {filter.label}
+          </button>
+        ))}
+      </div>
       <EcosystemSection title={t('ecosystemPages.shared.overview')}>
         <EcosystemMetricGrid stats={metrics} />
       </EcosystemSection>

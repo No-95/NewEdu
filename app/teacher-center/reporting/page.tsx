@@ -1,7 +1,7 @@
 import { ReportingClient } from '@/components/ecosystem/teacher-center/ReportingClient';
-import { requireEcosystemSession } from '@/lib/ecosystem/require-session';
+import { requireTeacherRole } from '@/lib/ecosystem/require-teacher-role';
 
 export default async function ReportingPage() {
-  const session = await requireEcosystemSession();
+  const session = await requireTeacherRole();
   return <ReportingClient userEmail={session.user.email} />;
 }

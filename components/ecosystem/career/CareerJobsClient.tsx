@@ -5,84 +5,45 @@ import { useMemo, useState } from 'react';
 import {
   ArrowRight,
   Building2,
-  CheckCircle2,
+  GraduationCap,
   MapPin,
   Search,
-  Sparkles,
   Wallet,
 } from 'lucide-react';
+import { useQuery } from 'convex/react';
+import { api } from '@/convex/_generated/api';
 import { Header } from '@/components/Header';
 import { ParticleBackground } from '@/components/DarkmodeParticleBackground';
 import { ClientOnly } from '@/lib/hooks/useClientOnly';
 import { useLanguage } from '@/lib/context/LanguageContext';
-import {
-  TEACHER_REGISTRATION_APPLY_HREF,
-  TEACHER_REGISTRATION_DETAIL_HREF,
-  TEACHER_REGISTRATION_JOB_ID,
-} from '@/lib/jobs/public-jobs';
 
-type JobCard = {
-  id: string;
-  title: string;
-  company: string;
-  location: string;
-  country: string;
-  industry: string;
-  salary: string;
-  jobTypeLabel: string;
-  requirements: string[];
-  detailHref: string;
-  applyHref: string;
-};
-
-function matchesSearch(job: JobCard, query: string) {
-  const haystack = [
-    job.title,
-    job.company,
-    job.location,
-    job.country,
-    job.industry,
-    job.salary,
-    job.jobTypeLabel,
-    ...job.requirements,
-  ]
+function matchesSearch(
+  job: {
+    title: string;
+    companyName: string;
+    department: string;
+    location?: string;
+    description?: string;
+  },
+  query: string
+) {
+  const haystack = [job.title, job.companyName, job.department, job.location ?? '', job.description ?? '']
     .join(' ')
     .toLowerCase();
-
   return haystack.includes(query);
 }
 
 function JobsPageContent() {
   const { t } = useLanguage();
   const ns = 'ecosystemPages.careerJobs';
-  const jobKey = `${ns}.teacherListing`;
   const [search, setSearch] = useState('');
-
-  const jobs = useMemo<JobCard[]>(() => {
-    const reqs = t(`${jobKey}.requirements`, { returnObjects: true });
-    const requirementList = Array.isArray(reqs) ? reqs : [];
-
-    return [
-      {
-        id: TEACHER_REGISTRATION_JOB_ID,
-        title: t(`${jobKey}.title`),
-        company: t(`${jobKey}.company`),
-        location: t(`${jobKey}.location`),
-        country: t(`${jobKey}.country`),
-        industry: t(`${jobKey}.industry`),
-        salary: t(`${jobKey}.salary`),
-        jobTypeLabel: t(`${jobKey}.jobTypeLabel`),
-        requirements: requirementList,
-        detailHref: TEACHER_REGISTRATION_DETAIL_HREF,
-        applyHref: TEACHER_REGISTRATION_APPLY_HREF,
-      },
-    ];
-  }, [t, jobKey]);
+  const jobs = useQuery(api.employerOps.listOpenJobPostings, {});
 
   const filteredJobs = useMemo(() => {
     const query = search.trim().toLowerCase();
-    if (!query) return jobs;
-    return jobs.filter((job) => matchesSearch(job, query));
+    const list = jobs ?? [];
+    if (!query) return list;
+    return list.filter((job) => matchesSearch(job, query));
   }, [jobs, search]);
 
   return (
@@ -91,7 +52,6 @@ function JobsPageContent() {
       <Header />
 
       <main className="relative z-10 mx-auto max-w-6xl px-4 pb-20 pt-24 sm:px-6">
-        {/* Hero */}
         <section className="jobs-page-hero jobs-stagger-1 mb-8 md:mb-10">
           <div className="jobs-page-hero-orb" aria-hidden />
           <div className="relative z-10 grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
@@ -109,7 +69,22 @@ function JobsPageContent() {
           </div>
         </section>
 
-        {/* Search */}
+        <section className="jobs-stagger-2 mb-8">
+          <div className="home-card flex flex-col gap-4 border-primary/20 bg-primary/5 p-5 sm:flex-row sm:items-center sm:justify-between md:p-6">
+            <div className="flex items-start gap-3">
+              <GraduationCap className="mt-0.5 h-6 w-6 shrink-0 text-primary" />
+              <div>
+                <h2 className="text-lg font-bold text-foreground">{t(`${ns}.teacherApplyTitle`)}</h2>
+                <p className="mt-1 text-sm text-muted-foreground">{t(`${ns}.teacherApplyBody`)}</p>
+              </div>
+            </div>
+            <Link href="/teacher-applicant" className="jobs-apply-btn shrink-0 self-start sm:self-auto">
+              {t(`${ns}.teacherApplyCta`)}
+              <ArrowRight className="relative z-10 h-4 w-4" />
+            </Link>
+          </div>
+        </section>
+
         <section className="jobs-stagger-2 mb-8">
           <label htmlFor="jobs-search" className="sr-only">
             {t(`${ns}.searchPlaceholder`)}
@@ -127,97 +102,59 @@ function JobsPageContent() {
           </div>
         </section>
 
-        {/* Listings */}
-        {filteredJobs.length === 0 ? (
+        {jobs === undefined ? (
+          <div className="jobs-empty-state py-16 text-center text-sm text-muted-foreground">
+            {t('ecosystemPages.shared.loading')}
+          </div>
+        ) : filteredJobs.length === 0 ? (
           <section className="jobs-stagger-3">
             <div className="jobs-empty-state">
               <Search className="mx-auto mb-3 h-8 w-8 text-muted-foreground/60" />
-              <p className="text-sm text-muted-foreground">{t(`${ns}.emptySearch`)}</p>
+              <p className="text-sm text-muted-foreground">
+                {jobs.length === 0 ? t(`${ns}.emptyBoard`) : t(`${ns}.emptySearch`)}
+              </p>
             </div>
           </section>
         ) : (
           filteredJobs.map((job) => (
-            <section key={job.id} className="jobs-stagger-3 mb-12">
-              <div className="jobs-spotlight">
-                <div className="grid gap-0 lg:grid-cols-[1fr_300px] xl:grid-cols-[1fr_320px]">
-                  <div className="p-7 md:p-10 lg:border-r lg:border-border">
-                    <span className="jobs-featured-badge mb-5">
-                      <Sparkles className="h-3.5 w-3.5" />
-                      {t(`${ns}.featuredBadge`)}
+            <section key={job.id} className="jobs-stagger-3 mb-8">
+              <div className="home-card p-6 md:p-8">
+                <Link href={`/jobs/${job.externalId}`} className="group block">
+                  <h2 className="text-2xl font-bold leading-tight tracking-tight text-foreground transition-colors group-hover:text-primary md:text-3xl">
+                    {job.title}
+                    <ArrowRight className="ml-2 inline-block h-5 w-5 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100" />
+                  </h2>
+                </Link>
+
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <span className="jobs-meta-chip">
+                    <Building2 className="h-4 w-4 shrink-0 text-primary/80" />
+                    {job.companyName}
+                  </span>
+                  {job.location ? (
+                    <span className="jobs-meta-chip">
+                      <MapPin className="h-4 w-4 shrink-0 text-primary/80" />
+                      {job.location}
                     </span>
+                  ) : null}
+                  {job.salary ? (
+                    <span className="jobs-meta-chip">
+                      <Wallet className="h-4 w-4 shrink-0 text-primary/80" />
+                      {job.salary}
+                    </span>
+                  ) : null}
+                </div>
 
-                    <Link href={job.detailHref} className="group block">
-                      <h2 className="text-2xl font-bold leading-tight tracking-tight text-foreground transition-colors group-hover:text-primary md:text-3xl lg:text-[2rem]">
-                        {job.title}
-                        <ArrowRight className="ml-2 inline-block h-5 w-5 opacity-0 transition-all group-hover:translate-x-1 group-hover:opacity-100 md:h-6 md:w-6" />
-                      </h2>
-                    </Link>
+                <p className="mt-2 text-sm text-muted-foreground">{job.department}</p>
+                {job.description ? (
+                  <p className="mt-3 line-clamp-2 text-sm text-muted-foreground">{job.description}</p>
+                ) : null}
 
-                    <div className="mt-5 flex flex-wrap gap-2">
-                      <span className="jobs-meta-chip">
-                        <Building2 className="h-4 w-4 shrink-0 text-primary/80" />
-                        {job.company}
-                      </span>
-                      <span className="jobs-meta-chip">
-                        <MapPin className="h-4 w-4 shrink-0 text-primary/80" />
-                        {job.location}
-                      </span>
-                      <span className="jobs-meta-chip">
-                        <Wallet className="h-4 w-4 shrink-0 text-primary/80" />
-                        {job.salary}
-                      </span>
-                    </div>
-
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      <span className="jobs-tag-accent">{job.jobTypeLabel}</span>
-                      <span className="jobs-tag">{job.industry}</span>
-                      <span className="jobs-tag">{job.country}</span>
-                    </div>
-
-                    <div className="mt-8 grid gap-3 sm:grid-cols-2">
-                      {job.requirements.map((req, index) => (
-                        <div
-                          key={req}
-                          className="jobs-req-card"
-                          style={{ animationDelay: `${index * 80}ms` }}
-                        >
-                          <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                          <span className="text-sm leading-relaxed text-muted-foreground">{req}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col justify-center border-t border-border p-7 md:p-8 lg:border-t-0">
-                    <div className="jobs-cta-panel">
-                      <div className="jobs-revenue-ring mb-5">
-                        <div>
-                          <p className="text-4xl font-black tracking-tight text-primary">
-                            {t(`${ns}.revenueStat`)}
-                          </p>
-                          <p className="mt-1 max-w-[7rem] text-[10px] font-semibold uppercase leading-tight tracking-wider text-muted-foreground">
-                            {t(`${ns}.revenueStatLabel`)}
-                          </p>
-                        </div>
-                      </div>
-
-                      <Link href={job.applyHref} className="jobs-apply-btn">
-                        {t(`${ns}.actions.apply`)}
-                        <ArrowRight className="relative z-10 h-4 w-4" />
-                      </Link>
-
-                      <Link
-                        href={job.detailHref}
-                        className="mt-4 text-xs font-medium text-primary/80 transition-colors hover:text-primary"
-                      >
-                        {t(`${ns}.actions.viewDetails`)} →
-                      </Link>
-
-                      <p className="mt-5 text-[11px] leading-relaxed text-muted-foreground/80">
-                        {t(`${ns}.ctaNote`)}
-                      </p>
-                    </div>
-                  </div>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <Link href={`/jobs/${job.externalId}`} className="jobs-apply-btn">
+                    {t(`${ns}.actions.viewDetails`)}
+                    <ArrowRight className="relative z-10 h-4 w-4" />
+                  </Link>
                 </div>
               </div>
             </section>

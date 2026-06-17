@@ -8,7 +8,9 @@ import { useMutation, useQuery } from 'convex/react';
 import { Header } from '@/components/Header';
 import { ParticleBackground } from '@/components/DarkmodeParticleBackground';
 import { api } from '@/convex/_generated/api';
+import type { Id } from '@/convex/_generated/dataModel';
 import { useLanguage } from '@/lib/context/LanguageContext';
+import { useUserEmail } from '@/hooks/useUserSession';
 
 function formatDateTime(timestamp: number, locale: string) {
   return new Date(timestamp).toLocaleString(locale, { timeZone: 'Asia/Ho_Chi_Minh' });
@@ -27,6 +29,8 @@ export default function ClassroomLobbyPage() {
   const [roomPassword, setRoomPassword] = useState('');
   const rooms = useQuery(api.classrooms.listLiveClassrooms, {}) ?? [];
   const upsertClassroom = useMutation(api.classrooms.upsertClassroom);
+  const userEmail = useUserEmail();
+  const userSettings = useQuery(api.users.getUserSettings, userEmail ? { email: userEmail } : 'skip');
 
   const dateLocale =
     language === 'vi' ? 'vi-VN' : language === 'ko' ? 'ko-KR' : 'en-US';
@@ -50,6 +54,7 @@ export default function ClassroomLobbyPage() {
       roomID,
       title,
       hostName: host,
+      hostUserId: userSettings?.userId ? (userSettings.userId as Id<'users'>) : undefined,
       roomPassword: password,
       status: 'live',
     });

@@ -9,6 +9,8 @@ import { ParticleBackground } from '@/components/DarkmodeParticleBackground';
 import { CourseOutlineSidebar } from '@/components/courses/CourseOutlineSidebar';
 import { api } from '@/convex/_generated/api';
 import { useCourseAccess } from '@/hooks/useCourseAccess';
+import { readProgress } from '@/hooks/useCourseProgress';
+import { useUserEmail } from '@/hooks/useUserSession';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { COURSE_TEXT, formatCourseTemplate, getCourseLanguage } from '@/lib/courses/localization';
 import { formatVndPrice } from '@/lib/currency';
@@ -24,6 +26,11 @@ export function CourseDetailClient({ courseSlug }: CourseDetailClientProps) {
   const locale = getCourseLanguage(language);
   const text = COURSE_TEXT[locale].detail;
   const course = useQuery(api.courses.getCourseBySlug, { slug: courseSlug });
+  const userEmail = useUserEmail();
+  const progressRows = useQuery(
+    api.progress.listProgressByEmail,
+    userEmail ? { email: userEmail } : 'skip'
+  );
   const { loading: accessLoading, syncingPayment, hasAccess } = useCourseAccess(
     courseSlug,
     !!course?.isFree,
@@ -48,6 +55,9 @@ export function CourseDetailClient({ courseSlug }: CourseDetailClientProps) {
   const canWatch = course.isFree || hasAccess;
   const firstLecture = course.lectures[0]?.videoFolderName;
   const lastLecture = course.lectures[course.lectures.length - 1]?.videoFolderName;
+  const serverProgress = progressRows?.find((row) => row.courseSlug === courseSlug);
+  const localProgress = readProgress(courseSlug);
+  const resumeVideoId = serverProgress?.lastVideoId ?? localProgress.lastVideoId;
 
   return (
     <div className="min-h-screen bg-background">
@@ -127,6 +137,14 @@ export function CourseDetailClient({ courseSlug }: CourseDetailClientProps) {
                     {text.watchFirst}
                   </span>
                 )}
+                {canWatch && resumeVideoId ? (
+                  <Link
+                    href={`/courses/${course.slug}/${resumeVideoId}`}
+                    className="rounded-xl border border-primary/50 bg-primary/10 px-5 py-2.5 text-sm font-semibold text-primary transition hover:bg-primary/20"
+                  >
+                    {text.resumeAt}
+                  </Link>
+                ) : null}
                 {canWatch && lastLecture ? (
                   <Link
                     href={`/courses/${course.slug}/${lastLecture}`}

@@ -9,13 +9,14 @@ interface HlsVideoPlayerProps {
   courseId: string;
   videoId: string;
   title: string;
+  onLectureCompleted?: () => void;
 }
 
 interface StreamApiResponse {
   streamUrl: string;
 }
 
-export function HlsVideoPlayer({ courseId, videoId, title }: HlsVideoPlayerProps) {
+export function HlsVideoPlayer({ courseId, videoId, title, onLectureCompleted }: HlsVideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -26,6 +27,7 @@ export function HlsVideoPlayer({ courseId, videoId, title }: HlsVideoPlayerProps
 
     const handleEnded = () => {
       markLectureCompleted(courseId, videoId);
+      onLectureCompleted?.();
     };
 
     async function setupPlayer() {
@@ -113,7 +115,7 @@ export function HlsVideoPlayer({ courseId, videoId, title }: HlsVideoPlayerProps
         hls.destroy();
       }
     };
-  }, [courseId, videoId]);
+  }, [courseId, videoId, onLectureCompleted]);
 
   if (error) {
     return (

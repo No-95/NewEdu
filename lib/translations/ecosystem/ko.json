@@ -1,6 +1,8 @@
 {
   "shared": {
     "loading": "데이터 불러오는 중...",
+    "saving": "저장 중…",
+    "cancel": "취소",
     "emptyTable": "데이터 없음",
     "emptyChart": "차트 데이터 없음",
     "chartValue": "값",
@@ -97,7 +99,8 @@
       "format": "형식",
       "uploadedBy": "업로더",
       "downloads": "다운로드",
-      "updated": "업데이트"
+      "updated": "업데이트",
+      "actions": "작업"
     }
   },
   "internalTraining": {
@@ -134,7 +137,7 @@
     "subtitle": "학교 및 교육 센터용 교육 대시보드.",
     "modulesSection": "모듈",
     "dataSection": "데이터",
-    "tabs": { "students": "학습자", "teachers": "강사", "classes": "수업" },
+    "tabs": { "students": "학습자", "teachers": "강사", "classes": "수업", "submissions": "제출물" },
     "actions": {
       "createClass": "반 만들기",
       "assignTeacher": "강사 배정",
@@ -144,6 +147,7 @@
     "emptyStudents": "학습자가 없습니다.",
     "emptyTeachers": "강사가 없습니다.",
     "emptyClasses": "수업이 없습니다.",
+    "emptySubmissions": "완료된 숙제 제출물이 없습니다.",
     "attendance": "출석",
     "metrics": {
       "totalStudents": "총 학습자",
@@ -199,7 +203,12 @@
     "completionByCourse": "과정별 완료율",
     "teacherReports": "강사 보고",
     "emptyTeachers": "강사 데이터가 없습니다.",
-    "actions": { "exportPdf": "PDF 내보내기", "exportExcel": "Excel 내보내기", "exportCsv": "CSV 내보내기" },
+    "actions": { "exportSummary": "요약 내보내기 (TXT)", "exportPdf": "PDF 내보내기", "exportExcel": "CSV 내보내기", "exportCsv": "CSV 내보내기" },
+    "filters": {
+      "all": "전체 기간",
+      "last30": "최근 30일",
+      "last90": "최근 90일"
+    },
     "metrics": {
       "monthlyRevenue": "월 매출",
       "newStudents": "신규 학습자",
@@ -213,6 +222,8 @@
     "searchPlaceholder": "자료 검색...",
     "categoryFilter": "카테고리",
     "materialsSection": "자료",
+    "emptyMaterials": "업로드된 자료가 없습니다.",
+    "emptyHint": "업로드를 눌러 검토용 자료를 제출하세요.",
     "actions": { "upload": "업로드", "edit": "편집", "delete": "삭제" }
   },
   "recruitment": {
@@ -267,6 +278,11 @@
     "revenueStat": "92%",
     "revenueStatLabel": "강사 수익 배분",
     "ctaNote": "48시간 이내 지원서 검토",
+    "saveJob": "채용 저장",
+    "unsaveJob": "저장 취소",
+    "teacherApplyTitle": "HDP EDU에서 한국어 강의",
+    "teacherApplyBody": "언어 실력을 공유하고 강사 네트워크에 참여하세요.",
+    "teacherApplyCta": "강사 지원",
     "emptySearch": "검색 결과가 없습니다. 다른 키워드를 시도해 보세요.",
     "teacherListing": {
       "title": "HDP EDU와 함께 강의 시작하기",
@@ -288,13 +304,82 @@
     "title": "커리어 지원",
     "subtitle": "CV 리뷰, 면접 코칭, 커리어 상담.",
     "bookSection": "서비스 예약",
-    "selectService": "서비스 선택",
-    "selectExpert": "전문가 선택",
+    "selectService": "요청 서비스",
+    "selectExpert": "희망 전문가 또는 분야",
+    "servicePlaceholder": "예: CV 리뷰, 모의 면접, 커리어 상담",
+    "expertPlaceholder": "선택 — HR, IT 커리어, 한국 취업 시장…",
+    "notes": "추가 메모",
+    "notesPlaceholder": "목표, 경력 수준, 상담 질문",
     "date": "날짜",
     "time": "시간",
     "confirmBooking": "예약 확인",
+    "bookingValidation": "서비스, 전문가 선택, 연락처를 모두 입력해 주세요.",
+    "bookingSuccess": "문의가 접수되었습니다. 이메일로 답변드립니다.",
+    "consultationSubmitted": "상담 요청을 보냈습니다. 전문가가 미팅 시간을 제안합니다.",
+    "scheduleHint": "요청 후 전문가가 날짜, 시간, 미팅 링크를 제안합니다.",
+    "viewConsultations": "내 상담 보기",
+    "requestConsultation": "상담 요청",
+    "generalInquiry": "일반 문의",
+    "browseNetwork": "전문가 네트워크 보기",
     "upcomingSection": "예정 세션",
-    "historySection": "세션 기록"
+    "historySection": "세션 기록",
+    "emptyUpcoming": "예정된 세션이 없습니다. 서비스를 예약해 보세요.",
+    "emptyHistory": "완료된 세션이 아직 없습니다."
+  },
+  "careerApplications": {
+    "title": "내 지원서",
+    "subtitle": "채용 지원 상태와 단계를 확인하세요.",
+    "listSection": "지원 내역",
+    "empty": "아직 지원한 공고가 없습니다."
+  },
+  "careerApplicationDetail": {
+    "title": "지원서 상세",
+    "subtitle": "현재 상태와 채용 단계.",
+    "notFound": "지원서를 찾을 수 없음",
+    "notFoundBody": "지원서가 삭제되었거나 접근 권한이 없습니다.",
+    "backToList": "지원 목록으로",
+    "viewJobPosting": "채용 공고 보기",
+    "lowScoreHint": "매칭 점수가 평균보다 낮습니다. 역량 프로필을 보완하면 향후 지원에 도움이 됩니다.",
+    "improveProfile": "프로필 개선",
+    "stageSection": "채용 파이프라인",
+    "rejectedMessage": "이번 채용에서는 선발되지 않았습니다.",
+    "stageHistory": {
+      "title": "단계 이력",
+      "empty": "기록된 단계 변경이 없습니다.",
+      "entered": "{{stage}} 단계 진입",
+      "moved": "{{from}}에서 {{to}}(으)로 이동"
+    }
+  },
+  "careerConsultations": {
+    "title": "전문가 상담",
+    "subtitle": "전문가 네트워크에 보낸 상담 요청.",
+    "listSection": "상담 요청",
+    "empty": "상담 요청이 없습니다.",
+    "status": {
+      "new": "대기",
+      "accepted": "일정 확정",
+      "closed": "종료"
+    },
+    "scheduledAt": "예정 시간",
+    "meetingUrl": "미팅 링크",
+    "joinMeeting": "미팅 참여",
+    "acceptTitle": "상담 일정 잡기",
+    "acceptHint": "날짜와 시간을 선택하세요. 요청자에게 미팅 링크가 포함된 알림이 전송됩니다.",
+    "duration": "소요 시간",
+    "timezone": "시간대",
+    "scheduleRequired": "날짜와 시간을 선택해 주세요.",
+    "scheduleFuture": "미래 시간만 선택할 수 있습니다.",
+    "confirmSchedule": "일정 확정",
+    "browseExperts": "새 상담 요청"
+  },
+  "candidateDetail": {
+    "title": "지원자 프로필",
+    "subtitle": "지원자 정보와 역량 프로필을 확인하세요.",
+    "notFound": "지원자를 찾을 수 없음",
+    "notFoundBody": "지원자가 삭제되었거나 접근 권한이 없습니다.",
+    "backToRecruitment": "채용으로 돌아가기",
+    "profileSnapshot": "역량 프로필 스냅샷",
+    "noProfile": "연결된 역량 프로필이 없습니다. 수동 추가 지원자일 수 있습니다."
   },
   "aiMatching": {
     "title": "AI 매칭",
@@ -306,7 +391,32 @@
     "aiAnalysisBody": "CV와 자격증을 업로드하면 AI가 스킬 갭을 분석하고 커리어 경로를 제안합니다.",
     "matchingJobs": "맞춤 채용",
     "suggestedCourses": "추천 과정",
-    "suggestedMentors": "추천 멘토"
+    "suggestedMentors": "추천 멘토",
+    "emptyJobs": "CV를 업로드하면 채용 매칭을 받을 수 있습니다. 아직 추천이 없습니다.",
+    "emptyCourses": "프로필을 완성하고 서류를 업로드하면 과정 추천을 볼 수 있습니다.",
+    "emptyMentors": "멘토 추천이 아직 없습니다. 전문가 네트워크를 둘러보세요.",
+    "completeProfile": "경력 프로필 완성",
+    "improveProfile": "프로필에 부족한 스킬 추가",
+    "skillGapsTitle": "보완할 스킬",
+    "browseJobs": "채용 보기",
+    "browseCourses": "과정 보기",
+    "browseExperts": "전문가 보기",
+    "uploading": "업로드 중…",
+    "uploadSuccess": "CV 업로드 완료",
+    "parsingCv": "AI로 CV 분석 중…",
+    "parseFailed": "CV를 분석할 수 없습니다. 텍스트 PDF를 사용해 보세요.",
+    "reparseCv": "CV 재분석",
+    "cvOnFile": "CV 등록됨",
+    "reviewCvTitle": "추출된 프로필 검토",
+    "reviewCvHint": "아래 내용을 수정한 뒤 경력 프로필에 적용하세요.",
+    "applyCvToProfile": "프로필에 적용",
+    "applyingCv": "적용 중…"
+  },
+  "savedJobs": {
+    "title": "저장한 채용",
+    "subtitle": "나중에 보려고 저장한 채용 공고.",
+    "listSection": "저장한 채용 목록",
+    "empty": "저장한 채용이 없습니다. 채용 게시판에서 관심 공고를 저장하세요."
   },
   "expertNetwork": {
     "title": "전문가 네트워크",
@@ -314,7 +424,13 @@
     "searchPlaceholder": "전문가, 분야 검색...",
     "filters": { "industry": "분야", "country": "국가" },
     "expertsCount": "전문가 {{count}}명",
-    "actions": { "bookConsultation": "상담 예약", "sendRequest": "요청 보내기", "follow": "팔로우" }
+    "verified": "인증됨",
+    "emptyExperts": "공개된 전문가 프로필이 없습니다.",
+    "consultationTitle": "상담 요청",
+    "consultationTopic": "주제",
+    "consultationMessage": "메시지",
+    "consultationScheduleHint": "요청을 보낸 후 전문가가 날짜, 시간, 미팅 링크를 제안합니다. 커리어 → 상담에서 확인하세요.",
+    "actions": { "bookConsultation": "상담 예약", "sendRequest": "요청 보내기", "viewProfile": "프로필 보기", "follow": "팔로우" }
   },
   "expertEvents": {
     "title": "전문 주제",

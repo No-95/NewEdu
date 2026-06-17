@@ -370,3 +370,130 @@ export const getLectureByCourseAndVideoId = query({
     };
   },
 });
+
+export const getCoursesByOwner = query({
+  args: { email: v.string() },
+  returns: v.array(
+    v.object({
+      _id: v.string(),
+      slug: v.string(),
+      title: v.string(),
+      subtitle: v.string(),
+      published: v.boolean(),
+      price: v.number(),
+      totalVideos: v.number(),
+    })
+  ),
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_email', (q) => q.eq('email', args.email.trim().toLowerCase()))
+      .first();
+    if (!user) return [];
+
+    const courses = await ctx.db
+      .query('courses')
+      .withIndex('by_ownerId', (q) => q.eq('ownerId', user._id))
+      .collect();
+
+    return courses.map((course) => ({
+      _id: course._id.toString(),
+      slug: course.slug,
+      title: course.title,
+      subtitle: course.subtitle,
+      published: course.published,
+      price: course.price ?? 399_000,
+      totalVideos: course.totalVideos,
+    }));
+  },
+});
+
+function slugifyTitle(title: string) {
+  return title
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 60);
+}
+
+export const createTeacherCourse = mutation({
+  args: {
+    email: v.string(),
+    title: v.string(),
+    subtitle: v.string(),
+    description: v.optional(v.string()),
+    price: v.optional(v.number()),
+    published: v.boolean(),
+  },
+  returns: v.object({ courseId: v.string(), slug: v.string() }),
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_email', (q) => q.eq('email', args.email.trim().toLowerCase()))
+      .first();
+    if (!user) throw new Error('User not found.');
+
+    const now = Date.now();
+    let slug = slugifyTitle(args.title) || `course-${now}`;
+    const existing = await ctx.db
+      .query('courses')
+      .withIndex('by_slug', (q) => q.eq('slug', slug))
+      .first();
+    if (existing) slug = `${slug}-${now}`;
+
+    const courseId = await ctx.db.insert('courses', {
+      slug,
+      title: args.title.trim(),
+      subtitle: args.subtitle.trim(),
+      description: args.description?.trim() || '',
+      badge: '',
+      isFree: (args.price ?? 0) === 0,
+      price: args.price ?? 0,
+      teacherId: user.fullName || user.email,
+      ownerId: user._id,
+      totalVideos: 0,
+      published: args.published,
+      createdAt: now,
+      updatedAt: now,
+    });
+
+    return { courseId: courseId.toString(), slug };
+  },
+});
+
+export const updateTeacherCourse = mutation({
+  args: {
+    email: v.string(),
+    courseId: v.id('courses'),
+    title: v.optional(v.string()),
+    subtitle: v.optional(v.string()),
+    description: v.optional(v.string()),
+    price: v.optional(v.number()),
+    published: v.optional(v.boolean()),
+  },
+  returns: v.object({ success: v.boolean() }),
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_email', (q) => q.eq('email', args.email.trim().toLowerCase()))
+      .first();
+    if (!user) throw new Error('User not found.');
+
+    const course = await ctx.db.get(args.courseId);
+    if (!course || course.ownerId !== user._id) throw new Error('Course not found.');
+
+    const patch: Record<string, unknown> = { updatedAt: Date.now() };
+    if (args.title !== undefined) patch.title = args.title.trim();
+    if (args.subtitle !== undefined) patch.subtitle = args.subtitle.trim();
+    if (args.description !== undefined) patch.description = args.description.trim();
+    if (args.price !== undefined) {
+      patch.price = args.price;
+      patch.isFree = args.price === 0;
+    }
+    if (args.published !== undefined) patch.published = args.published;
+
+    await ctx.db.patch(args.courseId, patch);
+    return { success: true };
+  },
+});

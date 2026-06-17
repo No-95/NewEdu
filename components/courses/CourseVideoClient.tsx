@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { Lock } from 'lucide-react';
-import { useQuery } from 'convex/react';
+import { useCallback, useEffect } from 'react';
+import { useMutation, useQuery } from 'convex/react';
 
 import { Header } from '@/components/Header';
 import { ParticleBackground } from '@/components/DarkmodeParticleBackground';
@@ -11,6 +12,8 @@ import CourseAction from '@/components/courses/CourseAction';
 import { HlsVideoPlayer } from '@/components/courses/HlsVideoPlayer';
 import { api } from '@/convex/_generated/api';
 import { useCourseAccess } from '@/hooks/useCourseAccess';
+import { markLastWatched, readProgress } from '@/hooks/useCourseProgress';
+import { useUserEmail } from '@/hooks/useUserSession';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import {
   COURSE_TEXT,
@@ -40,6 +43,31 @@ export function CourseVideoClient({ courseSlug, videoId }: CourseVideoClientProp
   const price = course?.price ?? 399_000;
   const { loading: accessLoading, hasAccess } = useCourseAccess(courseSlug, isFree);
   const canWatch = isFree || hasAccess;
+  const userEmail = useUserEmail();
+  const syncProgress = useMutation(api.progress.syncProgressByEmail);
+
+  const syncToServer = useCallback(
+    (lastVideoId?: string) => {
+      if (!userEmail) return;
+      const lectures = course?.lectures ?? [];
+      const total = lectures.length || result?.course.totalVideos || 0;
+      const completedCount = readProgress(courseSlug).completed.length;
+      void syncProgress({
+        email: userEmail,
+        courseSlug,
+        completedLectures: completedCount,
+        totalLectures: total,
+        lastVideoId,
+      });
+    },
+    [userEmail, courseSlug, course?.lectures, result?.course.totalVideos, syncProgress]
+  );
+
+  useEffect(() => {
+    if (!userEmail || !result) return;
+    markLastWatched(courseSlug, videoId);
+    syncToServer(videoId);
+  }, [userEmail, courseSlug, videoId, result, syncToServer]);
 
   if (!result) {
     return (
@@ -141,7 +169,12 @@ export function CourseVideoClient({ courseSlug, videoId }: CourseVideoClientProp
                 </div>
               </div>
             ) : (
-              <HlsVideoPlayer courseId={videoCourse.slug} videoId={lecture.videoFolderName} title={lecture.title} />
+              <HlsVideoPlayer
+                courseId={videoCourse.slug}
+                videoId={lecture.videoFolderName}
+                title={lecture.title}
+                onLectureCompleted={() => syncToServer(lecture.videoFolderName)}
+              />
             )}
 
             <div className="grid gap-3 sm:grid-cols-2">

@@ -51,6 +51,8 @@ export const COURSE_TEXT: Record<
       viewOnlineRooms: string;
       freeBookPromo: string;
       giftBookTag: string;
+      progressBadge: string;
+      resumeHint: string;
     };
     action: {
       continueCourse: string;
@@ -91,6 +93,7 @@ export const COURSE_TEXT: Record<
       startDescription: string;
       watchFirst: string;
       jumpLast: string;
+      resumeAt: string;
       confirmingPayment: string;
       paymentSuccess: string;
       paymentSyncing: string;
@@ -137,7 +140,7 @@ export const COURSE_TEXT: Record<
       free: 'Free',
       mixed: 'Mixed',
       catalogEyebrow: 'Course catalog',
-      catalogTitle: 'Start with this featured learning path',
+      catalogTitle: 'All published courses',
       loading: 'Loading course data...',
       teacherTeam: 'Teacher: HDP Team',
       videosReady: 'Videos ready',
@@ -152,6 +155,8 @@ export const COURSE_TEXT: Record<
       viewOnlineRooms: 'View available online classrooms',
       freeBookPromo: 'Free book included with this course',
       giftBookTag: 'Free book',
+      progressBadge: '{percent}% complete',
+      resumeHint: 'Resume where you left off',
     },
     action: {
       continueCourse: 'Continue with this course',
@@ -193,6 +198,7 @@ export const COURSE_TEXT: Record<
         'The outline on the right is grouped automatically by Unit and sorted numerically, so Unit 2 always comes before Unit 10.',
       watchFirst: 'Watch first lecture',
       jumpLast: 'Jump to last lecture',
+      resumeAt: 'Resume lecture',
       confirmingPayment: 'Confirming your payment…',
       paymentSuccess: 'Payment successful. You now have access to this course.',
       paymentSyncing:
@@ -241,7 +247,7 @@ export const COURSE_TEXT: Record<
       free: 'Miễn phí',
       mixed: 'Tổng hợp',
       catalogEyebrow: 'Danh mục khóa học',
-      catalogTitle: 'Bắt đầu với lộ trình nổi bật này',
+      catalogTitle: 'Tất cả khóa học đã xuất bản',
       loading: 'Đang tải dữ liệu khóa học...',
       teacherTeam: 'Giảng viên: HDP Team',
       videosReady: 'Video sẵn sàng',
@@ -256,6 +262,8 @@ export const COURSE_TEXT: Record<
       viewOnlineRooms: 'Xem các lớp học trực tuyến đang mở',
       freeBookPromo: 'Tặng sách khi mua khóa học này',
       giftBookTag: 'Tặng sách',
+      progressBadge: 'Hoàn thành {percent}%',
+      resumeHint: 'Tiếp tục từ chỗ bạn dừng lại',
     },
     action: {
       continueCourse: 'Tiếp tục khóa học này',
@@ -297,6 +305,7 @@ export const COURSE_TEXT: Record<
         'Outline bên phải được nhóm tự động theo Unit và sắp xếp theo thứ tự số, vì vậy Unit 2 luôn đứng trước Unit 10.',
       watchFirst: 'Xem bài học đầu tiên',
       jumpLast: 'Đến bài học cuối cùng',
+      resumeAt: 'Tiếp tục bài học',
       confirmingPayment: 'Đang xác nhận thanh toán…',
       paymentSuccess: 'Thanh toán thành công. Bạn đã có quyền truy cập khóa học.',
       paymentSyncing:
@@ -345,7 +354,7 @@ export const COURSE_TEXT: Record<
       free: '무료',
       mixed: '혼합',
       catalogEyebrow: '코스 카탈로그',
-      catalogTitle: '추천 학습 트랙부터 시작하세요',
+      catalogTitle: '게시된 모든 강좌',
       loading: '코스 데이터를 불러오는 중입니다...',
       teacherTeam: '강사진: HDP 팀',
       videosReady: '준비된 영상',
@@ -360,6 +369,8 @@ export const COURSE_TEXT: Record<
       viewOnlineRooms: '이용 가능한 온라인 강의실 보기',
       freeBookPromo: '이 코스 구매 시 도서 증정',
       giftBookTag: '도서 증정',
+      progressBadge: '{percent}% 완료',
+      resumeHint: '이어서 학습하기',
     },
     action: {
       continueCourse: '이 강좌 계속하기',
@@ -401,6 +412,7 @@ export const COURSE_TEXT: Record<
         '오른쪽 아웃라인은 Unit 기준으로 자동 그룹화되고 숫자 순으로 정렬되어 Unit 2가 Unit 10보다 먼저 표시됩니다.',
       watchFirst: '첫 강의 보기',
       jumpLast: '마지막 강의로 이동',
+      resumeAt: '강의 이어하기',
       confirmingPayment: '결제 확인 중…',
       paymentSuccess: '결제가 완료되었습니다. 이제 코스에 접근할 수 있습니다.',
       paymentSyncing:

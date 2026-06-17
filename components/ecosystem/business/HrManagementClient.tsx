@@ -1,22 +1,34 @@
 'use client';
 
 import { useState } from 'react';
-import { useQuery } from 'convex/react';
+import { useMutation, useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
+import type { Id } from '@/convex/_generated/dataModel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AppPageShell } from '@/components/ecosystem/shared/AppPageShell';
 import { EcosystemMetricGrid } from '@/components/ecosystem/shared/EcosystemMetricGrid';
 import { EcosystemDataTable } from '@/components/ecosystem/shared/EcosystemDataTable';
+import { EcosystemActionBar } from '@/components/ecosystem/shared/EcosystemActionBar';
 import { EcosystemSection } from '@/components/ecosystem/shared/EcosystemSection';
 import { EcosystemPageLoader } from '@/components/ecosystem/shared/EcosystemPageLoader';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { translateMetrics } from '@/lib/ecosystem/i18n';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  CreateDepartmentDialog,
+  CreateEmployeeDialog,
+  CreateReviewDialog,
+} from '@/components/ecosystem/business/EmployerOpsDialogs';
 
 export function HrManagementClient({ userEmail }: { userEmail: string }) {
   const { t } = useLanguage();
   const [tab, setTab] = useState('employees');
+  const [employeeOpen, setEmployeeOpen] = useState(false);
+  const [departmentOpen, setDepartmentOpen] = useState(false);
+  const [reviewOpen, setReviewOpen] = useState(false);
   const data = useQuery(api.ecosystem.getHrDashboard, { email: userEmail });
+  const completeReview = useMutation(api.employerOps.completeReview);
 
   if (data === undefined) {
     return (
@@ -33,7 +45,19 @@ export function HrManagementClient({ userEmail }: { userEmail: string }) {
     <AppPageShell
       title={t('ecosystemPages.hrManagement.title')}
       subtitle={t('ecosystemPages.hrManagement.subtitle')}
+      actions={
+        <EcosystemActionBar
+          actions={[
+            { label: t('employerOps.addEmployee'), variant: 'default', onClick: () => setEmployeeOpen(true) },
+            { label: t('employerOps.addDepartment'), variant: 'outline', onClick: () => setDepartmentOpen(true) },
+            { label: t('employerOps.addReview'), variant: 'outline', onClick: () => setReviewOpen(true) },
+          ]}
+        />
+      }
     >
+      <CreateEmployeeDialog userEmail={userEmail} open={employeeOpen} onOpenChange={setEmployeeOpen} />
+      <CreateDepartmentDialog userEmail={userEmail} open={departmentOpen} onOpenChange={setDepartmentOpen} />
+      <CreateReviewDialog userEmail={userEmail} open={reviewOpen} onOpenChange={setReviewOpen} />
       <EcosystemSection title={t('ecosystemPages.shared.overview')}>
         <EcosystemMetricGrid stats={metrics} />
       </EcosystemSection>
@@ -104,11 +128,27 @@ export function HrManagementClient({ userEmail }: { userEmail: string }) {
                   key: 'status',
                   header: t('ecosystemPages.shared.table.status'),
                   render: (row) => (
-                    <Badge className="bg-white/10">
-                      {row.status === 'completed'
-                        ? t('ecosystemPages.shared.status.completed')
-                        : t('ecosystemPages.shared.status.draft')}
-                    </Badge>
+                    <div className="flex items-center gap-2">
+                      <Badge className="bg-white/10">
+                        {row.status === 'completed'
+                          ? t('ecosystemPages.shared.status.completed')
+                          : t('ecosystemPages.shared.status.draft')}
+                      </Badge>
+                      {row.status === 'draft' ? (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() =>
+                            void completeReview({
+                              email: userEmail,
+                              reviewId: row.id as Id<'hrReviews'>,
+                            })
+                          }
+                        >
+                          {t('employerOps.completeReview')}
+                        </Button>
+                      ) : null}
+                    </div>
                   ),
                 },
               ]}

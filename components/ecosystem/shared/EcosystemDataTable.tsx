@@ -22,11 +22,15 @@ export function EcosystemDataTable<T extends { id: string }>({
   rows,
   emptyMessage = 'Không có dữ liệu',
   onRowClick,
+  highlightRowId,
+  rowDomId,
 }: {
   columns: Column<T>[];
   rows: T[];
   emptyMessage?: string;
   onRowClick?: (row: T) => void;
+  highlightRowId?: string;
+  rowDomId?: (row: T) => string;
 }) {
   if (rows.length === 0) {
     return (
@@ -52,7 +56,10 @@ export function EcosystemDataTable<T extends { id: string }>({
           {rows.map((row) => (
             <TableRow
               key={row.id}
-              className={`border-white/8 hover:bg-white/5 ${onRowClick ? 'cursor-pointer' : ''}`}
+              id={rowDomId?.(row)}
+              className={`border-white/8 hover:bg-white/5 ${onRowClick ? 'cursor-pointer' : ''} ${
+                highlightRowId === row.id ? 'bg-primary/10 ring-1 ring-inset ring-primary/40' : ''
+              }`}
               onClick={() => onRowClick?.(row)}
             >
               {columns.map((col) => (

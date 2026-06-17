@@ -5,6 +5,33 @@ import Link from 'next/link';
 import { motion } from 'motion/react';
 import { useLanguage } from '@/lib/context/LanguageContext';
 
+export function DashboardNextStepCta({
+  labelKey,
+  href,
+  delay = 0,
+}: {
+  labelKey: string;
+  href: string;
+  delay?: number;
+}) {
+  const { t } = useLanguage();
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay, ease: [0.22, 1, 0.36, 1] }}
+      className="home-card mb-5 border-primary/30 bg-primary/5 lg:col-span-2"
+    >
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <p className="text-sm font-medium text-foreground">{t(labelKey)}</p>
+        <Link href={href} className="home-btn-primary px-4 py-2 text-sm">
+          {t('dashboard.nextSteps.action')} →
+        </Link>
+      </div>
+    </motion.div>
+  );
+}
+
 export function DashboardGrid({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
     <div className={`grid gap-5 lg:grid-cols-2 xl:gap-6 ${className}`}>{children}</div>

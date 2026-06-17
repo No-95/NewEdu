@@ -1,6 +1,8 @@
 {
   "shared": {
     "loading": "Loading data...",
+    "saving": "Saving…",
+    "cancel": "Cancel",
     "emptyTable": "No data",
     "emptyChart": "No chart data yet",
     "chartValue": "Value",
@@ -97,7 +99,8 @@
       "format": "Format",
       "uploadedBy": "Uploaded by",
       "downloads": "Downloads",
-      "updated": "Updated"
+      "updated": "Updated",
+      "actions": "Actions"
     }
   },
   "internalTraining": {
@@ -134,7 +137,7 @@
     "subtitle": "Training dashboard for schools and centers.",
     "modulesSection": "Modules",
     "dataSection": "Data",
-    "tabs": { "students": "Students", "teachers": "Teachers", "classes": "Classes" },
+    "tabs": { "students": "Students", "teachers": "Teachers", "classes": "Classes", "submissions": "Submissions" },
     "actions": {
       "createClass": "Create class",
       "assignTeacher": "Assign teacher",
@@ -144,6 +147,7 @@
     "emptyStudents": "No students yet.",
     "emptyTeachers": "No teachers yet.",
     "emptyClasses": "No classes yet.",
+    "emptySubmissions": "No completed homework submissions yet.",
     "attendance": "Attendance",
     "metrics": {
       "totalStudents": "Total students",
@@ -199,7 +203,12 @@
     "completionByCourse": "Completion by course",
     "teacherReports": "Teacher reports",
     "emptyTeachers": "No teacher data yet.",
-    "actions": { "exportPdf": "Export PDF", "exportExcel": "Export Excel", "exportCsv": "Export CSV" },
+    "actions": { "exportSummary": "Export summary (TXT)", "exportPdf": "Export PDF", "exportExcel": "Export CSV", "exportCsv": "Export CSV" },
+    "filters": {
+      "all": "All time",
+      "last30": "Last 30 days",
+      "last90": "Last 90 days"
+    },
     "metrics": {
       "monthlyRevenue": "Monthly revenue",
       "newStudents": "New students",
@@ -213,7 +222,9 @@
     "searchPlaceholder": "Search resources...",
     "categoryFilter": "Category",
     "materialsSection": "Materials",
-    "actions": { "upload": "Upload", "edit": "Edit", "delete": "Delete" }
+    "emptyMaterials": "No resources uploaded yet.",
+    "emptyHint": "Use Upload to submit materials for review.",
+    "actions": { "upload": "Upload", "uploading": "Uploading...", "edit": "Edit", "delete": "Delete" }
   },
   "recruitment": {
     "title": "Recruitment",
@@ -253,48 +264,111 @@
     "emptyCertificates": "No certificates yet.",
     "emptyExperience": "No work experience yet.",
     "emptyLanguages": "No language information yet.",
-    "actions": { "edit": "Edit profile", "downloadCv": "Download CV", "downloadPdf": "Download PDF" }
+    "actions": { "edit": "Edit profile", "downloadCv": "Download CV (TXT)", "downloadTxt": "Download profile (TXT)" }
   },
   "careerJobs": {
     "title": "Jobs",
-    "subtitle": "Open roles at HDP EDU — apply to teach on our platform.",
-    "searchPlaceholder": "Search jobs, companies...",
-    "filters": { "country": "Country", "industry": "Industry", "jobType": "Job type" },
-    "jobsCount": "{{count}} jobs",
-    "actions": { "viewProfile": "View profile", "apply": "Apply now", "viewDetails": "View full details" },
+    "subtitle": "Open roles posted by HDP EDU employer partners.",
     "heroEyebrow": "Careers · HDP EDU",
-    "featuredBadge": "Featured opening",
-    "revenueStat": "92%",
-    "revenueStatLabel": "Teacher revenue share",
-    "ctaNote": "Applications reviewed within 48 hours",
+    "searchPlaceholder": "Search jobs, companies...",
+    "jobsCount": "{{count}} jobs",
+    "emptyBoard": "No open jobs yet. Check back soon or complete your profile for better matches.",
     "emptySearch": "No jobs match your search. Try different keywords.",
-    "teacherListing": {
-      "title": "Start Teaching with HDP EDU",
-      "company": "HDP EDU",
-      "location": "Remote",
-      "country": "Global",
-      "industry": "Education",
-      "salary": "92% teacher revenue share",
-      "jobTypeLabel": "Remote",
-      "requirements": [
-        "Fully remote — choose your own schedule",
-        "92% income share for teachers (8% platform fee)",
-        "Deliver practical, learner-focused lessons",
-        "Best fit: Korean language educators and subject mentors"
-      ]
-    }
+    "jobNotFound": "Job not found",
+    "jobNotFoundBody": "This listing may have been closed or removed.",
+    "backToJobs": "Back to jobs",
+    "noDescription": "No description provided.",
+    "applyNow": "Apply now",
+    "applying": "Applying…",
+    "applied": "Application submitted",
+    "signInToApply": "Sign in to apply",
+    "saveJob": "Save job",
+    "unsaveJob": "Remove from saved",
+    "teacherApplyTitle": "Teach Korean with HDP EDU",
+    "teacherApplyBody": "Share your language skills and join our teacher network.",
+    "teacherApplyCta": "Apply to teach",
+    "actions": { "viewDetails": "View details" }
   },
   "careerSupport": {
     "title": "Career Support",
     "subtitle": "CV review, interview coaching, and career counseling.",
     "bookSection": "Book a service",
-    "selectService": "Select service",
-    "selectExpert": "Select expert",
+    "selectService": "Service requested",
+    "selectExpert": "Preferred expert or specialty",
+    "servicePlaceholder": "e.g. CV review, mock interview, career counseling",
+    "expertPlaceholder": "Optional — HR, tech careers, Korean job market…",
+    "notes": "Additional notes",
+    "notesPlaceholder": "Goals, experience level, or questions for the advisor",
     "date": "Date",
     "time": "Time",
     "confirmBooking": "Confirm booking",
+    "bookingValidation": "Please complete service, expert selection, and contact details.",
+    "bookingSuccess": "Inquiry submitted. We will respond by email.",
+    "consultationSubmitted": "Consultation request sent. The expert will propose a meeting time.",
+    "scheduleHint": "Experts propose date, time, and meeting link after you request a consultation.",
+    "viewConsultations": "View my consultations",
+    "requestConsultation": "Request consultation",
+    "generalInquiry": "General inquiry",
+    "browseNetwork": "Browse expert network",
     "upcomingSection": "Upcoming sessions",
-    "historySection": "Session history"
+    "historySection": "Session history",
+    "emptyUpcoming": "No upcoming sessions. Book a service to get started.",
+    "emptyHistory": "No completed sessions yet."
+  },
+  "careerApplications": {
+    "title": "My applications",
+    "subtitle": "Track job applications and hiring stages.",
+    "listSection": "Application history",
+    "empty": "You have not applied to any jobs yet."
+  },
+  "careerApplicationDetail": {
+    "title": "Application detail",
+    "subtitle": "Current status and pipeline stage.",
+    "notFound": "Application not found",
+    "notFoundBody": "This application may have been removed or you do not have access.",
+    "backToList": "Back to applications",
+    "viewJobPosting": "View job posting",
+    "lowScoreHint": "Your match score is below average. Strengthen your competency profile to improve future applications.",
+    "improveProfile": "Improve your profile",
+    "stageSection": "Hiring pipeline",
+    "rejectedMessage": "This application was not selected at this time.",
+    "stageHistory": {
+      "title": "Stage history",
+      "empty": "No stage changes recorded yet.",
+      "entered": "Entered {{stage}}",
+      "moved": "Moved from {{from}} to {{to}}"
+    }
+  },
+  "careerConsultations": {
+    "title": "Expert consultations",
+    "subtitle": "Requests you sent to experts in the network.",
+    "listSection": "Consultation requests",
+    "empty": "No consultation requests yet.",
+    "status": {
+      "new": "Pending",
+      "accepted": "Scheduled",
+      "closed": "Closed"
+    },
+    "scheduledAt": "Scheduled time",
+    "meetingUrl": "Meeting link",
+    "joinMeeting": "Join meeting",
+    "acceptTitle": "Schedule consultation",
+    "acceptHint": "Pick a date and time. The requester will receive a notification with your meeting link.",
+    "duration": "Duration",
+    "timezone": "Timezone",
+    "scheduleRequired": "Please choose a date and time.",
+    "scheduleFuture": "Scheduled time must be in the future.",
+    "confirmSchedule": "Confirm schedule",
+    "browseExperts": "Request a new consultation"
+  },
+  "candidateDetail": {
+    "title": "Candidate profile",
+    "subtitle": "Review applicant details and career snapshot.",
+    "notFound": "Candidate not found",
+    "notFoundBody": "This candidate may have been removed or you do not have access.",
+    "backToRecruitment": "Back to recruitment",
+    "profileSnapshot": "Career profile snapshot",
+    "noProfile": "No linked career profile. This may be a manually added candidate."
   },
   "aiMatching": {
     "title": "AI Matching",
@@ -306,15 +380,68 @@
     "aiAnalysisBody": "Upload your CV and certificates for AI to analyze skill gaps and suggest a career path.",
     "matchingJobs": "Matching jobs",
     "suggestedCourses": "Suggested courses",
-    "suggestedMentors": "Suggested mentors"
+    "suggestedMentors": "Suggested mentors",
+    "emptyJobs": "Complete your profile or upload a CV to improve matches.",
+    "emptyCourses": "No course suggestions yet.",
+    "emptyMentors": "No expert matches yet. Browse the expert network.",
+    "uploading": "Uploading…",
+    "uploadSuccess": "CV uploaded successfully",
+    "parsingCv": "Analyzing CV with AI…",
+    "parseFailed": "Could not parse CV. Try a text-based PDF.",
+    "reparseCv": "Re-analyze CV",
+    "cvOnFile": "CV on file",
+    "reviewCvTitle": "Review extracted profile",
+    "reviewCvHint": "Edit fields below, then apply to merge into your career profile.",
+    "applyCvToProfile": "Apply to profile",
+    "applyingCv": "Applying…",
+    "completeProfile": "Complete your career profile",
+    "improveProfile": "Add missing skills to your profile",
+    "skillGapsTitle": "Skill gaps to address",
+    "browseJobs": "Browse jobs",
+    "browseCourses": "Browse courses",
+    "browseExperts": "Browse experts"
+  },
+  "savedJobs": {
+    "title": "Saved jobs",
+    "subtitle": "Jobs you bookmarked for later.",
+    "listSection": "Your saved jobs",
+    "empty": "You have not saved any jobs yet. Browse the job board and save roles that interest you."
   },
   "expertNetwork": {
     "title": "Expert Network",
-    "subtitle": "Discover and connect with experts across industries.",
+    "subtitle": "Discover verified experts and book consultations in-app.",
     "searchPlaceholder": "Search experts, fields...",
     "filters": { "industry": "Industry", "country": "Country" },
     "expertsCount": "{{count}} experts",
-    "actions": { "bookConsultation": "Book consultation", "sendRequest": "Send request", "follow": "Follow" }
+    "emptyExperts": "No published expert profiles yet.",
+    "profileNotFound": "Expert profile not found",
+    "backToNetwork": "Back to network",
+    "consultationTitle": "Request consultation",
+    "consultationTopic": "Topic",
+    "consultationMessage": "Message",
+    "consultationScheduleHint": "After you send a request, the expert will propose a date, time, and meeting link. Track updates under Career → Consultations.",
+    "verified": "Verified",
+    "actions": {
+      "bookConsultation": "Book consultation",
+      "sendRequest": "Send request",
+      "viewProfile": "View profile",
+      "follow": "Follow"
+    }
+  },
+  "expertProfile": {
+    "title": "Expert profile",
+    "subtitle": "Manage how you appear in the expert network.",
+    "edit": "Edit profile",
+    "create": "Create profile",
+    "emptyTitle": "No expert profile yet",
+    "emptyBody": "Create your profile to appear in the expert network.",
+    "displayName": "Display name",
+    "headline": "Headline",
+    "bio": "Bio",
+    "industries": "Industries (comma-separated)",
+    "expertise": "Expertise (comma-separated)",
+    "publishToNetwork": "Publish to expert network",
+    "previewTitle": "Network preview"
   },
   "expertEvents": {
     "title": "Expert Topics",
@@ -322,6 +449,7 @@
     "searchPlaceholder": "Search events...",
     "typeFilter": "Type",
     "scheduleSection": "Event schedule",
+    "emptyEvents": "No expert events published yet.",
     "register": "Register"
   }
 }

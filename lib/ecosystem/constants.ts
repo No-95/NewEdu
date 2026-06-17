@@ -26,7 +26,8 @@ export const RECRUITMENT_STAGE_IDS = [
 ] as const;
 
 export function buildTrainingModules(t: (key: string) => string): ModuleItem[] {
-  return TRAINING_MODULE_IDS.map((id) => ({
+  const enabledIds = ['students', 'teachers', 'classes'] as const;
+  return enabledIds.map((id) => ({
     id,
     title: t(`ecosystemPages.shared.trainingModules.${id}.title`),
     description: t(`ecosystemPages.shared.trainingModules.${id}.description`),
@@ -37,5 +38,12 @@ export function buildLeadStages(t: (key: string) => string) {
   return LEAD_STAGE_IDS.map((key) => ({
     key,
     label: t(`ecosystemPages.shared.leadStages.${key}`),
+  }));
+}
+
+export function buildRecruitmentStages(t: (key: string) => string) {
+  return RECRUITMENT_STAGE_IDS.filter((key) => key !== 'rejected').map((key) => ({
+    key,
+    label: t(`ecosystemPages.shared.recruitmentStages.${key}`),
   }));
 }

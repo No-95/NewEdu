@@ -2,16 +2,26 @@
 
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useMutation, useQuery } from 'convex/react';
+import { api } from '@/convex/_generated/api';
+import type { Id } from '@/convex/_generated/dataModel';
 import { AppPageShell } from '@/components/ecosystem/shared/AppPageShell';
 import { EcosystemFilterBar } from '@/components/ecosystem/shared/EcosystemFilterBar';
 import { EcosystemSection } from '@/components/ecosystem/shared/EcosystemSection';
-import { MOCK_EXPERTS } from '@/lib/ecosystem/mock-data';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Star, UserPlus, Calendar } from 'lucide-react';
-import { buildContactHref } from '@/lib/utils/client-actions';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Calendar } from 'lucide-react';
 
 function expertInitials(name: string) {
   return name
@@ -23,24 +33,53 @@ function expertInitials(name: string) {
     .toUpperCase();
 }
 
-export function ExpertNetworkClient() {
+export function ExpertNetworkClient({ userEmail }: { userEmail?: string }) {
   const { t } = useLanguage();
   const router = useRouter();
+  const experts = useQuery(api.experts.listPublishedExperts, {});
+  const submitRequest = useMutation(api.experts.submitConsultationRequest);
   const [search, setSearch] = useState('');
   const [industry, setIndustry] = useState('all');
-  const [country, setCountry] = useState('all');
+  const [consultOpen, setConsultOpen] = useState(false);
+  const [selectedExpertId, setSelectedExpertId] = useState<string | null>(null);
+  const [topic, setTopic] = useState('');
+  const [message, setMessage] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  const industries = useMemo(() => {
+    const set = new Set<string>();
+    (experts ?? []).forEach((ex) => ex.industries.forEach((i) => set.add(i)));
+    return Array.from(set);
+  }, [experts]);
 
   const filtered = useMemo(() => {
-    return MOCK_EXPERTS.filter((ex) => {
+    return (experts ?? []).filter((ex) => {
       const matchSearch =
         !search ||
-        ex.name.toLowerCase().includes(search.toLowerCase()) ||
+        ex.displayName.toLowerCase().includes(search.toLowerCase()) ||
         ex.expertise.some((e) => e.toLowerCase().includes(search.toLowerCase()));
-      const matchIndustry = industry === 'all' || ex.industry === industry;
-      const matchCountry = country === 'all' || ex.country === country;
-      return matchSearch && matchIndustry && matchCountry;
+      const matchIndustry = industry === 'all' || ex.industries.includes(industry);
+      return matchSearch && matchIndustry;
     });
-  }, [search, industry, country]);
+  }, [experts, search, industry]);
+
+  const handleConsult = async () => {
+    if (!userEmail || !selectedExpertId || !topic.trim()) return;
+    setSubmitting(true);
+    try {
+      await submitRequest({
+        requesterEmail: userEmail,
+        expertUserId: selectedExpertId as Id<'users'>,
+        topic,
+        message,
+      });
+      setConsultOpen(false);
+      setTopic('');
+      setMessage('');
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <AppPageShell
@@ -58,31 +97,13 @@ export function ExpertNetworkClient() {
             label: t('ecosystemPages.expertNetwork.filters.industry'),
             options: [
               { value: 'all', label: t('ecosystemPages.shared.all') },
-              { value: 'Giáo dục', label: 'Giáo dục' },
-              { value: 'Công nghệ', label: 'Công nghệ' },
-              { value: 'Tài chính', label: 'Tài chính' },
-              { value: 'Xuất khẩu lao động', label: 'Xuất khẩu lao động' },
-              { value: 'Nhân sự', label: 'Nhân sự' },
-              { value: 'Ngoại thương', label: 'Ngoại thương' },
-              { value: 'Luật', label: 'Luật' },
-            ],
-          },
-          {
-            key: 'country',
-            label: t('ecosystemPages.expertNetwork.filters.country'),
-            options: [
-              { value: 'all', label: t('ecosystemPages.shared.all') },
-              { value: 'Việt Nam', label: 'Việt Nam' },
-              { value: 'Singapore', label: 'Singapore' },
-              { value: 'Hàn Quốc', label: 'Hàn Quốc' },
-              { value: 'Nhật Bản', label: 'Nhật Bản' },
+              ...industries.map((value) => ({ value, label: value })),
             ],
           },
         ]}
-        filterValues={{ industry, country }}
+        filterValues={{ industry }}
         onFilterChange={(key, value) => {
           if (key === 'industry') setIndustry(value);
-          if (key === 'country') setCountry(value);
         }}
       />
 
@@ -90,84 +111,94 @@ export function ExpertNetworkClient() {
         title={t('ecosystemPages.expertNetwork.expertsCount', { params: { count: filtered.length } })}
         className="mt-6"
       >
-        <div className="grid gap-5 lg:grid-cols-2">
-          {filtered.map((expert) => (
-            <div key={expert.id} className="home-card">
-              <div className="flex items-start gap-4">
-                <Avatar className="size-16 shrink-0 ring-2 ring-primary/20">
-                  <AvatarImage src={expert.avatarUrl} alt={expert.name} />
-                  <AvatarFallback className="bg-primary/10 text-sm font-semibold text-primary">
-                    {expertInitials(expert.name)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="min-w-0 flex-1">
-                  <h3 className="text-lg font-semibold text-foreground">{expert.name}</h3>
-                  <p className="text-sm text-primary">{expert.industry} · {expert.country}</p>
-                  <div className="mt-1 flex items-center gap-1 text-sm text-amber-400">
-                    <Star className="h-4 w-4 fill-current" />
-                    {expert.rating}
+        {experts === undefined ? (
+          <p className="text-sm text-muted-foreground">{t('ecosystemPages.shared.loading')}</p>
+        ) : filtered.length === 0 ? (
+          <p className="text-sm text-muted-foreground">{t('ecosystemPages.expertNetwork.emptyExperts')}</p>
+        ) : (
+          <div className="grid gap-5 lg:grid-cols-2">
+            {filtered.map((expert) => (
+              <div key={expert.id} className="home-card">
+                <div className="flex items-start gap-4">
+                  <div className="flex size-16 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary ring-2 ring-primary/20">
+                    {expertInitials(expert.displayName)}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        className="text-left text-lg font-semibold text-foreground hover:text-primary"
+                        onClick={() => router.push(`/experts/${expert.id}`)}
+                      >
+                        {expert.displayName}
+                      </button>
+                      {expert.verified ? (
+                        <Badge className="bg-emerald-500/15 text-emerald-400">
+                          {t('ecosystemPages.expertNetwork.verified')}
+                        </Badge>
+                      ) : null}
+                    </div>
+                    <p className="text-sm text-primary">{expert.headline}</p>
                   </div>
                 </div>
+                {expert.bio ? <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{expert.bio}</p> : null}
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {expert.expertise.map((e) => (
+                    <Badge key={e} variant="secondary" className="experts-badge border-border bg-muted/80 text-foreground">
+                      {e}
+                    </Badge>
+                  ))}
+                </div>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={() => {
+                      if (!userEmail) {
+                        router.push('/auth?mode=signin&redirect=/experts/network');
+                        return;
+                      }
+                      setSelectedExpertId(expert.id);
+                      setConsultOpen(true);
+                    }}
+                  >
+                    <Calendar className="mr-1 h-4 w-4" /> {t('ecosystemPages.expertNetwork.actions.bookConsultation')}
+                  </Button>
+                  <Button type="button" size="sm" variant="outline" onClick={() => router.push(`/experts/${expert.id}`)}>
+                    {t('ecosystemPages.expertNetwork.actions.viewProfile')}
+                  </Button>
+                </div>
               </div>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{expert.biography}</p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {expert.expertise.map((e) => (
-                  <Badge key={e} variant="secondary" className="experts-badge border-border bg-muted/80 text-foreground">
-                    {e}
-                  </Badge>
-                ))}
-              </div>
-              <p className="mt-3 text-xs text-muted-foreground">
-                {t('ecosystemPages.shared.experience')} {expert.experience} · {expert.certifications.join(', ')}
-              </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                <Button
-                  type="button"
-                  size="sm"
-                  className="experts-btn-primary bg-primary text-primary-foreground hover:bg-primary/90"
-                  onClick={() =>
-                    router.push(
-                      buildContactHref({
-                        topic: 'expert-consultation',
-                        role: 'expert_network',
-                        message: `Book consultation with ${expert.name}`,
-                      })
-                    )
-                  }
-                >
-                  <Calendar className="mr-1 h-4 w-4" /> {t('ecosystemPages.expertNetwork.actions.bookConsultation')}
-                </Button>
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="outline"
-                  className="experts-btn-outline border-border bg-card text-foreground hover:border-primary/40 hover:bg-primary/10 hover:text-primary"
-                  onClick={() =>
-                    router.push(
-                      buildContactHref({
-                        topic: 'expert-connection',
-                        role: 'expert_network',
-                        message: `Connection request to ${expert.name}`,
-                      })
-                    )
-                  }
-                >
-                  {t('ecosystemPages.expertNetwork.actions.sendRequest')}
-                </Button>
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="outline"
-                  className="experts-btn-outline border-border bg-card text-foreground hover:border-primary/40 hover:bg-primary/10 hover:text-primary"
-                  onClick={() => router.push('/career/career-support')}
-                >
-                  <UserPlus className="mr-1 h-4 w-4" /> {t('ecosystemPages.expertNetwork.actions.follow')}
-                </Button>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </EcosystemSection>
+
+      <Dialog open={consultOpen} onOpenChange={setConsultOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t('ecosystemPages.expertNetwork.consultationTitle')}</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground">
+            {t('ecosystemPages.expertNetwork.consultationScheduleHint')}
+          </p>
+          <div className="space-y-3">
+            <div>
+              <Label>{t('ecosystemPages.expertNetwork.consultationTopic')}</Label>
+              <Input value={topic} onChange={(e) => setTopic(e.target.value)} />
+            </div>
+            <div>
+              <Label>{t('ecosystemPages.expertNetwork.consultationMessage')}</Label>
+              <Textarea value={message} onChange={(e) => setMessage(e.target.value)} rows={4} />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button onClick={handleConsult} disabled={submitting || !topic.trim()}>
+              {t('ecosystemPages.expertNetwork.actions.sendRequest')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </AppPageShell>
   );
 }

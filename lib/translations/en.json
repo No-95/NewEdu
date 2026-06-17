@@ -22,6 +22,7 @@
       "learners": {
         "label": "For Learners",
         "courses": "Courses",
+        "classroom": "Live classroom",
         "mentor": "Personal mentor",
         "library": "Resource library"
       },
@@ -37,6 +38,8 @@
         "label": "Jobs & Careers",
         "profile": "Competency profile",
         "jobs": "Jobs",
+        "applications": "My applications",
+        "savedJobs": "Saved jobs",
         "support": "Career support",
         "matching": "AI matching"
       },
@@ -49,6 +52,7 @@
       "experts": {
         "label": "Experts",
         "network": "Expert network",
+        "profile": "My profile",
         "topics": "Topics"
       },
       "community": {
@@ -221,6 +225,14 @@
     "submitForm": "Submit Application",
     "successMessage": "Your application has been submitted successfully!",
     "recentApplications": "Recent Applications",
+    "yourApplication": "Your application status",
+    "applicationStatus": {
+      "submitted": "Submitted — under review",
+      "in_review": "In review",
+      "shortlisted": "Shortlisted",
+      "rejected": "Not approved",
+      "accepted": "Accepted — welcome aboard!"
+    },
     "termsNotice": "By submitting this form, you agree to our Terms of Service and Privacy Policy.",
     "placeholders": {
       "fullName": "Your full name",
@@ -261,6 +273,32 @@
       "communitySupportDesc": "Join a supportive network of educators worldwide",
       "resources": "Resources",
       "resourcesDesc": "Use our comprehensive curriculum and teaching tools"
+    }
+  },
+  "expertApplicant": {
+    "title": "Become an HDP Expert",
+    "description": "Share your industry expertise with learners and job seekers across the Vietnam–Korea ecosystem.",
+    "fullName": "Full Name",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "specialization": "Area of expertise",
+    "bio": "Tell us about your background",
+    "submitForm": "Submit application",
+    "successMessage": "Your expert application has been submitted successfully!",
+    "yourApplication": "Your application status",
+    "applicationStatus": {
+      "submitted": "Submitted — under review",
+      "in_review": "In review",
+      "accepted": "Accepted — welcome aboard!",
+      "rejected": "Not approved"
+    },
+    "termsNotice": "By submitting this form, you agree to our Terms of Service and Privacy Policy.",
+    "placeholders": {
+      "fullName": "Your full name",
+      "email": "your.email@example.com",
+      "phone": "+84 (555) 123-4567",
+      "specialization": "e.g. HR, manufacturing, Korean job market",
+      "bio": "Describe your experience, credentials, and how you can help learners and job seekers."
     }
   },
   "teacherCenter": {
@@ -576,6 +614,70 @@
       "partnerships": "Partnerships"
     }
   },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "No notifications yet.",
+    "loading": "Loading notifications…",
+    "markAllRead": "Mark all read",
+    "types": {
+      "application_stage": {
+        "title": "Application update",
+        "body": "Your application for {position} moved to {stage}."
+      },
+      "application_rejected": {
+        "title": "Application update",
+        "body": "Your application for {position} was not selected at this time."
+      },
+      "application_submitted": {
+        "title": "Application submitted",
+        "body": "You applied for {jobTitle}."
+      },
+      "new_applicant": {
+        "title": "New job applicant",
+        "body": "{applicantName} applied for {jobTitle}."
+      },
+      "homework_assigned": {
+        "title": "New homework assigned",
+        "body": "{title}"
+      },
+      "homework_completed": {
+        "title": "Homework completed",
+        "body": "{learnerName} completed \"{title}\"."
+      },
+      "consultation_request": {
+        "title": "New consultation request",
+        "body": "{requesterName}: {topic}"
+      },
+      "consultation_accepted": {
+        "title": "Consultation accepted",
+        "body": "Your request \"{topic}\" was accepted."
+      },
+      "consultation_closed": {
+        "title": "Consultation closed",
+        "body": "Your request \"{topic}\" was closed."
+      },
+      "consultation_scheduled": {
+        "title": "Consultation scheduled",
+        "body": "Your consultation \"{topic}\" is scheduled for {scheduledAt}."
+      },
+      "consultation_reminder": {
+        "title": "Consultation reminder",
+        "body": "Your consultation \"{topic}\" starts at {scheduledAt}."
+      },
+      "teacher_accepted": {
+        "title": "Teacher application accepted",
+        "body": "Welcome! Open your teacher dashboard to get started."
+      },
+      "teacher_rejected": {
+        "title": "Teacher application update",
+        "body": "Your teacher application was not approved at this time."
+      },
+      "expert_accepted": {
+        "title": "Expert application accepted",
+        "body": "Welcome! Complete your expert profile to appear in the network."
+      }
+    }
+  },
   "dashboard": {
     "loading": "Loading dashboard...",
     "loadingData": "Loading your dashboard data...",
@@ -590,138 +692,273 @@
     "continueLearning": "Continue",
     "downloadCv": "Download CV",
     "updateProfile": "Update profile",
+    "nextSteps": {
+      "action": "Get started",
+      "learner": {
+        "browseCourses": "Start your first course to track progress here.",
+        "completeHomework": "You have homework due — mark it complete when finished.",
+        "practiceWeakArea": "Your recent test scores suggest extra practice would help.",
+        "practiceField": "Practice {field}"
+      },
+      "teacher": {
+        "addStudent": "Add your first student in training management.",
+        "addLead": "Capture leads in admission CRM to grow enrollment."
+      },
+      "jobSeeker": {
+        "completeProfile": "Complete your competency profile for better job matches.",
+        "browseJobs": "Browse open jobs and submit your first application."
+      },
+      "employer": {
+        "postJob": "Post your first job opening to start receiving applicants.",
+        "reviewApplicants": "New applicants are waiting — review your pipeline."
+      },
+      "expert": {
+        "publishProfile": "Publish your expert profile to appear in the network.",
+        "reviewInbox": "You have new consultation requests in your inbox."
+      }
+    },
     "learner": {
       "welcome": "Welcome back, {{name}}",
       "journeyTitle": "Your learning journey",
       "currentLevel": "Current level",
-      "currentLevelValue": "TOPIK 3",
       "goal": "Goal",
-      "goalValue": "TOPIK 5",
       "progress": "Completion progress",
-      "progressValue": "62%",
+      "continueLearningTitle": "Continue learning",
+      "continueLearningBody": "Pick up {{course}} where you left off ({{progress}}% complete).",
+      "continueLearningEmpty": "No recent lecture yet. Start a course to see your progress here.",
+      "browseCourses": "Browse courses",
       "activeCoursesTitle": "Courses in progress",
-      "activeCourses": ["Manufacturing Korean", "Intermediate TOPIK", "Business Korean"],
+      "activeCoursesEmpty": "No courses in progress yet. Browse the catalog to get started.",
       "suggestedCoursesTitle": "Recommended courses",
-      "suggestedCourses": ["HR Korean", "Logistics Korean", "Korean company interview skills"],
+      "suggestedCoursesEmpty": "You are enrolled in all published courses. Check back for new ones.",
+      "recentTestsTitle": "Recent practice",
+      "recentTestsEmpty": "No test attempts yet. Try a TOPIK mock test to track your scores.",
+      "homeworkTitle": "Homework",
+      "homeworkEmpty": "No homework assigned right now.",
+      "homeworkDue": "Due",
+      "homeworkOverdue": "Overdue",
+      "homeworkDueSoon": "Due soon",
+      "completeHomework": "Mark complete",
+      "homeworkNotePlaceholder": "Optional note for your teacher (optional)",
+      "liveClassroomTitle": "Live classroom",
+      "liveClassroomBody": "Join a live session with your teacher.",
+      "openClassroom": "Open classroom",
+      "expertBridgeTitle": "Expert support",
+      "expertBridgeBody": "Connect with mentors for guidance on learning, careers, and TOPIK preparation.",
+      "findMentor": "Find a mentor",
+      "requestConsultation": "Request consultation",
+      "topikBridgeTitle": "TOPIK → career profile",
+      "topikBridgeBody": "Sync your learner TOPIK level to your competency profile for better job matches.",
+      "syncTopikToCareer": "Sync TOPIK level",
+      "topikSyncSuccess": "Korean language updated to: {level}",
+      "studyRecommendationsTitle": "Study recommendations",
+      "homeworkStatus": {
+        "pending": "Pending",
+        "in-progress": "In progress",
+        "completed": "Completed"
+      },
+      "topikPracticeTitle": "TOPIK practice for you",
+      "topikPracticeEmpty": "No TOPIK tests available yet. Visit the test catalog.",
       "jobsTitle": "Jobs for you",
-      "jobs": ["Manufacturing interpreter", "Import/export staff", "Korean director assistant"],
-      "materialsTitle": "Materials for you",
-      "materials": ["Manufacturing vocabulary", "Korean email templates", "TOPIK curriculum"],
+      "jobsEmpty": "No open jobs matching your profile right now.",
       "communityTitle": "Your communities",
-      "communities": ["TOPIK community", "Manufacturing community", "Korean company workers"],
+      "communityEmpty": "No community posts yet. Join the forum to connect with learners.",
       "eventsTitle": "Upcoming events",
-      "events": ["TOPIK webinar", "Interview skills workshop"],
+      "eventsEmpty": "No upcoming events. Check the events page for announcements.",
       "hdpPointsTitle": "HDP Points",
       "hdpLevel": "Level",
-      "hdpLevelValue": "Member",
       "hdpPoints": "Points",
-      "hdpPointsValue": "1,250 pts",
       "balance": "Wallet balance"
     },
     "teacher": {
       "overviewTitle": "Business overview",
+      "centerOverviewTitle": "Training center overview",
       "students": "Active students",
-      "studentsValue": "356",
-      "activeCourses": "Active courses",
-      "activeCoursesValue": "12",
+      "activeCourses": "Active classes",
       "monthlyRevenue": "Monthly revenue",
-      "monthlyRevenueValue": "75,000,000 VND",
-      "courseMgmtTitle": "Course management",
-      "courseMgmt": ["Create new course", "Manage lectures", "Manage assignments", "Manage certificates"],
+      "followUpsTitle": "Today's follow-ups",
+      "followUpsEmpty": "No follow-ups due today. Add a lead in admission CRM.",
+      "classesTitle": "My classes",
+      "classesEmpty": "No classes yet. Create your first class in training management.",
+      "studentMgmtTitle": "Recent students",
+      "studentsEmpty": "No students yet. Add your first student to get started.",
       "crmTitle": "Enrollment CRM",
       "leads": "Leads",
-      "leadsValue": "124",
       "consulted": "Consulted",
-      "consultedValue": "67",
       "pendingSignup": "Pending signup",
-      "pendingSignupValue": "32",
-      "studentMgmtTitle": "Student management",
-      "studentMgmt": ["Student list", "Attendance", "Learning progress", "Learning outcomes"],
-      "marketingTitle": "Marketing",
-      "marketing": ["Course landing page", "Affiliate", "Promotions", "Email marketing"],
-      "instructorCommunityTitle": "Instructor community",
-      "instructorCommunity": ["Share materials", "Teaching webinars", "Professional workshops"],
-      "reportsTitle": "Reports",
-      "reports": ["Revenue", "Conversion rate", "Ad performance"]
+      "homeworkTitle": "Homework",
+      "homeworkPending": "{count} assignments pending review",
+      "homeworkEmpty": "No homework assigned yet.",
+      "liveClassroomTitle": "Live classroom",
+      "liveClassroomBody": "Host or join an online class session.",
+      "openClassroom": "Open classroom",
+      "courseMgmtTitle": "My courses",
+      "ownedCourses": "{count} courses you manage",
+      "coursesEmpty": "No courses yet. Create a course in teacher center.",
+      "reportsTitle": "Reports & resources",
+      "reportsRevenue": "Revenue reports",
+      "reportsCrm": "CRM conversion",
+      "reportsResources": "Resource library"
     },
     "jobSeeker": {
       "profileTitle": "Competency profile",
       "profileCompletion": "Completion",
       "matchingJobsTitle": "Matching jobs",
-      "matchingJobs": ["Korean interpreter", "Production assistant", "HR specialist"],
-      "profileViewsTitle": "Profile views",
-      "recruiterViews": "Recruiter views",
-      "recruiterViewsValue": "27",
-      "interviewInvites": "Interview invites",
-      "interviewInvitesValue": "5",
+      "applicationsTitle": "My applications",
+      "emptyMatchingJobs": "No open jobs match your profile yet. Browse the job board or complete your skills.",
+      "emptyApplications": "You have not applied to any jobs yet.",
       "skillSuggestionsTitle": "Skill recommendations",
-      "skillSuggestions": ["Manufacturing Korean", "Excel skills", "Reporting skills"],
+      "emptySkills": "Add skills to your profile to get recommendations.",
+      "skillGapsTitle": "In-demand skills to add",
+      "savedJobsTitle": "Saved jobs",
       "careerPathTitle": "Career path",
       "currentRole": "Current",
-      "currentRoleValue": "Staff",
       "targetRole": "Target",
-      "targetRoleValue": "Manager",
-      "advisorsTitle": "Expert advisors",
-      "advisors": ["HR mentor", "Manufacturing mentor", "Logistics mentor"],
+      "advisorsTitle": "Career support",
+      "emptyCareerSupport": "No career support requests yet.",
       "careerEventsTitle": "Career events",
-      "careerEvents": ["Career Day", "Job Fair", "CV Workshop"],
+      "emptyEvents": "No upcoming career events.",
       "networkTitle": "Network",
-      "networkTags": ["Businesses", "Experts", "Career community"]
+      "emptyNetwork": "Join the community to grow your network."
     },
     "employer": {
       "recruitingOverviewTitle": "Recruiting overview",
-      "activeJobs": "Active job posts",
-      "activeJobsValue": "12",
-      "newCandidates": "New candidates",
-      "newCandidatesValue": "87",
-      "interviews": "Interviews",
-      "interviewsValue": "16",
-      "hired": "Hired",
-      "hiredValue": "5",
-      "recruitingMgmtTitle": "Recruiting management",
-      "recruitingMgmt": ["Post jobs", "Manage candidates", "Evaluate candidates", "Online interviews"],
-      "talentPoolTitle": "Talent pool",
-      "talentPoolSubtitle": "Candidates by:",
-      "talentPoolTags": ["Korean", "Manufacturing", "Logistics", "HR", "Accounting"],
-      "trainingTitle": "Staff training",
-      "training": ["Internal courses", "Competency assessment", "Training management"],
-      "matchingTitle": "Business matching",
-      "matching": ["Find partners", "Find suppliers", "Find customers"],
-      "expertsTitle": "Recommended experts",
-      "experts": ["HR expert", "Manufacturing expert", "FDI expert"],
-      "reportsTitle": "Reports",
-      "reports": ["Recruiting efficiency", "Recruiting cost", "Candidate sources"],
-      "eventsTitle": "Business events",
-      "events": ["Business matching", "Business seminars", "Networking"]
+      "activeJobs": "Open jobs",
+      "newCandidates": "New applicants",
+      "interviews": "In interview",
+      "hired": "Offers",
+      "openJobsTitle": "Open positions",
+      "emptyOpenJobs": "No open jobs. Post a role from recruitment.",
+      "pipelineTitle": "Candidate pipeline",
+      "topCandidatesTitle": "Top candidates",
+      "emptyCandidates": "No high-scoring candidates yet.",
+      "trainingTitle": "Internal training",
+      "emptyTraining": "No internal courses yet.",
+      "hrTitle": "HR overview",
+      "hrEmployees": "Employee roster",
+      "hrDepartments": "Departments"
     },
     "expert": {
       "profileTitle": "Expert profile",
-      "credibility": "Credibility",
-      "credibilityValue": "Expert Level 4",
-      "followers": "Followers",
-      "followersValue": "2,350",
-      "activityTitle": "Expert activity",
-      "activity": ["Articles", "Webinars", "Podcasts", "Shared materials"],
-      "consultingTitle": "Consulting schedule",
+      "headline": "Headline",
+      "profileStatus": "Network visibility",
+      "published": "Published",
+      "draft": "Draft — not visible in network",
+      "editProfile": "Edit expert profile",
+      "viewNetwork": "View expert network",
+      "consultingTitle": "Consultation inbox",
       "newRequests": "New requests",
-      "newRequestsValue": "12",
-      "weeklySessions": "Sessions this week",
-      "weeklySessionsValue": "8",
-      "professionalCommunityTitle": "Professional communities",
-      "professionalCommunity": ["HR", "Manufacturing", "International trade", "FDI"],
-      "collaborationTitle": "Collaboration opportunities",
-      "collaboration": ["Business consulting needs", "Training projects", "Topic seminars"],
-      "contentMgmtTitle": "Content management",
-      "contentMgmt": ["Articles", "Videos", "Materials", "Courses"],
-      "incomeTitle": "Income",
-      "incomeConsulting": "Consulting",
-      "incomeConsultingValue": "xx.xxx.xxx VND",
-      "incomeCourses": "Courses",
-      "incomeCoursesValue": "xx.xxx.xxx VND",
-      "incomeSeminars": "Seminars",
-      "incomeSeminarsValue": "xx.xxx.xxx VND",
-      "personalBrandTitle": "Personal branding",
-      "personalBrand": ["Public profile", "Expert certification", "Achievements", "Community reviews"]
+      "weeklySessions": "This week",
+      "weeklyRequests": "Requests this week",
+      "inboxTitle": "Consultation requests",
+      "emptyInbox": "No consultation requests yet.",
+      "contentMgmtTitle": "Your content",
+      "emptyContent": "Publish articles or posts to build credibility.",
+      "expertiseTitle": "Areas of expertise",
+      "emptyExpertise": "Add expertise tags in your profile editor.",
+      "acceptRequest": "Accept",
+      "closeRequest": "Close"
+    }
+  },
+  "testsPage": {
+    "title": "Knowledge Tests",
+    "subtitle": "Practice across hundreds of tests in Korean, language skills, business, IT, and career topics.",
+    "searchPlaceholder": "Search tests by name or field...",
+    "startTest": "Start test",
+    "backToCatalog": "Back to all tests",
+    "empty": "No tests match your filters. Try another field or search term.",
+    "notFoundTitle": "Test not found",
+    "notFoundBody": "This test is no longer available or the link is incorrect.",
+    "loading": "Loading tests...",
+    "featured": "Featured",
+    "titlePattern": "{{field}} · {{topic}} #{{variant}}",
+    "resultsCount": "{{count}} tests available",
+    "fieldTestCount": "{{count}} tests",
+    "stats": {
+      "tests": "Total tests",
+      "fields": "Fields",
+      "questions": "Practice questions"
+    },
+    "filters": {
+      "field": "Field",
+      "difficulty": "Difficulty",
+      "allFields": "All fields",
+      "allLevels": "All levels"
+    },
+    "difficulty": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "descriptions": {
+      "beginner": "Build core knowledge with guided practice questions.",
+      "intermediate": "Strengthen skills with mixed difficulty scenarios.",
+      "advanced": "Challenge yourself with in-depth applied questions."
+    },
+    "meta": {
+      "questions": "{{count}} questions",
+      "duration": "{{minutes}} min",
+      "taken": "{{count}} taken",
+      "mix": "{{typed}} typed + {{mcq}} multiple choice"
+    },
+    "source": {
+      "curated": "Curated",
+      "ai_generated": "AI Practice",
+      "template": "Practice Set"
+    },
+    "questionTypes": {
+      "multiple_choice": "Multiple choice",
+      "fill_blank": "Fill in the blank",
+      "short_answer": "Short answer",
+      "translation": "Translation",
+      "sentence_order": "Sentence order",
+      "reading_comprehension": "Reading comprehension"
+    },
+    "pagination": {
+      "prev": "Previous",
+      "next": "Next",
+      "page": "Page {{current}} of {{total}}"
+    },
+    "fields": {
+      "korean_vocabulary": "Korean Vocabulary",
+      "korean_grammar": "Korean Grammar",
+      "korean_listening": "Korean Listening",
+      "korean_reading": "Korean Reading",
+      "korean_writing": "Korean Writing",
+      "topik_exam": "TOPIK Exam Prep",
+      "business_korean": "Business Korean",
+      "korean_culture": "Korean Culture",
+      "english_skills": "English Skills",
+      "it_technology": "IT & Technology",
+      "business_finance": "Business & Finance",
+      "career_skills": "Career Skills"
+    },
+    "topicTemplates": {
+      "1": "Fundamentals",
+      "2": "Daily Practice",
+      "3": "Review Set",
+      "4": "Challenge",
+      "5": "Mock Exam",
+      "6": "Advanced Drill",
+      "7": "Quick Check",
+      "8": "Master Test",
+      "9": "Skills Boost",
+      "10": "Final Review"
+    },
+    "take": {
+      "progress": "Question {{current}} of {{total}}",
+      "prev": "Previous",
+      "next": "Next",
+      "submit": "Submit answers",
+      "grading": "Grading with AI...",
+      "gradingError": "Could not grade your answers. Please try again.",
+      "shortPlaceholder": "Type your answer here...",
+      "longPlaceholder": "Write your full answer here...",
+      "typeHint": "Type your answer using the keyboard. AI will review typed responses.",
+      "yourAnswer": "Your answer",
+      "modelAnswer": "Model answer",
+      "resultTitle": "Your result",
+      "score": "{{score}}/{{total}} correct ({{percent}}%)"
     }
   },
   "aiSupport": {
@@ -734,5 +971,114 @@
     "errorConnection": "Cannot connect to AI service.",
     "fallbackSorry": "Sorry, I cannot respond right now. Please contact support directly.",
     "fallbackConnection": "Connection error. Please try again later."
+  },
+  "teacherOps": {
+    "addStudent": "Add student",
+    "studentName": "Student name",
+    "studentEmail": "Student email",
+    "className": "Class name",
+    "createClass": "Create class",
+    "classTitle": "Class title",
+    "instructor": "Instructor",
+    "schedule": "Schedule",
+    "capacity": "Capacity",
+    "addLead": "Add lead",
+    "leadName": "Lead name",
+    "phone": "Phone",
+    "source": "Source",
+    "leadEmail": "Email (optional)",
+    "followUpDate": "Follow-up date",
+    "notes": "Notes",
+    "save": "Save",
+    "assignHomework": "Assign homework",
+    "learnerEmail": "Learner email",
+    "homeworkTitle": "Title",
+    "description": "Description",
+    "dueDate": "Due date",
+    "assignedHomework": "Assigned homework",
+    "noHomeworkAssigned": "No homework assigned yet.",
+    "learnerNote": "Learner note",
+    "completedAt": "Completed",
+    "advanceStage": "Advance stage",
+    "addPartner": "Add partner",
+    "partnerName": "Partner name",
+    "partnerType": "Type",
+    "commission": "Commission",
+    "activate": "Activate",
+    "addReferral": "Add sample referral",
+    "download": "Download",
+    "myCourses": "My courses",
+    "myCoursesSubtitle": "Create and manage courses you own.",
+    "createCourse": "Create course",
+    "subtitle": "Subtitle",
+    "price": "Price (VND)",
+    "publishedCourses": "Your courses",
+    "noCoursesYet": "No courses yet. Create one above.",
+    "published": "Published",
+    "draft": "Draft",
+    "viewCourse": "View",
+    "publish": "Publish",
+    "unpublish": "Unpublish",
+    "downloadCsvTemplate": "Download CSV template",
+    "csvPreviewTitle": "Import preview",
+    "csvPreviewSubtitle": "{{shown}} of {{total}} rows shown",
+    "csvPreviewEmpty": "No rows to import",
+    "confirmImport": "Confirm import",
+    "cancelImport": "Cancel"
+  },
+  "employerOps": {
+    "postJob": "Post job",
+    "jobTitle": "Job title",
+    "department": "Department",
+    "location": "Location",
+    "salary": "Salary range",
+    "description": "Description",
+    "addCandidate": "Add candidate",
+    "candidateName": "Candidate name",
+    "position": "Position",
+    "score": "Match score",
+    "linkedJob": "Linked job posting",
+    "noLinkedJob": "No linked job",
+    "advanceStage": "Advance stage",
+    "rejectCandidate": "Reject",
+    "closeJob": "Close",
+    "reopenJob": "Reopen",
+    "addReview": "Add performance review",
+    "reviewPeriod": "Review period",
+    "reviewRating": "Rating (1–5)",
+    "updateProgress": "Update progress",
+    "progressPercent": "Progress (%)",
+    "addEmployee": "Add employee",
+    "employeeName": "Employee name",
+    "role": "Role",
+    "addDepartment": "Add department",
+    "departmentName": "Department name",
+    "departmentHead": "Department head",
+    "addCourse": "Add internal course",
+    "assignPlatformCourse": "Assign platform course",
+    "selectEmployee": "Select employee",
+    "selectCourse": "Select course",
+    "completeReview": "Mark complete",
+    "importStudentsCsv": "Import students (CSV)",
+    "courseTitle": "Course title",
+    "capacity": "Capacity",
+    "save": "Save",
+    "seedDemo": "Load demo data",
+    "editJob": "Edit",
+    "saveAsDraft": "Save as draft",
+    "publishJob": "Publish",
+    "candidateNotes": "Recruiter notes",
+    "candidateNotesPlaceholder": "Interview feedback, follow-up items…",
+    "notesSaved": "Notes saved"
+  },
+  "careerOps": {
+    "skillsHint": "Skills (one per line: Name:level)",
+    "educationHint": "Education (School|Degree|Year per line)",
+    "experienceHint": "Experience (Company|Role|Period|Description per line)",
+    "languagesHint": "Languages (Name:level per line)",
+    "certificatesHint": "Certificates",
+    "certificatesEmpty": "No certificates yet. Add one to strengthen your profile.",
+    "uploadCertificate": "Upload file",
+    "certificateUploaded": "File attached"
   }
 }

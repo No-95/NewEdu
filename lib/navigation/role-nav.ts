@@ -30,9 +30,10 @@ const EVENTS_FULL: RoleNavItem = {
 export const ROLE_NAV_BY_KEY: Record<RoleNavMenuKey, RoleNavItem[]> = {
   learner: [
     { id: 'courses', labelKey: 'nav.ecosystem.learners.courses', href: '/courses' },
+    { id: 'classroom', labelKey: 'nav.ecosystem.learners.classroom', href: '/courses/classroom' },
     { id: 'mentor', labelKey: 'nav.ecosystem.learners.mentor', href: '/experts/network' },
     { id: 'library', labelKey: 'nav.ecosystem.learners.library', href: '/books' },
-    { id: 'assessments', labelKey: 'nav.role.assessments', href: '/career/ai-matching' },
+    { id: 'assessments', labelKey: 'nav.role.assessments', href: '/tests' },
     COMMUNITY,
     EVENTS,
   ],
@@ -48,6 +49,8 @@ export const ROLE_NAV_BY_KEY: Record<RoleNavMenuKey, RoleNavItem[]> = {
   job_seeker: [
     { id: 'profile', labelKey: 'nav.ecosystem.careers.profile', href: '/career/profile' },
     { id: 'jobs', labelKey: 'nav.ecosystem.careers.jobs', href: '/jobs' },
+    { id: 'savedJobs', labelKey: 'nav.ecosystem.careers.savedJobs', href: '/career/saved-jobs' },
+    { id: 'applications', labelKey: 'nav.ecosystem.careers.applications', href: '/career/applications' },
     { id: 'support', labelKey: 'nav.ecosystem.careers.support', href: '/career/career-support' },
     { id: 'matching', labelKey: 'nav.ecosystem.careers.matching', href: '/career/ai-matching' },
     COMMUNITY,
@@ -61,6 +64,7 @@ export const ROLE_NAV_BY_KEY: Record<RoleNavMenuKey, RoleNavItem[]> = {
     EVENTS,
   ],
   expert: [
+    { id: 'profile', labelKey: 'nav.ecosystem.experts.profile', href: '/experts/profile' },
     { id: 'network', labelKey: 'nav.ecosystem.experts.network', href: '/experts/network' },
     { id: 'topics', labelKey: 'nav.ecosystem.experts.topics', href: '/experts/events' },
     COMMUNITY,

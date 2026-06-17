@@ -1,8 +1,10 @@
 'use client';
 
-import { useState } from 'react';
-import { useQuery } from 'convex/react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { useMutation, useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
+import type { Id } from '@/convex/_generated/dataModel';
 import { AppPageShell } from '@/components/ecosystem/shared/AppPageShell';
 import { EcosystemMetricGrid } from '@/components/ecosystem/shared/EcosystemMetricGrid';
 import { EcosystemPipeline } from '@/components/ecosystem/shared/EcosystemPipeline';
@@ -14,8 +16,9 @@ import { EcosystemPageLoader } from '@/components/ecosystem/shared/EcosystemPage
 import { buildLeadStages } from '@/lib/ecosystem/constants';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { translateMetrics } from '@/lib/ecosystem/i18n';
-import { buildContactHref, scrollToElementId } from '@/lib/utils/client-actions';
+import { scrollToElementId } from '@/lib/utils/client-actions';
 import type { LeadStage } from '@/lib/ecosystem/types';
+import { CreateLeadDialog } from '@/components/ecosystem/teacher-center/TeacherOpsDialogs';
 
 const LEAD_STAGE_COLORS: Record<LeadStage, string> = {
   new_lead: 'bg-blue-500/20 text-blue-300',
@@ -27,8 +30,24 @@ const LEAD_STAGE_COLORS: Record<LeadStage, string> = {
 
 export function AdmissionCrmClient({ userEmail }: { userEmail: string }) {
   const { t } = useLanguage();
+  const searchParams = useSearchParams();
+  const highlightLeadId = searchParams.get('leadId');
   const [view, setView] = useState<'pipeline' | 'table'>('pipeline');
+  const [leadOpen, setLeadOpen] = useState(false);
   const data = useQuery(api.ecosystem.getAdmissionCrmDashboard, { email: userEmail });
+  const advanceLead = useMutation(api.teacherOps.advanceLeadStage);
+
+  useEffect(() => {
+    if (!highlightLeadId || data === undefined) return;
+    setView('pipeline');
+    const timer = window.setTimeout(() => {
+      document.getElementById(`lead-${highlightLeadId}`)?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+    }, 150);
+    return () => window.clearTimeout(timer);
+  }, [highlightLeadId, data]);
 
   if (data === undefined) {
     return (
@@ -52,18 +71,13 @@ export function AdmissionCrmClient({ userEmail }: { userEmail: string }) {
             {
               label: t('ecosystemPages.admissionCrm.actions.addLead'),
               variant: 'default',
-              href: buildContactHref({ topic: 'add-lead', role: 'teacher', message: 'New admission lead request' }),
-            },
-            {
-              label: t('ecosystemPages.admissionCrm.actions.scheduleFollowUp'),
-              variant: 'outline',
-              href: buildContactHref({ topic: 'follow-up', role: 'teacher', message: 'Schedule admission follow-up' }),
+              onClick: () => setLeadOpen(true),
             },
             {
               label: t('ecosystemPages.admissionCrm.actions.moveStage'),
               variant: 'outline',
               onClick: () => {
-                setView('table');
+                setView('pipeline');
                 scrollToElementId('admission-pipeline');
               },
             },
@@ -71,6 +85,8 @@ export function AdmissionCrmClient({ userEmail }: { userEmail: string }) {
         />
       }
     >
+      <CreateLeadDialog userEmail={userEmail} open={leadOpen} onOpenChange={setLeadOpen} />
+
       <EcosystemSection title={t('ecosystemPages.shared.overview')}>
         <EcosystemMetricGrid stats={metrics} />
       </EcosystemSection>
@@ -124,12 +140,25 @@ export function AdmissionCrmClient({ userEmail }: { userEmail: string }) {
               {t('ecosystemPages.admissionCrm.emptyPipeline')}
             </div>
           ) : (
-            <EcosystemPipeline stages={leadStages} leads={data.leads} />
+            <EcosystemPipeline
+              stages={leadStages}
+              leads={data.leads}
+              advanceLabel={t('teacherOps.advanceStage')}
+              highlightLeadId={highlightLeadId ?? undefined}
+              onAdvanceLead={(leadId) =>
+                void advanceLead({
+                  email: userEmail,
+                  leadId: leadId as Id<'crmLeads'>,
+                })
+              }
+            />
           )
         ) : (
           <EcosystemDataTable
             rows={data.leads}
             emptyMessage={t('ecosystemPages.admissionCrm.emptyLeads')}
+            highlightRowId={highlightLeadId ?? undefined}
+            rowDomId={(row) => `lead-${row.id}`}
             columns={[
               { key: 'name', header: t('ecosystemPages.shared.table.name') },
               { key: 'phone', header: t('ecosystemPages.shared.table.phone') },

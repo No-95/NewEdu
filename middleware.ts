@@ -11,10 +11,12 @@ const PROTECTED_PREFIXES = [
   '/books',
   '/contact-us',
   '/teacher-applicant',
+  '/expert-applicant',
   '/teacher-center',
   '/career',
   '/business',
   '/experts',
+  '/tests',
 ];
 
 async function getSession(email: string) {
@@ -153,11 +155,13 @@ export const config = {
     '/books/:path*',
     '/contact-us/:path*',
     '/teacher-applicant/:path*',
+    '/expert-applicant/:path*',
     '/teacher-center',
     '/teacher-center/:path*',
     '/career/:path*',
     '/business/:path*',
     '/experts/:path*',
+    '/tests/:path*',
     '/auth',
     '/onboarding/:path*',
   ],

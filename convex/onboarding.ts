@@ -375,6 +375,25 @@ export const submitOnboardingSurvey = mutation({
       updatedAt: now,
     });
 
+    if (validated.roles.includes('job_seeker')) {
+      const existingCareer = await ctx.db
+        .query('careerProfiles')
+        .withIndex('by_userId', (q) => q.eq('userId', user._id))
+        .first();
+      if (!existingCareer) {
+        await ctx.db.insert('careerProfiles', {
+          userId: user._id,
+          education: [],
+          skills: [],
+          certificates: [],
+          experience: [],
+          languages: [],
+          createdAt: now,
+          updatedAt: now,
+        });
+      }
+    }
+
     return {
       hdpId,
       activeRole,

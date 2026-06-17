@@ -1,51 +1,60 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useMutation, useQuery } from 'convex/react';
+import { api } from '@/convex/_generated/api';
+import type { Id } from '@/convex/_generated/dataModel';
 import { AppPageShell } from '@/components/ecosystem/shared/AppPageShell';
-import { EcosystemFilterBar } from '@/components/ecosystem/shared/EcosystemFilterBar';
-import { EcosystemDataTable } from '@/components/ecosystem/shared/EcosystemDataTable';
 import { EcosystemActionBar } from '@/components/ecosystem/shared/EcosystemActionBar';
 import { EcosystemSection } from '@/components/ecosystem/shared/EcosystemSection';
-import { MOCK_RESOURCES, RESOURCE_CATEGORIES } from '@/lib/ecosystem/mock-data';
+import { EcosystemPageLoader } from '@/components/ecosystem/shared/EcosystemPageLoader';
 import { useLanguage } from '@/lib/context/LanguageContext';
-import { buildContactHref, downloadTextFile, openFilePicker } from '@/lib/utils/client-actions';
-import { Badge } from '@/components/ui/badge';
-import { Download, FileText } from 'lucide-react';
+import { openFilePicker } from '@/lib/utils/client-actions';
+import { Button } from '@/components/ui/button';
 
-export function ResourceLibraryClient() {
+export function ResourceLibraryClient({ userEmail }: { userEmail: string }) {
   const { t } = useLanguage();
-  const router = useRouter();
-  const [search, setSearch] = useState('');
-  const [category, setCategory] = useState('all');
-  const [selectedResourceId, setSelectedResourceId] = useState<string | null>(null);
+  const resources = useQuery(api.teacherOps.listTeacherResources, { email: userEmail });
+  const generateUploadUrl = useMutation(api.teacherOps.generateResourceUploadUrl);
+  const createResource = useMutation(api.teacherOps.createTeacherResource);
+  const deleteResource = useMutation(api.teacherOps.deleteTeacherResource);
+  const [uploading, setUploading] = useState(false);
 
-  const filtered = useMemo(() => {
-    return MOCK_RESOURCES.filter((r) => {
-      const matchSearch =
-        !search ||
-        r.title.toLowerCase().includes(search.toLowerCase()) ||
-        r.uploadedBy.toLowerCase().includes(search.toLowerCase());
-      const matchCategory = category === 'all' || r.category === category;
-      return matchSearch && matchCategory;
+  const handleUpload = () => {
+    openFilePicker({
+      accept: '.pdf,.doc,.docx,.ppt,.pptx,.xlsx,.txt,.png,.jpg',
+      onSelect: async (file) => {
+        setUploading(true);
+        try {
+          const uploadUrl = await generateUploadUrl({});
+          const response = await fetch(uploadUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': file.type || 'application/octet-stream' },
+            body: file,
+          });
+          const { storageId } = (await response.json()) as { storageId: Id<'_storage'> };
+          await createResource({
+            email: userEmail,
+            title: file.name.replace(/\.[^.]+$/, ''),
+            fileName: file.name,
+            mimeType: file.type || undefined,
+            storageId,
+          });
+        } finally {
+          setUploading(false);
+        }
+      },
     });
-  }, [search, category]);
-
-  const selectedResource = filtered.find((item) => item.id === selectedResourceId) ?? filtered[0] ?? null;
-
-  const downloadResource = (resource: (typeof MOCK_RESOURCES)[number]) => {
-    const content = [
-      `HDP EDU Resource Request`,
-      `Title: ${resource.title}`,
-      `Category: ${resource.category}`,
-      `Format: ${resource.format}`,
-      `Uploaded by: ${resource.uploadedBy}`,
-      `Updated: ${resource.updatedAt}`,
-      '',
-      'This is a catalog reference export. Contact HDP EDU for the full file.',
-    ].join('\n');
-    downloadTextFile(`${resource.title.replace(/\s+/g, '-').toLowerCase()}-info.txt`, content);
   };
+
+  if (resources === undefined) {
+    return (
+      <EcosystemPageLoader
+        title={t('ecosystemPages.resourceLibrary.title')}
+        subtitle={t('ecosystemPages.resourceLibrary.subtitle')}
+      />
+    );
+  }
 
   return (
     <AppPageShell
@@ -55,116 +64,59 @@ export function ResourceLibraryClient() {
         <EcosystemActionBar
           actions={[
             {
-              label: t('ecosystemPages.resourceLibrary.actions.upload'),
+              label: uploading
+                ? t('ecosystemPages.resourceLibrary.actions.uploading')
+                : t('ecosystemPages.resourceLibrary.actions.upload'),
               variant: 'default',
-              onClick: () =>
-                openFilePicker({
-                  accept: '.pdf,.doc,.docx,.ppt,.pptx,.xlsx',
-                  onSelect: (file) => {
-                    router.push(
-                      buildContactHref({
-                        topic: 'resource-upload',
-                        role: 'teacher',
-                        message: `Upload request for resource file: ${file.name}`,
-                      })
-                    );
-                  },
-                }),
-            },
-            {
-              label: t('ecosystemPages.resourceLibrary.actions.edit'),
-              variant: 'outline',
-              href: buildContactHref({
-                topic: 'resource-edit',
-                role: 'teacher',
-                message: selectedResource ? `Edit resource: ${selectedResource.title}` : 'Edit resource request',
-              }),
-            },
-            {
-              label: t('ecosystemPages.resourceLibrary.actions.delete'),
-              variant: 'outline',
-              href: buildContactHref({
-                topic: 'resource-delete',
-                role: 'teacher',
-                message: selectedResource ? `Delete resource: ${selectedResource.title}` : 'Delete resource request',
-              }),
+              onClick: handleUpload,
             },
           ]}
         />
       }
     >
-      <div className="mb-6 flex flex-wrap gap-2">
-        {RESOURCE_CATEGORIES.map((cat) => (
-          <Badge
-            key={cat}
-            variant="secondary"
-            className={`cursor-pointer bg-white/10 hover:bg-primary/20 ${category === cat ? 'border-primary/40 bg-primary/20 text-primary' : ''}`}
-            onClick={() => setCategory(cat)}
-          >
-            {cat}
-          </Badge>
-        ))}
-      </div>
-
-      <EcosystemFilterBar
-        searchValue={search}
-        onSearchChange={setSearch}
-        searchPlaceholder={t('ecosystemPages.resourceLibrary.searchPlaceholder')}
-        filters={[
-          {
-            key: 'category',
-            label: t('ecosystemPages.resourceLibrary.categoryFilter'),
-            options: [
-              { value: 'all', label: t('ecosystemPages.shared.all') },
-              ...RESOURCE_CATEGORIES.map((c) => ({ value: c, label: c })),
-            ],
-          },
-        ]}
-        filterValues={{ category }}
-        onFilterChange={(_, v) => setCategory(v)}
-      />
-
-      <EcosystemSection
-        title={`${t('ecosystemPages.resourceLibrary.materialsSection')} (${filtered.length})`}
-        className="mt-6"
-      >
-        <EcosystemDataTable
-          rows={filtered}
-          onRowClick={(row) => setSelectedResourceId(String(row.id))}
-          columns={[
-            {
-              key: 'title',
-              header: t('ecosystemPages.shared.table.title'),
-              render: (row) => (
-                <div className="flex items-center gap-2">
-                  <FileText className="h-4 w-4 text-primary" />
-                  <span>{row.title}</span>
+      <EcosystemSection title={t('ecosystemPages.resourceLibrary.materialsSection')}>
+        {resources.length === 0 ? (
+          <div className="home-card-muted py-12 text-center">
+            <p className="text-sm text-muted-foreground">{t('ecosystemPages.resourceLibrary.emptyMaterials')}</p>
+            <p className="mt-2 text-xs text-muted-foreground">{t('ecosystemPages.resourceLibrary.emptyHint')}</p>
+          </div>
+        ) : (
+          <ul className="space-y-3">
+            {resources.map((resource) => (
+              <li
+                key={resource.id}
+                className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-white/10 bg-white/5 px-4 py-3"
+              >
+                <div>
+                  <p className="font-medium text-foreground">{resource.title}</p>
+                  <p className="text-xs text-muted-foreground">{resource.fileName}</p>
                 </div>
-              ),
-            },
-            { key: 'category', header: t('ecosystemPages.shared.table.category') },
-            { key: 'format', header: t('ecosystemPages.shared.table.format') },
-            { key: 'uploadedBy', header: t('ecosystemPages.shared.table.uploadedBy') },
-            { key: 'downloads', header: t('ecosystemPages.shared.table.downloads') },
-            { key: 'updatedAt', header: t('ecosystemPages.shared.table.updated') },
-            {
-              key: 'actions',
-              header: '',
-              render: (row) => (
-                <button
-                  type="button"
-                  className="text-primary hover:text-primary/80"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    downloadResource(row as (typeof MOCK_RESOURCES)[number]);
-                  }}
-                >
-                  <Download className="h-4 w-4" />
-                </button>
-              ),
-            },
-          ]}
-        />
+                <div className="flex items-center gap-2">
+                  {resource.url ? (
+                    <Button asChild size="sm" variant="outline">
+                      <a href={resource.url} target="_blank" rel="noreferrer">
+                        {t('teacherOps.download')}
+                      </a>
+                    </Button>
+                  ) : null}
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() =>
+                      void deleteResource({
+                        email: userEmail,
+                        resourceId: resource.id as Id<'teacherResources'>,
+                      })
+                    }
+                  >
+                    {t('ecosystemPages.resourceLibrary.actions.delete')}
+                  </Button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
       </EcosystemSection>
     </AppPageShell>
   );

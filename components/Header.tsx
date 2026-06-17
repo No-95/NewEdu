@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { useLanguage, type Language } from '@/lib/context/LanguageContext';
 import { GuestNavMenu } from '@/components/GuestNavMenu';
 import { RoleNavMenu } from '@/components/RoleNavMenu';
+import { RoleSwitcher } from '@/components/dashboard/RoleSwitcher';
+import { NotificationBell } from '@/components/NotificationBell';
 
 interface HeaderProps {
   onNavigate?: (section: string) => void;
@@ -18,6 +20,8 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, lockNavigation = fal
   const [mounted, setMounted] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [activeRole, setActiveRole] = useState<string | null>(null);
+  const [roles, setRoles] = useState<string[]>([]);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
   const { language, setLanguage, t } = useLanguage();
 
   React.useEffect(() => {
@@ -30,13 +34,19 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, lockNavigation = fal
           const data = await res.json();
           setIsAuthenticated(true);
           setActiveRole(data.activeRole ?? null);
+          setRoles(Array.isArray(data.roles) ? data.roles : []);
+          setUserEmail(data.email ?? null);
         } else {
           setIsAuthenticated(false);
           setActiveRole(null);
+          setRoles([]);
+          setUserEmail(null);
         }
       } catch (e) {
         setIsAuthenticated(false);
         setActiveRole(null);
+        setRoles([]);
+        setUserEmail(null);
       }
     })();
   }, []);
@@ -134,6 +144,18 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, lockNavigation = fal
             </div>
             )}
 
+            {mounted && isAuthenticated && userEmail ? (
+              <NotificationBell userEmail={userEmail} />
+            ) : null}
+
+            {mounted && isAuthenticated && roles.length > 1 && activeRole ? (
+              <RoleSwitcher
+                activeRole={activeRole}
+                roles={roles}
+                onRoleChange={(roleKey) => setActiveRole(roleKey)}
+              />
+            ) : null}
+
             {mounted && (
               isAuthenticated ? (
                 <Link
@@ -221,6 +243,19 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, lockNavigation = fal
                 </div>
 
                 {/* Mobile Auth Buttons */}
+                {mounted && isAuthenticated && userEmail ? (
+                  <div className="flex items-center justify-between px-4 py-2">
+                    <NotificationBell userEmail={userEmail} />
+                    {roles.length > 1 && activeRole ? (
+                      <RoleSwitcher
+                        activeRole={activeRole}
+                        roles={roles}
+                        onRoleChange={(roleKey) => setActiveRole(roleKey)}
+                      />
+                    ) : null}
+                  </div>
+                ) : null}
+
                 {mounted && (
                 <div className="flex gap-2 pt-2">
                   {isAuthenticated ? (
