@@ -432,6 +432,21 @@
     "consultationScheduleHint": "요청을 보낸 후 전문가가 날짜, 시간, 미팅 링크를 제안합니다. 커리어 → 상담에서 확인하세요.",
     "actions": { "bookConsultation": "상담 예약", "sendRequest": "요청 보내기", "viewProfile": "프로필 보기", "follow": "팔로우" }
   },
+  "expertProfile": {
+    "title": "전문가 프로필",
+    "subtitle": "전문가 네트워크에 표시되는 프로필을 관리합니다.",
+    "edit": "프로필 수정",
+    "create": "프로필 만들기",
+    "emptyTitle": "전문가 프로필이 없습니다",
+    "emptyBody": "전문가 네트워크에 노출하려면 프로필을 만드세요.",
+    "displayName": "표시 이름",
+    "headline": "한 줄 소개",
+    "bio": "소개",
+    "industries": "분야 (쉼표로 구분)",
+    "expertise": "전문 분야 (쉼표로 구분)",
+    "publishToNetwork": "전문가 네트워크에 공개",
+    "previewTitle": "네트워크 미리보기"
+  },
   "expertEvents": {
     "title": "전문 주제",
     "subtitle": "이벤트, 웨비나, 워크숍, 전문 포럼.",

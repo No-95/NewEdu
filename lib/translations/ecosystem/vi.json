@@ -432,6 +432,21 @@
     "consultationScheduleHint": "Sau khi gửi yêu cầu, chuyên gia sẽ đề xuất ngày, giờ và link họp. Theo dõi tại Sự nghiệp → Tư vấn.",
     "actions": { "bookConsultation": "Đặt tư vấn", "sendRequest": "Gửi yêu cầu", "viewProfile": "Xem hồ sơ", "follow": "Theo dõi" }
   },
+  "expertProfile": {
+    "title": "Hồ sơ chuyên gia",
+    "subtitle": "Quản lý cách bạn xuất hiện trên mạng lưới chuyên gia.",
+    "edit": "Chỉnh sửa hồ sơ",
+    "create": "Tạo hồ sơ",
+    "emptyTitle": "Chưa có hồ sơ chuyên gia",
+    "emptyBody": "Tạo hồ sơ để xuất hiện trên mạng lưới chuyên gia.",
+    "displayName": "Tên hiển thị",
+    "headline": "Tiêu đề ngắn",
+    "bio": "Giới thiệu",
+    "industries": "Lĩnh vực (phân cách bằng dấu phẩy)",
+    "expertise": "Chuyên môn (phân cách bằng dấu phẩy)",
+    "publishToNetwork": "Công khai trên mạng lưới chuyên gia",
+    "previewTitle": "Xem trước trên mạng lưới"
+  },
   "expertEvents": {
     "title": "Chuyên Đề",
     "subtitle": "Sự kiện, webinar, workshop và diễn đàn chuyên môn.",

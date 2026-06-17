@@ -39,6 +39,54 @@ function emptyCertificate(): CertificateRow {
   return { name: '', issuer: '', year: '' };
 }
 
+const fieldClass =
+  'border-border/60 bg-background text-foreground placeholder:text-muted-foreground focus-visible:ring-primary/40';
+
+function SectionBlock({
+  title,
+  hint,
+  onAdd,
+  addLabel,
+  children,
+}: {
+  title: string;
+  hint: string;
+  onAdd: () => void;
+  addLabel: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="space-y-3 rounded-xl border border-border/60 bg-muted/20 p-4">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <h3 className="text-sm font-semibold text-foreground">{title}</h3>
+          <p className="mt-0.5 text-xs text-muted-foreground">{hint}</p>
+        </div>
+        <Button type="button" variant="outline" size="sm" className="shrink-0" onClick={onAdd}>
+          + {addLabel}
+        </Button>
+      </div>
+      <div className="space-y-3">{children}</div>
+    </section>
+  );
+}
+
+function ColumnLabels({ labels }: { labels: string[] }) {
+  return (
+    <div
+      className="hidden gap-2 sm:grid"
+      style={{ gridTemplateColumns: `repeat(${labels.length}, minmax(0, 1fr)) auto` }}
+    >
+      {labels.map((label) => (
+        <span key={label} className="px-1 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+          {label}
+        </span>
+      ))}
+      <span className="w-9" />
+    </div>
+  );
+}
+
 export function CareerProfileEditor({
   userEmail,
   open,
@@ -109,28 +157,39 @@ export function CareerProfileEditor({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
+      <DialogContent className="max-h-[90vh] overflow-y-auto border-border/60 bg-card sm:max-w-3xl">
         <DialogHeader>
           <DialogTitle>{t('ecosystemPages.careerProfile.actions.edit')}</DialogTitle>
         </DialogHeader>
-        <div className="space-y-6">
-          <div>
-            <Label>{t('employerOps.location')}</Label>
-            <Input value={location} onChange={(e) => setLocation(e.target.value)} className="mt-1" />
+
+        <div className="space-y-5">
+          <div className="rounded-xl border border-border/60 bg-muted/20 p-4">
+            <Label htmlFor="career-location" className="text-sm font-semibold text-foreground">
+              {t('careerOps.locationLabel')}
+            </Label>
+            <Input
+              id="career-location"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              className={`mt-2 ${fieldClass}`}
+              placeholder={t('careerOps.locationLabel')}
+            />
           </div>
 
-          <section className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label>{t('careerOps.skillsHint')}</Label>
-              <Button type="button" variant="outline" size="sm" onClick={() => setSkills([...skills, emptySkill()])}>
-                + Add
-              </Button>
-            </div>
+          <SectionBlock
+            title={t('careerOps.skillsTitle')}
+            hint={t('careerOps.skillsHint')}
+            addLabel={t('careerOps.addRow')}
+            onAdd={() => setSkills([...skills, emptySkill()])}
+          >
+            <ColumnLabels labels={[t('careerOps.skillName'), t('careerOps.skillLevel')]} />
             {skills.map((skill, index) => (
-              <div key={index} className="flex gap-2">
+              <div key={index} className="flex flex-col gap-2 sm:flex-row sm:items-center">
                 <Input
-                  placeholder="Skill name"
+                  aria-label={t('careerOps.skillName')}
+                  placeholder={t('careerOps.skillName')}
                   value={skill.name}
+                  className={`flex-1 ${fieldClass}`}
                   onChange={(e) => {
                     const next = [...skills];
                     next[index] = { ...skill, name: e.target.value };
@@ -138,10 +197,12 @@ export function CareerProfileEditor({
                   }}
                 />
                 <Input
+                  aria-label={t('careerOps.skillLevel')}
                   type="number"
                   min={0}
                   max={100}
-                  className="w-24"
+                  placeholder="0–100"
+                  className={`w-full sm:w-28 ${fieldClass}`}
                   value={skill.level}
                   onChange={(e) => {
                     const next = [...skills];
@@ -150,144 +211,283 @@ export function CareerProfileEditor({
                   }}
                 />
                 {skills.length > 1 ? (
-                  <Button type="button" variant="ghost" size="sm" onClick={() => setSkills(skills.filter((_, i) => i !== index))}>
-                    ×
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="shrink-0 text-muted-foreground"
+                    onClick={() => setSkills(skills.filter((_, i) => i !== index))}
+                  >
+                    {t('careerOps.removeRow')}
+                  </Button>
+                ) : (
+                  <span className="hidden w-9 sm:inline" />
+                )}
+              </div>
+            ))}
+          </SectionBlock>
+
+          <SectionBlock
+            title={t('careerOps.educationTitle')}
+            hint={t('careerOps.educationHint')}
+            addLabel={t('careerOps.addRow')}
+            onAdd={() => setEducation([...education, emptyEducation()])}
+          >
+            <ColumnLabels labels={[t('careerOps.school'), t('careerOps.degree'), t('careerOps.year')]} />
+            {education.map((row, index) => (
+              <div key={index} className="grid gap-2 sm:grid-cols-[1fr_1fr_120px_auto] sm:items-center">
+                <Input
+                  aria-label={t('careerOps.school')}
+                  placeholder={t('careerOps.school')}
+                  value={row.school}
+                  className={fieldClass}
+                  onChange={(e) => {
+                    const next = [...education];
+                    next[index] = { ...row, school: e.target.value };
+                    setEducation(next);
+                  }}
+                />
+                <Input
+                  aria-label={t('careerOps.degree')}
+                  placeholder={t('careerOps.degree')}
+                  value={row.degree}
+                  className={fieldClass}
+                  onChange={(e) => {
+                    const next = [...education];
+                    next[index] = { ...row, degree: e.target.value };
+                    setEducation(next);
+                  }}
+                />
+                <Input
+                  aria-label={t('careerOps.year')}
+                  placeholder={t('careerOps.year')}
+                  value={row.year}
+                  className={fieldClass}
+                  onChange={(e) => {
+                    const next = [...education];
+                    next[index] = { ...row, year: e.target.value };
+                    setEducation(next);
+                  }}
+                />
+                {education.length > 1 ? (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="text-muted-foreground"
+                    onClick={() => setEducation(education.filter((_, i) => i !== index))}
+                  >
+                    {t('careerOps.removeRow')}
                   </Button>
                 ) : null}
               </div>
             ))}
-          </section>
+          </SectionBlock>
 
-          <section className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label>{t('careerOps.educationHint')}</Label>
-              <Button type="button" variant="outline" size="sm" onClick={() => setEducation([...education, emptyEducation()])}>
-                + Add
-              </Button>
-            </div>
-            {education.map((row, index) => (
-              <div key={index} className="grid gap-2 sm:grid-cols-3">
-                <Input placeholder="School" value={row.school} onChange={(e) => {
-                  const next = [...education]; next[index] = { ...row, school: e.target.value }; setEducation(next);
-                }} />
-                <Input placeholder="Degree" value={row.degree} onChange={(e) => {
-                  const next = [...education]; next[index] = { ...row, degree: e.target.value }; setEducation(next);
-                }} />
-                <div className="flex gap-2">
-                  <Input placeholder="Year" value={row.year} onChange={(e) => {
-                    const next = [...education]; next[index] = { ...row, year: e.target.value }; setEducation(next);
-                  }} />
-                  {education.length > 1 ? (
-                    <Button type="button" variant="ghost" size="sm" onClick={() => setEducation(education.filter((_, i) => i !== index))}>×</Button>
-                  ) : null}
-                </div>
-              </div>
-            ))}
-          </section>
-
-          <section className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label>{t('careerOps.experienceHint')}</Label>
-              <Button type="button" variant="outline" size="sm" onClick={() => setExperience([...experience, emptyExperience()])}>
-                + Add
-              </Button>
-            </div>
+          <SectionBlock
+            title={t('careerOps.experienceTitle')}
+            hint={t('careerOps.experienceHint')}
+            addLabel={t('careerOps.addRow')}
+            onAdd={() => setExperience([...experience, emptyExperience()])}
+          >
             {experience.map((row, index) => (
-              <div key={index} className="space-y-2 rounded-lg border border-border/50 p-3">
+              <div key={index} className="space-y-3 rounded-lg border border-border/50 bg-background/40 p-3">
+                <ColumnLabels labels={[t('careerOps.company'), t('careerOps.role'), t('careerOps.period')]} />
                 <div className="grid gap-2 sm:grid-cols-3">
-                  <Input placeholder="Company" value={row.company} onChange={(e) => {
-                    const next = [...experience]; next[index] = { ...row, company: e.target.value }; setExperience(next);
-                  }} />
-                  <Input placeholder="Role" value={row.role} onChange={(e) => {
-                    const next = [...experience]; next[index] = { ...row, role: e.target.value }; setExperience(next);
-                  }} />
-                  <Input placeholder="Period" value={row.period} onChange={(e) => {
-                    const next = [...experience]; next[index] = { ...row, period: e.target.value }; setExperience(next);
-                  }} />
+                  <Input
+                    aria-label={t('careerOps.company')}
+                    placeholder={t('careerOps.company')}
+                    value={row.company}
+                    className={fieldClass}
+                    onChange={(e) => {
+                      const next = [...experience];
+                      next[index] = { ...row, company: e.target.value };
+                      setExperience(next);
+                    }}
+                  />
+                  <Input
+                    aria-label={t('careerOps.role')}
+                    placeholder={t('careerOps.role')}
+                    value={row.role}
+                    className={fieldClass}
+                    onChange={(e) => {
+                      const next = [...experience];
+                      next[index] = { ...row, role: e.target.value };
+                      setExperience(next);
+                    }}
+                  />
+                  <Input
+                    aria-label={t('careerOps.period')}
+                    placeholder={t('careerOps.period')}
+                    value={row.period}
+                    className={fieldClass}
+                    onChange={(e) => {
+                      const next = [...experience];
+                      next[index] = { ...row, period: e.target.value };
+                      setExperience(next);
+                    }}
+                  />
                 </div>
-                <Textarea placeholder="Description" value={row.description} rows={2} onChange={(e) => {
-                  const next = [...experience]; next[index] = { ...row, description: e.target.value }; setExperience(next);
-                }} />
+                <div>
+                  <Label className="text-xs text-muted-foreground">{t('careerOps.description')}</Label>
+                  <Textarea
+                    placeholder={t('careerOps.description')}
+                    value={row.description}
+                    rows={2}
+                    className={`mt-1.5 ${fieldClass}`}
+                    onChange={(e) => {
+                      const next = [...experience];
+                      next[index] = { ...row, description: e.target.value };
+                      setExperience(next);
+                    }}
+                  />
+                </div>
                 {experience.length > 1 ? (
-                  <Button type="button" variant="ghost" size="sm" onClick={() => setExperience(experience.filter((_, i) => i !== index))}>Remove</Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="text-muted-foreground"
+                    onClick={() => setExperience(experience.filter((_, i) => i !== index))}
+                  >
+                    {t('careerOps.removeRow')}
+                  </Button>
                 ) : null}
               </div>
             ))}
-          </section>
+          </SectionBlock>
 
-          <section className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label>{t('careerOps.languagesHint')}</Label>
-              <Button type="button" variant="outline" size="sm" onClick={() => setLanguages([...languages, emptyLanguage()])}>
-                + Add
-              </Button>
-            </div>
+          <SectionBlock
+            title={t('careerOps.languagesTitle')}
+            hint={t('careerOps.languagesHint')}
+            addLabel={t('careerOps.addRow')}
+            onAdd={() => setLanguages([...languages, emptyLanguage()])}
+          >
+            <ColumnLabels labels={[t('careerOps.languageName'), t('careerOps.languageLevel')]} />
             {languages.map((row, index) => (
-              <div key={index} className="flex gap-2">
-                <Input placeholder="Language" value={row.name} onChange={(e) => {
-                  const next = [...languages]; next[index] = { ...row, name: e.target.value }; setLanguages(next);
-                }} />
-                <Input placeholder="Level" value={row.level} onChange={(e) => {
-                  const next = [...languages]; next[index] = { ...row, level: e.target.value }; setLanguages(next);
-                }} />
+              <div key={index} className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                <Input
+                  aria-label={t('careerOps.languageName')}
+                  placeholder={t('careerOps.languageName')}
+                  value={row.name}
+                  className={`flex-1 ${fieldClass}`}
+                  onChange={(e) => {
+                    const next = [...languages];
+                    next[index] = { ...row, name: e.target.value };
+                    setLanguages(next);
+                  }}
+                />
+                <Input
+                  aria-label={t('careerOps.languageLevel')}
+                  placeholder={t('careerOps.languageLevel')}
+                  value={row.level}
+                  className={`flex-1 sm:max-w-xs ${fieldClass}`}
+                  onChange={(e) => {
+                    const next = [...languages];
+                    next[index] = { ...row, level: e.target.value };
+                    setLanguages(next);
+                  }}
+                />
                 {languages.length > 1 ? (
-                  <Button type="button" variant="ghost" size="sm" onClick={() => setLanguages(languages.filter((_, i) => i !== index))}>×</Button>
-                ) : null}
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="shrink-0 text-muted-foreground"
+                    onClick={() => setLanguages(languages.filter((_, i) => i !== index))}
+                  >
+                    {t('careerOps.removeRow')}
+                  </Button>
+                ) : (
+                  <span className="hidden w-9 sm:inline" />
+                )}
               </div>
             ))}
-          </section>
+          </SectionBlock>
 
-          <section className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label>{t('careerOps.certificatesHint')}</Label>
-              <Button type="button" variant="outline" size="sm" onClick={() => setCertificates([...certificates, emptyCertificate()])}>
-                + Add
-              </Button>
-            </div>
+          <SectionBlock
+            title={t('careerOps.certificatesTitle')}
+            hint={t('careerOps.certificatesHint')}
+            addLabel={t('careerOps.addRow')}
+            onAdd={() => setCertificates([...certificates, emptyCertificate()])}
+          >
             {certificates.length === 0 ? (
               <p className="text-sm text-muted-foreground">{t('careerOps.certificatesEmpty')}</p>
             ) : (
               certificates.map((row, index) => (
-                <div key={index} className="space-y-2 rounded-lg border border-border/50 p-3">
-                  <div className="grid gap-2 sm:grid-cols-3">
-                    <Input placeholder="Certificate" value={row.name} onChange={(e) => {
-                      const next = [...certificates]; next[index] = { ...row, name: e.target.value }; setCertificates(next);
-                    }} />
-                    <Input placeholder="Issuer" value={row.issuer} onChange={(e) => {
-                      const next = [...certificates]; next[index] = { ...row, issuer: e.target.value }; setCertificates(next);
-                    }} />
-                    <div className="flex gap-2">
-                      <Input placeholder="Year" value={row.year} onChange={(e) => {
-                        const next = [...certificates]; next[index] = { ...row, year: e.target.value }; setCertificates(next);
-                      }} />
-                      <Button type="button" variant="ghost" size="sm" onClick={() => setCertificates(certificates.filter((_, i) => i !== index))}>×</Button>
-                    </div>
+                <div key={index} className="space-y-3 rounded-lg border border-border/50 bg-background/40 p-3">
+                  <ColumnLabels labels={[t('careerOps.certificateName'), t('careerOps.issuer'), t('careerOps.year')]} />
+                  <div className="grid gap-2 sm:grid-cols-[1fr_1fr_120px_auto] sm:items-center">
+                    <Input
+                      aria-label={t('careerOps.certificateName')}
+                      placeholder={t('careerOps.certificateName')}
+                      value={row.name}
+                      className={fieldClass}
+                      onChange={(e) => {
+                        const next = [...certificates];
+                        next[index] = { ...row, name: e.target.value };
+                        setCertificates(next);
+                      }}
+                    />
+                    <Input
+                      aria-label={t('careerOps.issuer')}
+                      placeholder={t('careerOps.issuer')}
+                      value={row.issuer}
+                      className={fieldClass}
+                      onChange={(e) => {
+                        const next = [...certificates];
+                        next[index] = { ...row, issuer: e.target.value };
+                        setCertificates(next);
+                      }}
+                    />
+                    <Input
+                      aria-label={t('careerOps.year')}
+                      placeholder={t('careerOps.year')}
+                      value={row.year}
+                      className={fieldClass}
+                      onChange={(e) => {
+                        const next = [...certificates];
+                        next[index] = { ...row, year: e.target.value };
+                        setCertificates(next);
+                      }}
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="text-muted-foreground"
+                      onClick={() => setCertificates(certificates.filter((_, i) => i !== index))}
+                    >
+                      {t('careerOps.removeRow')}
+                    </Button>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <label className="cursor-pointer text-xs font-medium text-primary hover:underline">
-                      {uploadingCertIndex === index
-                        ? t('ecosystemPages.aiMatching.uploading')
-                        : row.storageId
-                          ? t('careerOps.certificateUploaded')
-                          : t('careerOps.uploadCertificate')}
-                      <input
-                        type="file"
-                        accept=".pdf,.jpg,.jpeg,.png,.webp"
-                        className="hidden"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) void handleCertificateUpload(index, file);
-                          e.target.value = '';
-                        }}
-                      />
-                    </label>
-                  </div>
+                  <label className="inline-flex cursor-pointer items-center gap-2 text-xs font-medium text-primary hover:underline">
+                    {uploadingCertIndex === index
+                      ? t('ecosystemPages.aiMatching.uploading')
+                      : row.storageId
+                        ? t('careerOps.certificateUploaded')
+                        : t('careerOps.uploadCertificate')}
+                    <input
+                      type="file"
+                      accept=".pdf,.jpg,.jpeg,.png,.webp"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) void handleCertificateUpload(index, file);
+                        e.target.value = '';
+                      }}
+                    />
+                  </label>
                 </div>
               ))
             )}
-          </section>
+          </SectionBlock>
         </div>
-        <DialogFooter>
+
+        <DialogFooter className="gap-2 sm:gap-0">
+          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={saving}>
+            {t('ecosystemPages.common.cancel')}
+          </Button>
           <Button onClick={handleSave} disabled={saving}>
             {t('employerOps.save')}
           </Button>

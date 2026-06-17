@@ -49,8 +49,6 @@ export const ROLE_NAV_BY_KEY: Record<RoleNavMenuKey, RoleNavItem[]> = {
   job_seeker: [
     { id: 'profile', labelKey: 'nav.ecosystem.careers.profile', href: '/career/profile' },
     { id: 'jobs', labelKey: 'nav.ecosystem.careers.jobs', href: '/jobs' },
-    { id: 'savedJobs', labelKey: 'nav.ecosystem.careers.savedJobs', href: '/career/saved-jobs' },
-    { id: 'applications', labelKey: 'nav.ecosystem.careers.applications', href: '/career/applications' },
     { id: 'support', labelKey: 'nav.ecosystem.careers.support', href: '/career/career-support' },
     { id: 'matching', labelKey: 'nav.ecosystem.careers.matching', href: '/career/ai-matching' },
     COMMUNITY,

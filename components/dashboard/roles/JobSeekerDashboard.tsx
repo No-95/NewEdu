@@ -82,7 +82,7 @@ export function JobSeekerDashboard({ userEmail }: { userEmail: string }) {
       ) : null}
 
       {data.savedJobs.length > 0 ? (
-        <DashboardSection title={t('dashboard.jobSeeker.savedJobsTitle')} delay={0.135} action={t('dashboard.viewAll')} actionHref="/jobs">
+        <DashboardSection title={t('dashboard.jobSeeker.savedJobsTitle')} delay={0.135} action={t('dashboard.viewAll')} actionHref="/career/saved-jobs">
           <ul className="space-y-2">
             {data.savedJobs.map((job) => (
               <li key={job.id}>
