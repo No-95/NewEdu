@@ -224,7 +224,9 @@
     "materialsSection": "Materials",
     "emptyMaterials": "No resources uploaded yet.",
     "emptyHint": "Use Upload to submit materials for review.",
-    "actions": { "upload": "Upload", "uploading": "Uploading...", "edit": "Edit", "delete": "Delete" }
+    "actions": { "upload": "Upload", "uploading": "Uploading...", "edit": "Edit", "delete": "Delete" },
+    "uploadSuccess": "Resource uploaded successfully.",
+    "uploadFailed": "Upload failed. Please try again."
   },
   "recruitment": {
     "title": "Recruitment",
@@ -264,7 +266,7 @@
     "emptyCertificates": "No certificates yet.",
     "emptyExperience": "No work experience yet.",
     "emptyLanguages": "No language information yet.",
-    "actions": { "edit": "Edit profile", "downloadCv": "Download CV (TXT)", "downloadTxt": "Download profile (TXT)" }
+    "actions": { "edit": "Edit profile", "downloadCv": "Download CV (TXT)", "downloadTextExport": "Download text export" }
   },
   "careerJobs": {
     "title": "Jobs",
@@ -399,7 +401,11 @@
     "skillGapsTitle": "Skill gaps to address",
     "browseJobs": "Browse jobs",
     "browseCourses": "Browse courses",
-    "browseExperts": "Browse experts"
+    "browseExperts": "Browse experts",
+    "parseErrors": {
+      "unavailable": "CV parsing is temporarily unavailable. Please try again later.",
+      "unauthorized": "CV parsing service is not configured correctly. Contact support if this persists."
+    }
   },
   "savedJobs": {
     "title": "Saved jobs",
@@ -416,6 +422,9 @@
     "emptyExperts": "No published expert profiles yet.",
     "profileNotFound": "Expert profile not found",
     "backToNetwork": "Back to network",
+    "signInToBook": "Sign in to book a consultation",
+    "consultationSuccess": "Consultation request sent. Track updates under Career → Consultations.",
+    "consultationFailed": "Could not send consultation request. Please try again.",
     "consultationTitle": "Request consultation",
     "consultationTopic": "Topic",
     "consultationMessage": "Message",
@@ -450,6 +459,6 @@
     "typeFilter": "Type",
     "scheduleSection": "Event schedule",
     "emptyEvents": "No expert events published yet.",
-    "register": "Register"
+    "viewDetails": "View details"
   }
 }

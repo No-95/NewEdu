@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useQuery } from 'convex/react';
 import {
   BookOpenCheck,
@@ -44,21 +44,20 @@ export function TestsCatalogClient() {
   const [difficulty, setDifficulty] = useState('all');
   const [page, setPage] = useState(1);
   const [seeding, setSeeding] = useState(false);
-  const hasSeededRef = useRef(false);
 
   const tests = useQuery(api.tests.listPublishedTests, {});
   const stats = useQuery(api.tests.getCatalogStats, {});
 
-  useEffect(() => {
-    if (hasSeededRef.current || tests === undefined) return;
-    if (tests.length > 0) return;
+  const isDev = process.env.NODE_ENV === 'development';
 
-    hasSeededRef.current = true;
+  const handleDevSeed = async () => {
     setSeeding(true);
-    void fetch('/api/dev/seed-tests')
-      .then((res) => res.json())
-      .finally(() => setSeeding(false));
-  }, [tests]);
+    try {
+      await fetch('/api/dev/seed-tests');
+    } finally {
+      setSeeding(false);
+    }
+  };
 
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -233,7 +232,19 @@ export function TestsCatalogClient() {
       )}
 
       {!isLoading && filtered.length === 0 && (
-        <div className="home-card py-12 text-center text-muted-foreground">{t('testsPage.empty')}</div>
+        <div className="home-card space-y-4 py-12 text-center text-muted-foreground">
+          <p>{tests?.length === 0 ? t('testsPage.emptyCatalog') : t('testsPage.empty')}</p>
+          {tests?.length === 0 ? (
+            <Link href="/courses" className="inline-block text-sm font-medium text-primary hover:underline">
+              {t('testsPage.browseCourses')} →
+            </Link>
+          ) : null}
+          {isDev && tests?.length === 0 ? (
+            <Button type="button" variant="outline" disabled={seeding} onClick={() => void handleDevSeed()}>
+              {seeding ? t('testsPage.seeding') : t('testsPage.seedDevOnly')}
+            </Button>
+          ) : null}
+        </div>
       )}
 
       {!isLoading && filtered.length > 0 && (

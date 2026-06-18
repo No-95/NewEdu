@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { requireDevRoute } from '@/lib/api/require-dev-route';
 import { ConvexHttpClient } from 'convex/browser';
 import { api } from '@/convex/_generated/api';
 
@@ -9,6 +10,9 @@ function getConvexUrl() {
 }
 
 export async function GET(req: Request) {
+  const denied = requireDevRoute(req);
+  if (denied) return denied;
+
   try {
     const url = new URL(req.url);
     const slug = String(url.searchParams.get('slug') || '');

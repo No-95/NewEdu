@@ -224,7 +224,9 @@
     "materialsSection": "Tài liệu",
     "emptyMaterials": "Chưa có tài liệu nào.",
     "emptyHint": "Nhấn Tải lên để gửi tài liệu để được duyệt.",
-    "actions": { "upload": "Tải lên", "edit": "Chỉnh sửa", "delete": "Xóa" }
+    "actions": { "upload": "Tải lên", "edit": "Chỉnh sửa", "delete": "Xóa" },
+    "uploadSuccess": "Đã tải tài liệu thành công.",
+    "uploadFailed": "Tải lên thất bại. Vui lòng thử lại."
   },
   "recruitment": {
     "title": "Tuyển Dụng",
@@ -264,7 +266,7 @@
     "emptyCertificates": "Chưa có chứng chỉ nào.",
     "emptyExperience": "Chưa có kinh nghiệm làm việc.",
     "emptyLanguages": "Chưa có thông tin ngôn ngữ.",
-    "actions": { "edit": "Chỉnh sửa hồ sơ", "downloadCv": "Tải CV", "downloadPdf": "Tải PDF" }
+    "actions": { "edit": "Chỉnh sửa hồ sơ", "downloadCv": "Tải CV (TXT)", "downloadTextExport": "Tải bản xuất văn bản" }
   },
   "careerJobs": {
     "title": "Việc Làm",
@@ -410,7 +412,11 @@
     "reviewCvTitle": "Xem lại hồ sơ trích xuất",
     "reviewCvHint": "Chỉnh sửa bên dưới, rồi áp dụng vào hồ sơ nghề nghiệp.",
     "applyCvToProfile": "Áp dụng vào hồ sơ",
-    "applyingCv": "Đang áp dụng…"
+    "applyingCv": "Đang áp dụng…",
+    "parseErrors": {
+      "unavailable": "Phân tích CV tạm thời không khả dụng. Vui lòng thử lại sau.",
+      "unauthorized": "Dịch vụ phân tích CV chưa được cấu hình đúng. Liên hệ hỗ trợ nếu lỗi tiếp diễn."
+    }
   },
   "savedJobs": {
     "title": "Việc làm đã lưu",
@@ -426,6 +432,11 @@
     "expertsCount": "{{count}} chuyên gia",
     "verified": "Đã xác minh",
     "emptyExperts": "Chưa có chuyên gia công khai.",
+    "profileNotFound": "Không tìm thấy hồ sơ chuyên gia",
+    "backToNetwork": "Quay lại mạng lưới",
+    "signInToBook": "Đăng nhập để đặt tư vấn",
+    "consultationSuccess": "Đã gửi yêu cầu tư vấn. Theo dõi tại Sự nghiệp → Tư vấn.",
+    "consultationFailed": "Không gửi được yêu cầu tư vấn. Vui lòng thử lại.",
     "consultationTitle": "Yêu cầu tư vấn",
     "consultationTopic": "Chủ đề",
     "consultationMessage": "Tin nhắn",
@@ -453,6 +464,7 @@
     "searchPlaceholder": "Tìm sự kiện...",
     "typeFilter": "Loại",
     "scheduleSection": "Lịch sự kiện",
-    "register": "Đăng ký"
+    "emptyEvents": "Chưa có sự kiện chuyên gia nào.",
+    "viewDetails": "Xem chi tiết"
   }
 }

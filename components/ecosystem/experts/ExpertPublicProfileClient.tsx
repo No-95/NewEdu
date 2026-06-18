@@ -19,6 +19,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { useLanguage } from '@/lib/context/LanguageContext';
+import { notifyError, notifySuccess } from '@/lib/ui/notify';
 import { Badge } from '@/components/ui/badge';
 
 export function ExpertPublicProfileClient({
@@ -47,6 +48,14 @@ export function ExpertPublicProfileClient({
         message,
       });
       setConsultOpen(false);
+      setTopic('');
+      setMessage('');
+      notifySuccess(t('ecosystemPages.expertNetwork.consultationSuccess'));
+    } catch (err) {
+      notifyError(
+        t('ecosystemPages.expertNetwork.consultationFailed'),
+        err instanceof Error ? err.message : undefined
+      );
     } finally {
       setSubmitting(false);
     }
@@ -86,7 +95,7 @@ export function ExpertPublicProfileClient({
                   </Button>
                 ) : (
                   <Link href={`/auth?mode=signin&redirect=/experts/${expertUserId}`} className="rounded-lg bg-primary px-4 py-2 text-sm text-primary-foreground">
-                    {t('ecosystemPages.careerJobs.signInToApply')}
+                    {t('ecosystemPages.expertNetwork.signInToBook')}
                   </Link>
                 )}
                 <Link href="/experts/network" className="rounded-lg border border-border px-4 py-2 text-sm">

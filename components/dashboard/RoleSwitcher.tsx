@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/lib/context/LanguageContext';
+import { notifyError } from '@/lib/ui/notify';
 import { getRoleLabelKey } from '@/lib/dashboard/role-utils';
 
 type RoleSwitcherProps = {
@@ -59,7 +60,7 @@ export function RoleSwitcher({ activeRole, roles, onRoleChange }: RoleSwitcherPr
       );
       router.refresh();
     } catch {
-      // keep current role on failure
+      notifyError(t('dashboard.roleSwitchFailed'));
     } finally {
       setSwitching(false);
     }

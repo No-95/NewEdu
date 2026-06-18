@@ -1,7 +1,11 @@
 import { NextResponse } from 'next/server';
+import { requireDevRoute } from '@/lib/api/require-dev-route';
 import { seedAllTests } from '@/lib/tests/seed-runner';
 
-export async function GET() {
+export async function GET(request: Request) {
+  const denied = requireDevRoute(request);
+  if (denied) return denied;
+
   try {
     const result = await seedAllTests();
     return NextResponse.json({ success: true, ...result });

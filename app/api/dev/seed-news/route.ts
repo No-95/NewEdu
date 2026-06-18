@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { requireDevRoute } from '@/lib/api/require-dev-route';
 import { ConvexHttpClient } from 'convex/browser';
 import { api } from '@/convex/_generated/api';
 
@@ -8,7 +9,10 @@ function getConvexUrl() {
   return url;
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  const denied = requireDevRoute(request);
+  if (denied) return denied;
+
   try {
     const convex = new ConvexHttpClient(getConvexUrl());
     const result = await convex.mutation(api.news.seedNewsArticles, {});

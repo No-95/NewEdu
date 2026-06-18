@@ -9,6 +9,7 @@ import { AppPageShell } from '@/components/ecosystem/shared/AppPageShell';
 import { EcosystemFilterBar } from '@/components/ecosystem/shared/EcosystemFilterBar';
 import { EcosystemSection } from '@/components/ecosystem/shared/EcosystemSection';
 import { useLanguage } from '@/lib/context/LanguageContext';
+import { notifyError, notifySuccess } from '@/lib/ui/notify';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -76,6 +77,12 @@ export function ExpertNetworkClient({ userEmail }: { userEmail?: string }) {
       setConsultOpen(false);
       setTopic('');
       setMessage('');
+      notifySuccess(t('ecosystemPages.expertNetwork.consultationSuccess'));
+    } catch (err) {
+      notifyError(
+        t('ecosystemPages.expertNetwork.consultationFailed'),
+        err instanceof Error ? err.message : undefined
+      );
     } finally {
       setSubmitting(false);
     }

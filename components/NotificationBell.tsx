@@ -95,7 +95,24 @@ export function NotificationBell({ userEmail }: { userEmail: string }) {
                       </Link>
                     );
                   }
-                  return <div key={item.id}>{content}</div>;
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      className="block w-full text-left"
+                      onClick={() => {
+                        setOpen(false);
+                        if (!item.read) {
+                          void markRead({
+                            email: userEmail,
+                            notificationId: item.id as Id<'notifications'>,
+                          });
+                        }
+                      }}
+                    >
+                      {content}
+                    </button>
+                  );
                 })
               )}
             </div>

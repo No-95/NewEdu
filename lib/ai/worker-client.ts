@@ -56,21 +56,27 @@ export async function callGeminiWorker(
   const workerUrl = normalizeWorkerChatUrl(resolveServerEnv('AI_WORKER_URL'));
   const workerToken = resolveServerEnv('AI_WORKER_INTERNAL_TOKEN');
 
-  if (!workerUrl) throw new Error('Missing AI_WORKER_URL on server.');
-  if (!workerToken) throw new Error('Missing AI_WORKER_INTERNAL_TOKEN on server.');
+  if (!workerUrl || !workerToken) {
+    throw new Error('AI_UNAVAILABLE');
+  }
 
-  const workerResponse = await fetch(workerUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-internal-token': workerToken,
-    },
-    body: JSON.stringify({
-      message: message.slice(0, 12000),
-      locale,
-      history: [],
-    }),
-  });
+  let workerResponse: Response;
+  try {
+    workerResponse = await fetch(workerUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-internal-token': workerToken,
+      },
+      body: JSON.stringify({
+        message: message.slice(0, 12000),
+        locale,
+        history: [],
+      }),
+    });
+  } catch {
+    throw new Error('AI_UNAVAILABLE');
+  }
 
   const rawBody = await workerResponse.text();
   let data: { reply?: string; model?: string; error?: string; detail?: string } = {};
@@ -78,6 +84,13 @@ export async function callGeminiWorker(
     data = JSON.parse(rawBody) as typeof data;
   } catch {
     throw new Error(`Worker returned non-JSON: ${rawBody.slice(0, 200)}`);
+  }
+
+  if (workerResponse.status === 401) {
+    throw new Error('AI_UNAUTHORIZED');
+  }
+  if (workerResponse.status === 503 || workerResponse.status >= 500) {
+    throw new Error('AI_UNAVAILABLE');
   }
 
   if (!workerResponse.ok || !data.reply) {

@@ -57,7 +57,7 @@ export function ExpertEventsClient() {
                     href={`/events/${event.slug}`}
                     className="shrink-0 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
                   >
-                    {t('ecosystemPages.expertEvents.register')}
+                    {t('ecosystemPages.expertEvents.viewDetails')}
                   </Link>
                 </div>
               </div>

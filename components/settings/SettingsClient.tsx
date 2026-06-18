@@ -14,7 +14,7 @@ import { Label } from '@/components/ui/label';
 import { useLanguage } from '@/lib/context/LanguageContext';
 
 export function SettingsClient({ userEmail }: { userEmail: string }) {
-  const { language } = useLanguage();
+  const { t, language } = useLanguage();
   const settings = useQuery(api.users.getUserSettings, { email: userEmail });
   const updateProfile = useMutation(api.users.updateUserProfile);
   const updateNotificationPrefs = useMutation(api.users.updateNotificationPreferences);
@@ -38,8 +38,8 @@ export function SettingsClient({ userEmail }: { userEmail: string }) {
   if (settings === undefined) {
     return (
       <EcosystemPageLoader
-        title="Account settings"
-        subtitle="Manage your profile and ecosystem roles"
+        title={t('settingsPage.title')}
+        subtitle={t('settingsPage.subtitle')}
       />
     );
   }
@@ -76,14 +76,14 @@ export function SettingsClient({ userEmail }: { userEmail: string }) {
 
   return (
     <AppPageShell
-      title="Account settings"
-      subtitle="Manage your profile and ecosystem roles"
+      title={t('settingsPage.title')}
+      subtitle={t('settingsPage.subtitle')}
     >
       <div className="grid gap-8 lg:grid-cols-2">
-        <EcosystemSection title="Profile">
+        <EcosystemSection title={t('settingsPage.profileSection')}>
           <div className="home-card space-y-4">
             <div>
-              <Label htmlFor="settings-full-name">Full name</Label>
+              <Label htmlFor="settings-full-name">{t('settingsPage.fullName')}</Label>
               <Input
                 id="settings-full-name"
                 value={fullName}
@@ -92,11 +92,11 @@ export function SettingsClient({ userEmail }: { userEmail: string }) {
               />
             </div>
             <div>
-              <Label htmlFor="settings-email">Email</Label>
+              <Label htmlFor="settings-email">{t('settingsPage.email')}</Label>
               <Input id="settings-email" value={settings.email} disabled className="mt-1" />
             </div>
             <div>
-              <Label htmlFor="settings-phone">Phone</Label>
+              <Label htmlFor="settings-phone">{t('settingsPage.phone')}</Label>
               <Input
                 id="settings-phone"
                 value={phone}
@@ -106,29 +106,29 @@ export function SettingsClient({ userEmail }: { userEmail: string }) {
             </div>
             <div className="flex items-center gap-3">
               <Button onClick={handleSave} disabled={saving}>
-                {saving ? 'Saving…' : 'Save profile'}
+                {saving ? t('settingsPage.saving') : t('settingsPage.saveProfile')}
               </Button>
-              {saved && <span className="text-sm text-emerald-400">Saved successfully.</span>}
+              {saved && <span className="text-sm text-emerald-400">{t('settingsPage.saved')}</span>}
             </div>
           </div>
         </EcosystemSection>
 
-        <EcosystemSection title="Account">
+        <EcosystemSection title={t('settingsPage.accountSection')}>
           <div className="home-card space-y-4">
             <div>
-              <p className="text-sm text-muted-foreground">HDP ID</p>
+              <p className="text-sm text-muted-foreground">{t('settingsPage.hdpId')}</p>
               <p className="mt-1 font-mono text-lg font-semibold text-primary">
                 {settings.hdpId || '—'}
               </p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Active role</p>
+              <p className="text-sm text-muted-foreground">{t('settingsPage.activeRole')}</p>
               <p className="mt-1 capitalize">{settings.activeRole || '—'}</p>
             </div>
             <div>
-              <p className="mb-2 text-sm text-muted-foreground">Ecosystem roles</p>
+              <p className="mb-2 text-sm text-muted-foreground">{t('settingsPage.ecosystemRoles')}</p>
               {settings.roles.length === 0 ? (
-                <p className="text-sm text-muted-foreground">No roles assigned yet.</p>
+                <p className="text-sm text-muted-foreground">{t('settingsPage.noRoles')}</p>
               ) : (
                 <div className="flex flex-wrap gap-2">
                   {settings.roles.map((role: string) => (
@@ -150,13 +150,13 @@ export function SettingsClient({ userEmail }: { userEmail: string }) {
         </EcosystemSection>
       </div>
 
-      <EcosystemSection title="Notification preferences">
+      <EcosystemSection title={t('settingsPage.notificationSection')}>
         <div className="home-card space-y-4">
           <p className="text-sm text-muted-foreground">
-            Email alerts mirror in-app notifications. Language follows your site preference when saved.
+            {t('settingsPage.notificationHint')}
           </p>
           <label className="flex items-center justify-between gap-4 text-sm">
-            <span>Email notifications</span>
+            <span>{t('settingsPage.emailNotifications')}</span>
             <input
               type="checkbox"
               checked={emailNotifications}
@@ -168,7 +168,7 @@ export function SettingsClient({ userEmail }: { userEmail: string }) {
             />
           </label>
           <label className="flex items-center justify-between gap-4 text-sm opacity-60">
-            <span>Push notifications</span>
+            <span>{t('settingsPage.pushNotifications')}</span>
             <input
               type="checkbox"
               checked={pushNotifications}
@@ -177,34 +177,34 @@ export function SettingsClient({ userEmail }: { userEmail: string }) {
               className="h-4 w-4"
             />
           </label>
-          <p className="text-xs text-muted-foreground">Push notifications coming in a future update.</p>
+          <p className="text-xs text-muted-foreground">{t('settingsPage.pushComingSoon')}</p>
           <div className="flex items-center gap-3">
             <Button size="sm" onClick={() => void handleSaveNotificationPrefs()} disabled={prefsSaving}>
-              {prefsSaving ? 'Saving…' : 'Save notification preferences'}
+              {prefsSaving ? t('settingsPage.saving') : t('settingsPage.saveNotificationPrefs')}
             </Button>
-            {prefsSaved ? <span className="text-sm text-emerald-400">Preferences saved.</span> : null}
+            {prefsSaved ? <span className="text-sm text-emerald-400">{t('settingsPage.prefsSaved')}</span> : null}
           </div>
         </div>
       </EcosystemSection>
 
-      <EcosystemSection title="Profile links">
+      <EcosystemSection title={t('settingsPage.profileLinksSection')}>
         <div className="grid gap-4 sm:grid-cols-2">
           <Link
             href="/career/profile"
             className="home-card-muted block transition-colors hover:border-primary/40"
           >
-            <p className="font-semibold">Career profile</p>
+            <p className="font-semibold">{t('settingsPage.careerProfileLink')}</p>
             <p className="mt-1 text-sm text-muted-foreground">
-              View and edit your competency profile for job seekers.
+              {t('settingsPage.careerProfileDesc')}
             </p>
           </Link>
           <Link
             href="/experts/profile"
             className="home-card-muted block transition-colors hover:border-primary/40"
           >
-            <p className="font-semibold">Expert profile</p>
+            <p className="font-semibold">{t('settingsPage.expertProfileLink')}</p>
             <p className="mt-1 text-sm text-muted-foreground">
-              Manage your expert profile and consultation settings.
+              {t('settingsPage.expertProfileDesc')}
             </p>
           </Link>
         </div>

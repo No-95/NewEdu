@@ -24,6 +24,12 @@ export function AiMatchingClient({ userEmail }: { userEmail: string }) {
   const [reviewOpen, setReviewOpen] = useState(false);
   const [reviewDraft, setReviewDraft] = useState<NonNullable<typeof cvStatus>['draft'] | null>(null);
 
+  const mapParseError = (code: string) => {
+    if (code === 'AI_UNAVAILABLE') return t('ecosystemPages.aiMatching.parseErrors.unavailable');
+    if (code === 'AI_UNAUTHORIZED') return t('ecosystemPages.aiMatching.parseErrors.unauthorized');
+    return code || t('ecosystemPages.aiMatching.parseFailed');
+  };
+
   useEffect(() => {
     if (cvStatus?.status === 'ready' && cvStatus.draft && !reviewOpen) {
       setReviewDraft(cvStatus.draft);
@@ -38,7 +44,7 @@ export function AiMatchingClient({ userEmail }: { userEmail: string }) {
       const response = await fetch('/api/career/parse-cv', { method: 'POST' });
       const data = (await response.json()) as { error?: string; draft?: NonNullable<typeof cvStatus>['draft'] };
       if (!response.ok) {
-        setParseError(data.error ?? 'Parse failed.');
+        setParseError(mapParseError(data.error ?? ''));
         return;
       }
       if (data.draft) {
@@ -46,7 +52,7 @@ export function AiMatchingClient({ userEmail }: { userEmail: string }) {
         setReviewOpen(true);
       }
     } catch {
-      setParseError('Parse failed.');
+      setParseError(t('ecosystemPages.aiMatching.parseFailed'));
     } finally {
       setParsing(false);
     }
@@ -74,7 +80,7 @@ export function AiMatchingClient({ userEmail }: { userEmail: string }) {
     uploading || parsing || cvStatus?.status === 'parsing'
       ? t('ecosystemPages.aiMatching.parsingCv')
       : cvStatus?.status === 'failed'
-        ? cvStatus.error ?? t('ecosystemPages.aiMatching.parseFailed')
+        ? mapParseError(cvStatus.error ?? '')
         : cvStatus?.hasCvOnFile || results?.hasCvOnFile
           ? t('ecosystemPages.aiMatching.uploadSuccess')
           : null;
@@ -84,6 +90,12 @@ export function AiMatchingClient({ userEmail }: { userEmail: string }) {
       title={t('ecosystemPages.aiMatching.title')}
       subtitle={t('ecosystemPages.aiMatching.subtitle')}
     >
+      {(parseError || cvStatus?.status === 'failed') && (
+        <div className="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+          {parseError || mapParseError(cvStatus?.error ?? '')}
+        </div>
+      )}
+
       <div className="mb-8">
         <label className="home-card-muted flex cursor-pointer flex-col items-center gap-3 border-dashed py-8 transition-colors hover:border-primary/40">
           <Upload className="h-8 w-8 text-primary" />

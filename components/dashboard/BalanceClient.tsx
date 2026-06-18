@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Table, TableHeader, TableBody, TableRow, TableCell, TableHead } from '@/components/ui/table'
 import { Plus, DollarSign, ArrowDownLeft, ArrowUpRight } from 'lucide-react'
+import { useLanguage } from '@/lib/context/LanguageContext'
 
 type Transaction = {
   id: string
@@ -18,6 +19,7 @@ type Transaction = {
 }
 
 export default function BalanceClient(): React.ReactElement {
+  const { t } = useLanguage()
   const [balance, setBalance] = useState<number | null>(null)
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [depositAmount, setDepositAmount] = useState<string>('')
@@ -120,6 +122,7 @@ export default function BalanceClient(): React.ReactElement {
                 </Button>
               </div>
             </div>
+            <p className="mt-3 text-xs text-muted-foreground">{t('balancePage.supportHint')}</p>
 
             <div className="mt-6">
               <h4 className="text-sm font-medium mb-2">Recent Transactions</h4>
@@ -166,6 +169,7 @@ export default function BalanceClient(): React.ReactElement {
                   <Link href="/contact-us?topic=payment-method&role=account">Add Card</Link>
                 </Button>
               </div>
+              <p className="mt-2 text-xs text-muted-foreground">{t('balancePage.supportHint')}</p>
             </CardContent>
           </Card>
 

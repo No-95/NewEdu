@@ -11,6 +11,7 @@ import { EcosystemSection } from '@/components/ecosystem/shared/EcosystemSection
 import { EcosystemPageLoader } from '@/components/ecosystem/shared/EcosystemPageLoader';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/lib/context/LanguageContext';
 
 type ApplicationRow = {
   id: string;
@@ -48,6 +49,7 @@ function formatDate(timestamp: number) {
 }
 
 export function AdminApplicationsClient({ userEmail }: { userEmail: string }) {
+  const { t } = useLanguage();
   const [tab, setTab] = useState('teacher');
   const [busyId, setBusyId] = useState<string | null>(null);
 
@@ -71,8 +73,8 @@ export function AdminApplicationsClient({ userEmail }: { userEmail: string }) {
   if (loading) {
     return (
       <EcosystemPageLoader
-        title="Application review"
-        subtitle="Review teacher and expert applications"
+        title={t('adminApplicationsPage.title')}
+        subtitle={t('adminApplicationsPage.subtitle')}
       />
     );
   }
@@ -128,7 +130,7 @@ export function AdminApplicationsClient({ userEmail }: { userEmail: string }) {
             )
           }
         >
-          Accept
+          {t('adminApplicationsPage.accept')}
         </Button>
         <Button
           size="sm"
@@ -143,7 +145,7 @@ export function AdminApplicationsClient({ userEmail }: { userEmail: string }) {
             )
           }
         >
-          In review
+          {t('adminApplicationsPage.inReview')}
         </Button>
         <Button
           size="sm"
@@ -158,7 +160,7 @@ export function AdminApplicationsClient({ userEmail }: { userEmail: string }) {
             )
           }
         >
-          Reject
+          {t('adminApplicationsPage.reject')}
         </Button>
       </div>
     );
@@ -182,7 +184,7 @@ export function AdminApplicationsClient({ userEmail }: { userEmail: string }) {
             )
           }
         >
-          Accept
+          {t('adminApplicationsPage.accept')}
         </Button>
         <Button
           size="sm"
@@ -197,7 +199,7 @@ export function AdminApplicationsClient({ userEmail }: { userEmail: string }) {
             )
           }
         >
-          In review
+          {t('adminApplicationsPage.inReview')}
         </Button>
         <Button
           size="sm"
@@ -212,50 +214,54 @@ export function AdminApplicationsClient({ userEmail }: { userEmail: string }) {
             )
           }
         >
-          Reject
+          {t('adminApplicationsPage.reject')}
         </Button>
       </div>
     );
   };
 
   const baseColumns = [
-    { key: 'fullName', header: 'Name' },
-    { key: 'email', header: 'Email' },
-    { key: 'specialization', header: 'Specialization' },
+    { key: 'fullName', header: t('adminApplicationsPage.name') },
+    { key: 'email', header: t('adminApplicationsPage.email') },
+    { key: 'specialization', header: t('adminApplicationsPage.specialization') },
     {
       key: 'createdAt',
-      header: 'Submitted',
+      header: t('adminApplicationsPage.submitted'),
       render: (row: ApplicationRow) => formatDate(row.createdAt),
     },
     {
       key: 'status',
-      header: 'Status',
+      header: t('adminApplicationsPage.status'),
       render: renderStatus,
     },
   ];
 
   return (
     <AppPageShell
-      title="Application review"
-      subtitle="Review teacher and expert applications"
+      title={t('adminApplicationsPage.title')}
+      subtitle={t('adminApplicationsPage.subtitle')}
     >
-      <EcosystemSection title="Pending applications">
+      <EcosystemSection title={t('adminApplicationsPage.pendingSection')}>
         <Tabs value={tab} onValueChange={setTab}>
           <TabsList className="mb-4 bg-white/5">
-            <TabsTrigger value="teacher">Teacher ({teacherRows.length})</TabsTrigger>
-            <TabsTrigger value="expert">Expert ({expertRows.length})</TabsTrigger>
+            <TabsTrigger value="teacher">
+              {t('adminApplicationsPage.teacherTab')} ({teacherRows.length})
+            </TabsTrigger>
+            <TabsTrigger value="expert">
+              {t('adminApplicationsPage.expertTab')} ({expertRows.length})
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="teacher">
             <EcosystemDataTable
               rows={teacherRows}
-              emptyMessage="No teacher applications to review."
+              emptyMessage={t('adminApplicationsPage.emptyTeacher')}
               columns={[
                 ...baseColumns,
-                { key: 'phone', header: 'Phone' },
+                { key: 'phone', header: t('adminApplicationsPage.phone') },
                 {
                   key: 'actions',
-                  header: 'Actions',
+                  header: t('adminApplicationsPage.actions'),
                   render: renderTeacherActions,
                 },
               ]}
@@ -265,12 +271,12 @@ export function AdminApplicationsClient({ userEmail }: { userEmail: string }) {
           <TabsContent value="expert">
             <EcosystemDataTable
               rows={expertRows}
-              emptyMessage="No expert applications to review."
+              emptyMessage={t('adminApplicationsPage.emptyExpert')}
               columns={[
                 ...baseColumns,
                 {
                   key: 'actions',
-                  header: 'Actions',
+                  header: t('adminApplicationsPage.actions'),
                   render: renderExpertActions,
                 },
               ]}

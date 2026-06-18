@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
+import { notifyError, notifySuccess } from '@/lib/ui/notify';
 
 export function CareerSupportClient({
   userEmail,
@@ -61,8 +62,10 @@ export function CareerSupportClient({
       setService('');
       setExpertId('');
       setNotes('');
+      notifySuccess(t('ecosystemPages.careerSupport.consultationSubmitted'));
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not submit request.');
+      setError(err instanceof Error ? err.message : t('ecosystemPages.expertNetwork.consultationFailed'));
+      notifyError(t('ecosystemPages.expertNetwork.consultationFailed'));
     } finally {
       setSubmitting(false);
     }
@@ -85,6 +88,10 @@ export function CareerSupportClient({
         feedback: [service.trim(), notes.trim()].filter(Boolean).join('\n'),
       });
       setSuccess(t('ecosystemPages.careerSupport.bookingSuccess'));
+      notifySuccess(t('ecosystemPages.careerSupport.bookingSuccess'));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t('ecosystemPages.expertNetwork.consultationFailed'));
+      notifyError(t('ecosystemPages.expertNetwork.consultationFailed'));
     } finally {
       setSubmitting(false);
     }

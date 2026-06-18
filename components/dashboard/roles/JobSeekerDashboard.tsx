@@ -1,10 +1,14 @@
 'use client';
 
-import React from 'react';
 import Link from 'next/link';
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { useLanguage } from '@/lib/context/LanguageContext';
+import {
+  canDownloadCareerExport,
+  downloadCareerCv,
+} from '@/lib/career/downloadProfileExport';
+import { notifyError } from '@/lib/ui/notify';
 import {
   DashboardActionRow,
   DashboardBulletList,
@@ -20,10 +24,19 @@ import {
 export function JobSeekerDashboard({ userEmail }: { userEmail: string }) {
   const { t } = useLanguage();
   const data = useQuery(api.dashboard.getJobSeekerDashboard, { email: userEmail });
+  const profile = useQuery(api.ecosystem.getCareerProfile, { email: userEmail });
 
   if (data === undefined) {
     return <DashboardLoadingState />;
   }
+
+  const handleDownloadCv = () => {
+    if (!profile || !canDownloadCareerExport(profile)) {
+      notifyError(t('dashboard.jobSeeker.downloadCvEmpty'));
+      return;
+    }
+    downloadCareerCv(profile);
+  };
 
   return (
     <>
@@ -37,7 +50,7 @@ export function JobSeekerDashboard({ userEmail }: { userEmail: string }) {
           <DashboardActionRow
             actions={[
               { label: t('dashboard.updateProfile'), href: '/career/profile', primary: true },
-              { label: t('dashboard.downloadCv'), href: '/career/profile' },
+              { label: t('dashboard.downloadCv'), onClick: handleDownloadCv },
             ]}
           />
         </div>
@@ -81,8 +94,8 @@ export function JobSeekerDashboard({ userEmail }: { userEmail: string }) {
         </DashboardSection>
       ) : null}
 
-      {data.savedJobs.length > 0 ? (
-        <DashboardSection title={t('dashboard.jobSeeker.savedJobsTitle')} delay={0.135} action={t('dashboard.viewAll')} actionHref="/career/saved-jobs">
+      <DashboardSection title={t('dashboard.jobSeeker.savedJobsTitle')} delay={0.135} action={t('dashboard.viewAll')} actionHref="/career/saved-jobs">
+        {data.savedJobs.length > 0 ? (
           <ul className="space-y-2">
             {data.savedJobs.map((job) => (
               <li key={job.id}>
@@ -92,8 +105,15 @@ export function JobSeekerDashboard({ userEmail }: { userEmail: string }) {
               </li>
             ))}
           </ul>
-        </DashboardSection>
-      ) : null}
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            {t('dashboard.jobSeeker.emptySavedJobs')}{' '}
+            <Link href="/jobs" className="font-medium text-primary hover:underline">
+              {t('dashboard.jobSeeker.browseJobs')}
+            </Link>
+          </p>
+        )}
+      </DashboardSection>
 
       <DashboardSection title={t('dashboard.jobSeeker.skillSuggestionsTitle')} delay={0.14} action={t('dashboard.viewAll')} actionHref="/career/ai-matching">
         {data.skillSuggestions.length > 0 ? (

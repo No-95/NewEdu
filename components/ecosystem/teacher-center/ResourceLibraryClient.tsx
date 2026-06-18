@@ -10,6 +10,7 @@ import { EcosystemSection } from '@/components/ecosystem/shared/EcosystemSection
 import { EcosystemPageLoader } from '@/components/ecosystem/shared/EcosystemPageLoader';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { openFilePicker } from '@/lib/utils/client-actions';
+import { notifyError, notifySuccess } from '@/lib/ui/notify';
 import { Button } from '@/components/ui/button';
 
 export function ResourceLibraryClient({ userEmail }: { userEmail: string }) {
@@ -40,6 +41,9 @@ export function ResourceLibraryClient({ userEmail }: { userEmail: string }) {
             mimeType: file.type || undefined,
             storageId,
           });
+          notifySuccess(t('ecosystemPages.resourceLibrary.uploadSuccess'));
+        } catch {
+          notifyError(t('ecosystemPages.resourceLibrary.uploadFailed'));
         } finally {
           setUploading(false);
         }

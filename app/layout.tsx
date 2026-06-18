@@ -6,6 +6,7 @@ import { LanguageProvider } from '@/lib/context/LanguageContext'
 import { AppConvexProvider } from '@/components/convex-provider'
 import { SiteModeProvider } from '@/components/site-mode-provider'
 import { AISupportDock } from '@/components/AISupportDock'
+import { Toaster } from '@/components/ui/toaster'
 
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
@@ -43,6 +44,7 @@ export default function RootLayout({
           <AppConvexProvider>
             <LanguageProvider>
               <AISupportDock>{children}</AISupportDock>
+              <Toaster />
             </LanguageProvider>
           </AppConvexProvider>
         </SiteModeProvider>

@@ -82,7 +82,13 @@ export async function POST() {
 
     return NextResponse.json({ success: true, draft });
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'CV parsing failed.';
+    const raw = error instanceof Error ? error.message : 'CV parsing failed.';
+    const message =
+      raw === 'AI_UNAVAILABLE'
+        ? 'AI_UNAVAILABLE'
+        : raw === 'AI_UNAUTHORIZED'
+          ? 'AI_UNAUTHORIZED'
+          : raw;
     try {
       await convex.mutation(api.career.failCvParse, { email, error: message });
     } catch {

@@ -9,7 +9,10 @@ import { EcosystemSection } from '@/components/ecosystem/shared/EcosystemSection
 import { EcosystemPageLoader } from '@/components/ecosystem/shared/EcosystemPageLoader';
 import { CareerProfileEditor } from '@/components/ecosystem/career/CareerProfileEditor';
 import { useLanguage } from '@/lib/context/LanguageContext';
-import { downloadTextFile, formatCareerProfileDocument } from '@/lib/utils/client-actions';
+import {
+  downloadCareerCv,
+  downloadCareerTextExport,
+} from '@/lib/career/downloadProfileExport';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 
@@ -28,15 +31,11 @@ export function CareerProfileClient({ userEmail }: { userEmail: string }) {
   }
 
   const downloadCv = () => {
-    const content = formatCareerProfileDocument(profile, 'cv');
-    const filename = `${(profile.fullName || 'hdp-edu-profile').replace(/\s+/g, '-').toLowerCase()}-cv.txt`;
-    downloadTextFile(filename, content);
+    downloadCareerCv(profile);
   };
 
-  const downloadPdf = () => {
-    const content = formatCareerProfileDocument(profile, 'pdf-text');
-    const filename = `${(profile.fullName || 'hdp-edu-profile').replace(/\s+/g, '-').toLowerCase()}-profile.txt`;
-    downloadTextFile(filename, content);
+  const downloadTextExport = () => {
+    downloadCareerTextExport(profile);
   };
 
   return (
@@ -52,7 +51,7 @@ export function CareerProfileClient({ userEmail }: { userEmail: string }) {
               onClick: () => setEditOpen(true),
             },
             { label: t('ecosystemPages.careerProfile.actions.downloadCv'), variant: 'outline', onClick: downloadCv },
-            { label: t('ecosystemPages.careerProfile.actions.downloadTxt'), variant: 'outline', onClick: downloadPdf },
+            { label: t('ecosystemPages.careerProfile.actions.downloadTextExport'), variant: 'outline', onClick: downloadTextExport },
             { label: t('ecosystemPages.aiMatching.uploadCv'), variant: 'outline', href: '/career/ai-matching' },
           ]}
         />

@@ -140,3 +140,16 @@ node scripts/set-course-price.mjs
 ## 11. Do not use parallel deploy paths
 
 Avoid mixing **34+ manual dashboard uploads** with CLI deploys without the same env. Pick **CLI `deploy:prod`** or Workers Builds with **Build variables** matching `.env.production`.
+
+## 12. Dev seed routes (production)
+
+Routes under `/api/dev/*` return **403 in production** unless you set `DEV_SEED_SECRET` on the Cloudflare worker and pass it as a Bearer token.
+
+```bash
+# One-time test catalog seed (after deploy)
+curl -H "Authorization: Bearer YOUR_DEV_SEED_SECRET" https://hdpedu.com/api/dev/seed-tests
+```
+
+Other dev routes: `/api/dev/seed-news`, `/api/dev/seed-catalog`, `/api/dev/course-by-slug`.
+
+Locally (`pnpm dev`), these routes work without the secret.

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { Button } from '@/components/ui/button';
@@ -317,6 +317,83 @@ export function AssignHomeworkDialog({ userEmail, open, onOpenChange }: DialogPr
         </div>
         <DialogFooter>
           <Button onClick={handleSubmit} disabled={saving || !learnerEmail || !title}>
+            {t('teacherOps.save')}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+export function CreateReferralDialog({
+  userEmail,
+  open,
+  onOpenChange,
+  partners,
+}: DialogProps & { partners: { id: string; name: string }[] }) {
+  const { t } = useLanguage();
+  const createReferral = useMutation(api.teacherOps.createReferral);
+  const [partner, setPartner] = useState('');
+  const [student, setStudent] = useState('');
+  const [amount, setAmount] = useState('');
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (open && partners.length > 0 && !partner) {
+      setPartner(partners[0].name);
+    }
+  }, [open, partners, partner]);
+
+  const handleSubmit = async () => {
+    setSaving(true);
+    try {
+      await createReferral({
+        email: userEmail,
+        partner: partner.trim(),
+        student: student.trim(),
+        amount: amount.trim(),
+      });
+      onOpenChange(false);
+      setStudent('');
+      setAmount('');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{t('teacherOps.addReferral')}</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-3">
+          <div>
+            <Label htmlFor="referral-partner">{t('teacherOps.referralPartner')}</Label>
+            <select
+              id="referral-partner"
+              value={partner}
+              onChange={(e) => setPartner(e.target.value)}
+              className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
+            >
+              {partners.map((p) => (
+                <option key={p.id} value={p.name}>
+                  {p.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <Label htmlFor="referral-student">{t('teacherOps.referralStudent')}</Label>
+            <Input id="referral-student" value={student} onChange={(e) => setStudent(e.target.value)} />
+          </div>
+          <div>
+            <Label htmlFor="referral-amount">{t('teacherOps.referralAmount')}</Label>
+            <Input id="referral-amount" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0 ₫" />
+          </div>
+        </div>
+        <DialogFooter>
+          <Button onClick={handleSubmit} disabled={saving || !partner || !student.trim() || !amount.trim()}>
             {t('teacherOps.save')}
           </Button>
         </DialogFooter>

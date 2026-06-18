@@ -15,14 +15,14 @@ import { useLanguage } from '@/lib/context/LanguageContext';
 import { translateMetrics } from '@/lib/ecosystem/i18n';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { CreatePartnerDialog } from '@/components/ecosystem/teacher-center/TeacherOpsDialogs';
+import { CreatePartnerDialog, CreateReferralDialog } from '@/components/ecosystem/teacher-center/TeacherOpsDialogs';
 
 export function BusinessDevelopmentClient({ userEmail }: { userEmail: string }) {
   const { t } = useLanguage();
   const [partnerOpen, setPartnerOpen] = useState(false);
+  const [referralOpen, setReferralOpen] = useState(false);
   const data = useQuery(api.ecosystem.getBusinessDevelopmentDashboard, { email: userEmail });
   const updatePartnerStatus = useMutation(api.teacherOps.updatePartnerStatus);
-  const createReferral = useMutation(api.teacherOps.createReferral);
 
   if (data === undefined) {
     return (
@@ -52,6 +52,12 @@ export function BusinessDevelopmentClient({ userEmail }: { userEmail: string }) 
       }
     >
       <CreatePartnerDialog userEmail={userEmail} open={partnerOpen} onOpenChange={setPartnerOpen} />
+      <CreateReferralDialog
+        userEmail={userEmail}
+        open={referralOpen}
+        onOpenChange={setReferralOpen}
+        partners={data.partners.map((p) => ({ id: p.id, name: p.name }))}
+      />
 
       <EcosystemSection title={t('ecosystemPages.businessDevelopment.businessMetrics')}>
         <EcosystemMetricGrid stats={metrics} />
@@ -145,14 +151,7 @@ export function BusinessDevelopmentClient({ userEmail }: { userEmail: string }) 
               type="button"
               variant="outline"
               className="mt-4"
-              onClick={() =>
-                void createReferral({
-                  email: userEmail,
-                  partner: data.partners[0].name,
-                  student: 'New referral',
-                  amount: '0 ₫',
-                })
-              }
+              onClick={() => setReferralOpen(true)}
             >
               {t('teacherOps.addReferral')}
             </Button>
