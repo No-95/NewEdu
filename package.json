@@ -13,6 +13,7 @@
     "deploy": "pnpm run build:cloudflare && opennextjs-cloudflare deploy -- --keep-vars",
     "deploy:prod": "pnpm run build:cloudflare && opennextjs-cloudflare deploy -- --keep-vars",
     "deploy:messages": "cd convex-messages && npx convex deploy",
+    "deploy:messages:fantastic": "node scripts/deploy-messages-fantastic.mjs",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview"
   },
   "dependencies": {

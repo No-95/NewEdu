@@ -2,26 +2,29 @@
 
 Private messaging backend for HDP EDU.
 
-**Production URL:** `https://dapper-cricket-274.convex.cloud`  
-**Dashboard:** https://dashboard.convex.dev/t/minhhoangd852/hdp-messages
+**Production URL:** `https://fantastic-kookabura-624.convex.cloud`  
+**Site URL:** `https://fantastic-kookabura-624.convex.site`  
+**Dashboard:** https://dashboard.convex.dev/t/alwaybusy-hoang/mesg/fantastic-kookabura-624
 
-## Setup
+## Deploy (fantastic-kookabura-624)
+
+This deployment is on team `alwaybusy-hoang` (project `mesg`). Use a **Production Deploy Key**:
+
+1. Copy `convex-messages/.env.deploy.example` → `.env.deploy.local`
+2. Paste `CONVEX_DEPLOY_KEY=prod:fantastic-kookabura-624|...` from Convex dashboard
+3. Run:
 
 ```bash
-cd convex-messages
-npm install
-npx convex dev
+pnpm run deploy:messages:fantastic
 ```
 
-## Deploy
-
-From repo root:
+## Deploy (hdp-messages fallback on minhhoangd852 team)
 
 ```bash
 pnpm run deploy:messages
 ```
 
-## Required environment variables (Convex prod dashboard)
+## Required environment variables (Convex prod)
 
 | Variable | Purpose |
 |----------|---------|
