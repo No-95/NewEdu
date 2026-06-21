@@ -133,7 +133,7 @@ export function JobDetailClient({ jobId, userEmail }: { jobId: string; userEmail
                   </Button>
                 ) : (
                   <Button onClick={handleApply} disabled={applying}>
-                    {applying ? t('ecosystemPages.careerJobs.applying') : t('ecosystemPages.careerJobs.applyNow')}
+                    {applying ? t('ecosystemPages.careerJobs.applying') : t('ecosystemPages.careerJobs.pickUpJob')}
                   </Button>
                 )
               ) : (

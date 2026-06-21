@@ -943,6 +943,7 @@
     "loadingConversations": "Đang tải tin nhắn…",
     "loginPrompt": "Đăng nhập để gửi tin nhắn riêng và xem hộp thư.",
     "loginCta": "Đăng nhập",
+    "unavailable": "Tính năng nhắn tin tạm thời không khả dụng. Vui lòng thử lại sau.",
     "aiErrorUnavailable": "Dịch vụ AI tạm thời không khả dụng. Vui lòng thử lại.",
     "aiErrorConnection": "Không thể kết nối dịch vụ AI.",
     "aiFallbackSorry": "Xin lỗi, tôi chưa thể trả lời ngay. Vui lòng liên hệ bộ phận hỗ trợ.",

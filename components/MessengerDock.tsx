@@ -2,15 +2,19 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { MessageCircle, X } from 'lucide-react';
+import { MessageCircle } from 'lucide-react';
 import { useMutation, useQuery } from 'convex/react';
 import { api as messagesApi } from '@/convex-messages/convex/_generated/api';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { useUserEmail } from '@/hooks/useUserSession';
-import { MessagesConvexProvider } from '@/components/messages-convex-provider';
+import {
+  MessagesConvexProvider,
+  useMessagesConvexConfigured,
+} from '@/components/messages-convex-provider';
 import { Button } from '@/components/ui/button';
 import { MessengerInbox, type ConversationItem } from '@/components/messenger/MessengerInbox';
 import { MessengerThread } from '@/components/messenger/MessengerThread';
+import { MessengerFloatingShell } from '@/components/messenger/MessengerFloatingShell';
 import type { SearchUserResult } from '@/components/messenger/MessengerUserSearch';
 
 type View = 'inbox' | 'ai' | 'user';
@@ -23,6 +27,26 @@ type ActiveUserThread = {
     avatarUrl?: string;
   };
 };
+
+function MessengerDockOffline() {
+  const { t } = useLanguage();
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <MessengerFloatingShell
+      isOpen={isOpen}
+      onOpen={() => setIsOpen(true)}
+      onClose={() => setIsOpen(false)}
+      openChatLabel={t('messenger.openChat')}
+      closeLabel={t('messenger.close')}
+    >
+      <div className="flex h-full flex-col items-center justify-center gap-4 px-6 text-center">
+        <MessageCircle className="h-10 w-10 text-primary" />
+        <p className="text-sm text-muted-foreground">{t('messenger.unavailable')}</p>
+      </div>
+    </MessengerFloatingShell>
+  );
+}
 
 function MessengerDockInner() {
   const { language, t } = useLanguage();
@@ -124,87 +148,76 @@ function MessengerDockInner() {
   const badge = unreadCount ?? 0;
 
   return (
-    <>
-      {isOpen ? (
-        <div className="fixed bottom-6 right-6 z-[80] flex h-[min(480px,calc(100vh-3rem))] w-[min(360px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-border/60 bg-card/95 shadow-2xl backdrop-blur-md">
-          <div className="flex items-center justify-end border-b border-border/40 px-2 py-1">
-            <Button size="icon-sm" variant="ghost" onClick={() => setIsOpen(false)} aria-label={t('messenger.close')}>
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
-
-          <div className="min-h-0 flex-1">
-            {!userEmail ? (
-              <div className="flex h-full flex-col items-center justify-center gap-4 px-6 text-center">
-                <MessageCircle className="h-10 w-10 text-primary" />
-                <p className="text-sm text-muted-foreground">{t('messenger.loginPrompt')}</p>
-                <Button asChild size="sm">
-                  <Link href="/auth">{t('messenger.loginCta')}</Link>
-                </Button>
-              </div>
-            ) : view === 'inbox' ? (
-              <MessengerInbox
-                title={t('messenger.title')}
-                aiLabel={t('messenger.aiLabel')}
-                searchPlaceholder={t('messenger.searchPlaceholder')}
-                searchMinChars={t('messenger.searchMinChars')}
-                emptyLabel={t('messenger.emptyConversations')}
-                loadingLabel={t('messenger.loadingConversations')}
-                conversations={conversations}
-                onOpenAi={() => setView('ai')}
-                onOpenConversation={openConversation}
-                onSelectUser={(user) => void startChatWithUser(user)}
-              />
-            ) : view === 'ai' ? (
-              <MessengerThread
-                mode="ai"
-                userEmail={userEmail}
-                language={language}
-                labels={threadLabels}
-                onBack={() => setView('inbox')}
-              />
-            ) : activeThread ? (
-              <MessengerThread
-                mode="user"
-                userEmail={userEmail}
-                senderDisplayName={displayName}
-                conversationId={activeThread.conversationId}
-                peer={activeThread.peer}
-                language={language}
-                labels={threadLabels}
-                onBack={() => {
-                  setView('inbox');
-                  setActiveThread(null);
-                }}
-              />
-            ) : null}
-          </div>
+    <MessengerFloatingShell
+      isOpen={isOpen}
+      onOpen={() => setIsOpen(true)}
+      onClose={() => setIsOpen(false)}
+      badge={userEmail ? badge : 0}
+      openChatLabel={t('messenger.openChat')}
+      closeLabel={t('messenger.close')}
+    >
+      {!userEmail ? (
+        <div className="flex h-full flex-col items-center justify-center gap-4 px-6 text-center">
+          <MessageCircle className="h-10 w-10 text-primary" />
+          <p className="text-sm text-muted-foreground">{t('messenger.loginPrompt')}</p>
+          <Button asChild size="sm">
+            <Link href="/auth">{t('messenger.loginCta')}</Link>
+          </Button>
         </div>
+      ) : view === 'inbox' ? (
+        <MessengerInbox
+          title={t('messenger.title')}
+          aiLabel={t('messenger.aiLabel')}
+          searchPlaceholder={t('messenger.searchPlaceholder')}
+          searchMinChars={t('messenger.searchMinChars')}
+          emptyLabel={t('messenger.emptyConversations')}
+          loadingLabel={t('messenger.loadingConversations')}
+          conversations={conversations}
+          onOpenAi={() => setView('ai')}
+          onOpenConversation={openConversation}
+          onSelectUser={(user) => void startChatWithUser(user)}
+        />
+      ) : view === 'ai' ? (
+        <MessengerThread
+          mode="ai"
+          userEmail={userEmail}
+          language={language}
+          labels={threadLabels}
+          onBack={() => setView('inbox')}
+        />
+      ) : activeThread ? (
+        <MessengerThread
+          mode="user"
+          userEmail={userEmail}
+          senderDisplayName={displayName}
+          conversationId={activeThread.conversationId}
+          peer={activeThread.peer}
+          language={language}
+          labels={threadLabels}
+          onBack={() => {
+            setView('inbox');
+            setActiveThread(null);
+          }}
+        />
       ) : null}
-
-      {!isOpen ? (
-        <button
-          type="button"
-          onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-[80] relative inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_12px_30px_rgba(0,217,255,0.45)] transition-transform hover:scale-105"
-          aria-label={t('messenger.openChat')}
-        >
-          <MessageCircle className="h-6 w-6" />
-          {userEmail && badge > 0 ? (
-            <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-bold text-destructive-foreground">
-              {badge > 9 ? '9+' : badge}
-            </span>
-          ) : null}
-        </button>
-      ) : null}
-    </>
+    </MessengerFloatingShell>
   );
 }
 
-export function MessengerDock() {
+function MessengerDockConnected() {
   return (
     <MessagesConvexProvider>
       <MessengerDockInner />
     </MessagesConvexProvider>
   );
+}
+
+export function MessengerDock() {
+  const configured = useMessagesConvexConfigured();
+
+  if (!configured) {
+    return <MessengerDockOffline />;
+  }
+
+  return <MessengerDockConnected />;
 }

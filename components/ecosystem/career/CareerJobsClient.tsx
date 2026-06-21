@@ -1,13 +1,15 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
 import {
   ArrowRight,
   Briefcase,
   Clock,
   GraduationCap,
   MapPin,
+  PlusCircle,
   Search,
   Sparkles,
   TrendingUp,
@@ -20,6 +22,7 @@ import { Header } from '@/components/Header';
 import { ParticleBackground } from '@/components/DarkmodeParticleBackground';
 import { ClientOnly } from '@/lib/hooks/useClientOnly';
 import { useLanguage } from '@/lib/context/LanguageContext';
+import { CreateJobPostingDialog } from '@/components/ecosystem/business/EmployerOpsDialogs';
 import { TEACHER_REGISTRATION_JOB_ID } from '@/lib/jobs/public-jobs';
 
 type JobRow = {
@@ -152,11 +155,20 @@ function JobListingCard({
   );
 }
 
-function JobsPageContent() {
+function JobsPageContent({ userEmail }: { userEmail: string | null }) {
   const { t } = useLanguage();
+  const router = useRouter();
   const ns = 'ecosystemPages.careerJobs';
   const [search, setSearch] = useState('');
+  const [postJobOpen, setPostJobOpen] = useState(false);
   const jobs = useQuery(api.employerOps.listOpenJobPostings, {});
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('postJob') === '1' && userEmail) {
+      setPostJobOpen(true);
+    }
+  }, [userEmail]);
 
   const filteredJobs = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -168,10 +180,23 @@ function JobsPageContent() {
   const hasTeacherListing = (jobs ?? []).some((job) => isTeacherListing(job as JobRow));
   const showTeacherSidebar = !hasTeacherListing;
 
+  const postJobHref = userEmail
+    ? undefined
+    : `/auth?mode=signin&redirect=${encodeURIComponent('/jobs?postJob=1')}`;
+
   return (
     <div className="jobs-page min-h-screen bg-background">
       <ParticleBackground />
       <Header />
+
+      {userEmail ? (
+        <CreateJobPostingDialog
+          userEmail={userEmail}
+          open={postJobOpen}
+          onOpenChange={setPostJobOpen}
+          onCreated={(externalId) => router.push(`/jobs/${externalId}`)}
+        />
+      ) : null}
 
       <main className="relative z-10 mx-auto max-w-6xl px-4 pb-20 pt-24 sm:px-6">
         <section className="jobs-page-hero jobs-stagger-1 mb-10 md:mb-12">
@@ -181,6 +206,19 @@ function JobsPageContent() {
               <p className="home-eyebrow mb-4">{t(`${ns}.heroEyebrow`)}</p>
               <h1 className="home-title max-w-2xl text-4xl md:text-5xl lg:text-[3.25rem]">{t(`${ns}.title`)}</h1>
               <p className="home-subtitle mt-4 max-w-xl">{t(`${ns}.subtitle`)}</p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                {userEmail ? (
+                  <button type="button" onClick={() => setPostJobOpen(true)} className="jobs-sidebar-cta">
+                    <PlusCircle className="h-4 w-4" />
+                    {t(`${ns}.postJob`)}
+                  </button>
+                ) : (
+                  <Link href={postJobHref!} className="jobs-sidebar-cta">
+                    <PlusCircle className="h-4 w-4" />
+                    {t(`${ns}.signInToPost`)}
+                  </Link>
+                )}
+              </div>
             </div>
             <div className="jobs-count-pill shrink-0 self-start md:self-auto">
               <span className="jobs-count-pill-dot" aria-hidden />
@@ -241,6 +279,30 @@ function JobsPageContent() {
           </div>
 
           <aside className="jobs-board-aside">
+            <div className="jobs-sidebar-card jobs-sidebar-card--accent">
+              <div className="jobs-sidebar-card-glow" aria-hidden />
+              <PlusCircle className="h-6 w-6 text-primary" />
+              <h3 className="mt-3 text-base font-bold text-foreground">{t(`${ns}.postJob`)}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t(`${ns}.postJobBody`)}</p>
+              {userEmail ? (
+                <>
+                  <button type="button" onClick={() => setPostJobOpen(true)} className="jobs-sidebar-cta mt-5">
+                    {t(`${ns}.postJob`)}
+                    <ArrowRight className="h-4 w-4" />
+                  </button>
+                  <Link href="/business/recruitment" className="jobs-sidebar-link mt-3">
+                    {t(`${ns}.manageMyJobs`)}
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                </>
+              ) : (
+                <Link href={postJobHref!} className="jobs-sidebar-cta mt-5">
+                  {t(`${ns}.signInToPost`)}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              )}
+            </div>
+
             {showTeacherSidebar ? (
               <div className="jobs-sidebar-card jobs-sidebar-card--accent">
                 <div className="jobs-sidebar-card-glow" aria-hidden />
@@ -287,10 +349,10 @@ function JobsPageContent() {
   );
 }
 
-export function CareerJobsClient() {
+export function CareerJobsClient({ userEmail }: { userEmail: string | null }) {
   return (
     <ClientOnly>
-      <JobsPageContent />
+      <JobsPageContent userEmail={userEmail} />
     </ClientOnly>
   );
 }

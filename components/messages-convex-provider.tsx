@@ -21,3 +21,7 @@ export function MessagesConvexProvider({ children }: MessagesConvexProviderProps
 
   return <ConvexProvider client={client}>{children}</ConvexProvider>;
 }
+
+export function useMessagesConvexConfigured() {
+  return Boolean(process.env.NEXT_PUBLIC_CONVEX_MESSAGES_URL?.trim());
+}

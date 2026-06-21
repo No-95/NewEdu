@@ -118,6 +118,16 @@
     @apply text-primary font-bold drop-shadow-[0_0_10px_rgba(0,217,255,0.5)];
   }
 
+  .messenger-fab {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    box-shadow: 0 12px 28px color-mix(in srgb, var(--primary) 42%, transparent);
+  }
+
+  .messenger-fab:hover {
+    box-shadow: 0 14px 32px color-mix(in srgb, var(--primary) 52%, transparent);
+  }
+
   .site-mode-darkmode2 .glass {
     @apply bg-black/45 border-white/20;
   }

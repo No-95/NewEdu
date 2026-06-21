@@ -943,6 +943,7 @@
     "loadingConversations": "채팅 불러오는 중…",
     "loginPrompt": "로그인하면 개인 메시지를 보내고 채팅 목록을 볼 수 있습니다.",
     "loginCta": "로그인",
+    "unavailable": "메시지 기능을 일시적으로 사용할 수 없습니다. 나중에 다시 시도해 주세요.",
     "aiErrorUnavailable": "AI 서비스를 일시적으로 사용할 수 없습니다. 다시 시도해 주세요.",
     "aiErrorConnection": "AI 서비스에 연결할 수 없습니다.",
     "aiFallbackSorry": "죄송합니다. 지금은 답변할 수 없습니다. 고객 지원팀에 문의해 주세요.",

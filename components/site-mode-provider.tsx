@@ -11,6 +11,12 @@ interface SiteModeContextValue {
   cycleMode: () => void;
 }
 
+export function getSiteModeCssVariables(mode: SiteMode): Record<string, string> {
+  return MODE_CSS_VARIABLES[mode];
+}
+
+export type { SiteMode };
+
 const MODE_SEQUENCE: SiteMode[] = ['darkmode1', 'lightmode1', 'darkmode2', 'lightmode2'];
 const STORAGE_KEY = 'hdp-site-mode';
 

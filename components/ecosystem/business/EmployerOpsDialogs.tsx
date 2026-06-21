@@ -21,9 +21,10 @@ type DialogProps = {
   userEmail: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onCreated?: (externalId: string) => void;
 };
 
-export function CreateJobPostingDialog({ userEmail, open, onOpenChange }: DialogProps) {
+export function CreateJobPostingDialog({ userEmail, open, onOpenChange, onCreated }: DialogProps) {
   const { t } = useLanguage();
   const createJob = useMutation(api.employerOps.createJobPosting);
   const [title, setTitle] = useState('');
@@ -44,7 +45,7 @@ export function CreateJobPostingDialog({ userEmail, open, onOpenChange }: Dialog
   const handleSubmit = async (asDraft: boolean) => {
     setSaving(true);
     try {
-      await createJob({
+      const result = await createJob({
         email: userEmail,
         title,
         department,
@@ -53,6 +54,7 @@ export function CreateJobPostingDialog({ userEmail, open, onOpenChange }: Dialog
         description: description || undefined,
         status: asDraft ? 'draft' : 'open',
       });
+      onCreated?.(result.externalId);
       onOpenChange(false);
       resetForm();
     } finally {

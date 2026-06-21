@@ -988,6 +988,7 @@
     "loadingConversations": "Loading chats…",
     "loginPrompt": "Sign in to send private messages and view your chats.",
     "loginCta": "Sign in",
+    "unavailable": "Messaging is temporarily unavailable. Please try again later.",
     "aiErrorUnavailable": "AI service is temporarily unavailable. Please try again.",
     "aiErrorConnection": "Cannot connect to AI service.",
     "aiFallbackSorry": "Sorry, I cannot respond right now. Please contact support directly.",
