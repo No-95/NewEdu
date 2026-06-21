@@ -18,11 +18,45 @@ Always deploy with **`--keep-vars`** so CLI deploys do not wipe dashboard secret
 pnpm run deploy:prod
 ```
 
-## 1. Convex
+## 1. Convex (platform)
+
+From the project root:
 
 ```bash
 npx convex deploy
 ```
+
+## 1b. Convex (private messaging — second deployment)
+
+Messaging uses a separate Convex project (`fantastic-kookabura-624`).
+
+```bash
+pnpm run deploy:messages
+```
+
+Or manually:
+
+```bash
+cd convex-messages
+npx convex deploy
+```
+
+**Environment (build + runtime):**
+
+| Variable | Example |
+|----------|---------|
+| `NEXT_PUBLIC_CONVEX_MESSAGES_URL` | `https://fantastic-kookabura-624.convex.cloud` |
+| `CONVEX_MESSAGES_SITE_URL` | `https://fantastic-kookabura-624.convex.site` |
+| `MESSAGES_NOTIFY_SECRET` | shared secret on Cloudflare **and** messages Convex dashboard |
+
+Set on **messages Convex dashboard** (Settings → Environment Variables):
+
+- `MESSAGES_NOTIFY_SECRET` — same value as Cloudflare
+- `SITE_URL` — `https://hdpedu.com` (for notification bridge)
+
+Set on **main Convex dashboard**:
+
+- `MESSAGES_NOTIFY_SECRET` — same value (for `messagesBridge.notifyDirectMessage`)
 
 ## 2. Production build and deploy (recommended)
 
@@ -50,6 +84,7 @@ Set under **Workers & Pages → newedu → Settings → Variables** (encrypted s
 - `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`
 - `RESEND_API_KEY`, `AI_WORKER_INTERNAL_TOKEN`, `GEMINI_API_KEY` (if used on worker)
 - `CONVEX_SITE_URL`, `CONVEX_DEPLOYMENT` (optional)
+- `MESSAGES_NOTIFY_SECRET` — DM notification bridge (must match messages Convex + main Convex)
 - `SITE_URL` — email notification CTA base URL (optional; defaults to `https://hdpedu.com`)
 
 Plaintext runtime vars (or use [`wrangler.jsonc`](wrangler.jsonc) `vars`):

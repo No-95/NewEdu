@@ -5,7 +5,7 @@ import './globals.css'
 import { LanguageProvider } from '@/lib/context/LanguageContext'
 import { AppConvexProvider } from '@/components/convex-provider'
 import { SiteModeProvider } from '@/components/site-mode-provider'
-import { AISupportDock } from '@/components/AISupportDock'
+import { MessengerDock } from '@/components/MessengerDock'
 import { Toaster } from '@/components/ui/toaster'
 
 const _geist = Geist({ subsets: ["latin"] });
@@ -43,7 +43,8 @@ export default function RootLayout({
         <SiteModeProvider>
           <AppConvexProvider>
             <LanguageProvider>
-              <AISupportDock>{children}</AISupportDock>
+              {children}
+              <MessengerDock />
               <Toaster />
             </LanguageProvider>
           </AppConvexProvider>

@@ -60,6 +60,60 @@ export const getUserSettings = query({
   },
 });
 
+export const searchUsersForMessaging = query({
+  args: {
+    email: v.string(),
+    query: v.string(),
+    limit: v.optional(v.number()),
+  },
+  returns: v.array(
+    v.object({
+      email: v.string(),
+      fullName: v.optional(v.string()),
+      avatarUrl: v.optional(v.string()),
+      hdpId: v.optional(v.string()),
+    })
+  ),
+  handler: async (ctx, args) => {
+    const callerEmail = args.email.trim().toLowerCase();
+    const caller = await ctx.db
+      .query('users')
+      .withIndex('by_email', (q) => q.eq('email', callerEmail))
+      .first();
+    if (!caller) throw new Error('User not found.');
+
+    const needle = args.query.trim().toLowerCase();
+    if (needle.length < 2) return [];
+
+    const limit = Math.min(args.limit ?? 20, 20);
+    const users = await ctx.db.query('users').collect();
+
+    const matches = users
+      .filter((user) => user.email !== callerEmail)
+      .filter((user) => {
+        const fullName = (user.fullName ?? user.name ?? '').toLowerCase();
+        const email = user.email.toLowerCase();
+        const username = (user.username ?? '').toLowerCase();
+        const hdpId = (user.hdpId ?? '').toLowerCase();
+        return (
+          fullName.includes(needle) ||
+          email.includes(needle) ||
+          username.includes(needle) ||
+          hdpId.includes(needle)
+        );
+      })
+      .slice(0, limit)
+      .map((user) => ({
+        email: user.email,
+        fullName: user.fullName ?? user.name,
+        avatarUrl: user.avatarUrl,
+        hdpId: user.hdpId,
+      }));
+
+    return matches;
+  },
+});
+
 export const updateNotificationPreferences = mutation({
   args: {
     email: v.string(),

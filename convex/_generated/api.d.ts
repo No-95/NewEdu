@@ -28,6 +28,7 @@ import type * as lib_notificationsHelper from "../lib/notificationsHelper.js";
 import type * as lib_recruitmentStages from "../lib/recruitmentStages.js";
 import type * as lib_skillGaps from "../lib/skillGaps.js";
 import type * as lib_stageEventsHelper from "../lib/stageEventsHelper.js";
+import type * as messagesBridge from "../messagesBridge.js";
 import type * as news from "../news.js";
 import type * as notifications from "../notifications.js";
 import type * as onboarding from "../onboarding.js";
@@ -67,6 +68,7 @@ declare const fullApi: ApiFromModules<{
   "lib/recruitmentStages": typeof lib_recruitmentStages;
   "lib/skillGaps": typeof lib_skillGaps;
   "lib/stageEventsHelper": typeof lib_stageEventsHelper;
+  messagesBridge: typeof messagesBridge;
   news: typeof news;
   notifications: typeof notifications;
   onboarding: typeof onboarding;

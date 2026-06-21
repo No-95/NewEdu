@@ -57,7 +57,6 @@ export function EcosystemFilterBar({
             <SelectValue placeholder={filter.label} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Tất cả</SelectItem>
             {filter.options.map((opt) => (
               <SelectItem key={opt.value} value={opt.value}>
                 {opt.label}

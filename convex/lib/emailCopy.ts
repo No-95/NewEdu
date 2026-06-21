@@ -20,6 +20,7 @@ const COPY: Record<Locale, Record<string, NotificationCopy>> = {
     teacher_accepted: { title: 'Teacher application accepted', body: 'Welcome! Open your teacher dashboard to get started.' },
     teacher_rejected: { title: 'Teacher application update', body: 'Your teacher application was not approved at this time.' },
     expert_accepted: { title: 'Expert application accepted', body: 'Complete your expert profile to appear on the network.' },
+    direct_message: { title: 'New message', body: '{senderName}: {preview}' },
   },
   vi: {
     application_stage: { title: 'Cập nhật đơn ứng tuyển', body: 'Đơn {position} chuyển sang {stage}.' },
@@ -36,6 +37,7 @@ const COPY: Record<Locale, Record<string, NotificationCopy>> = {
     teacher_accepted: { title: 'Đơn giáo viên được duyệt', body: 'Chào mừng! Mở bảng điều khiển giáo viên để bắt đầu.' },
     teacher_rejected: { title: 'Cập nhật đơn giáo viên', body: 'Đơn giáo viên chưa được duyệt lần này.' },
     expert_accepted: { title: 'Đơn chuyên gia được duyệt', body: 'Hoàn thiện hồ sơ chuyên gia để xuất hiện trên mạng lưới.' },
+    direct_message: { title: 'Tin nhắn mới', body: '{senderName}: {preview}' },
   },
   ko: {
     application_stage: { title: '지원서 업데이트', body: '{position} 지원이 {stage} 단계로 이동했습니다.' },
@@ -52,6 +54,7 @@ const COPY: Record<Locale, Record<string, NotificationCopy>> = {
     teacher_accepted: { title: '강사 신청 승인', body: '환영합니다! 강사 대시보드에서 시작하세요.' },
     teacher_rejected: { title: '강사 신청 업데이트', body: '강사 신청이 이번에 승인되지 않았습니다.' },
     expert_accepted: { title: '전문가 신청 승인', body: '전문가 프로필을 완성하여 네트워크에 표시하세요.' },
+    direct_message: { title: '새 메시지', body: '{senderName}: {preview}' },
   },
 };
 

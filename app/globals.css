@@ -479,6 +479,94 @@
     @apply rounded-2xl border border-border bg-card/80 px-6 py-14 text-center backdrop-blur-sm;
   }
 
+  .jobs-board-layout {
+    @apply grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(240px,300px)];
+  }
+
+  .jobs-board-aside {
+    @apply flex flex-col gap-4 lg:sticky lg:top-24;
+  }
+
+  .jobs-board-grid {
+    @apply grid gap-4 sm:grid-cols-2;
+  }
+
+  .jobs-board-grid--single {
+    @apply sm:grid-cols-1 xl:max-w-xl;
+  }
+
+  .jobs-listing-card {
+    @apply relative flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card/75 p-5 backdrop-blur-sm transition-all duration-300;
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--foreground) 5%, transparent);
+  }
+
+  .jobs-listing-card:hover {
+    @apply border-primary/35;
+    box-shadow:
+      0 16px 40px -24px var(--jobs-glow),
+      inset 0 1px 0 color-mix(in srgb, var(--foreground) 8%, transparent);
+    transform: translateY(-2px);
+  }
+
+  .jobs-listing-card--teacher {
+    background:
+      radial-gradient(ellipse 120% 80% at 100% 0%, var(--jobs-glow-soft), transparent 55%),
+      color-mix(in srgb, var(--card) 92%, var(--background));
+  }
+
+  .jobs-listing-card-accent {
+    @apply pointer-events-none absolute left-0 top-0 h-full w-1 opacity-0 transition-opacity duration-300;
+    background: var(--jobs-accent-bar);
+  }
+
+  .jobs-listing-card:hover .jobs-listing-card-accent {
+    @apply opacity-100;
+  }
+
+  .jobs-listing-avatar {
+    @apply flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border bg-muted/50 text-xs font-bold tracking-wide text-foreground;
+  }
+
+  .jobs-listing-avatar--teacher {
+    @apply border-primary/30 bg-primary/10 text-primary;
+  }
+
+  .jobs-listing-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .jobs-sidebar-card {
+    @apply relative overflow-hidden rounded-2xl border border-border bg-card/80 p-5 backdrop-blur-sm;
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--foreground) 5%, transparent);
+  }
+
+  .jobs-sidebar-card--accent {
+    @apply border-primary/25;
+    background:
+      radial-gradient(circle at 100% 0%, var(--jobs-glow-soft), transparent 50%),
+      color-mix(in srgb, var(--card) 94%, var(--background));
+  }
+
+  .jobs-sidebar-card-glow {
+    @apply pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full blur-2xl;
+    background: var(--jobs-glow);
+  }
+
+  .jobs-sidebar-cta {
+    @apply inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground transition-all duration-300;
+    box-shadow: var(--jobs-btn-glow);
+  }
+
+  .jobs-sidebar-cta:hover {
+    box-shadow: var(--jobs-btn-glow-hover);
+    transform: translateY(-1px);
+  }
+
+  .jobs-sidebar-link {
+    @apply inline-flex items-center gap-1.5 text-sm font-semibold text-primary transition-colors hover:text-primary/80;
+  }
+
   /* Light modes — restore depth + brand colors (global rules strip shadows / force black text) */
   .site-mode-lightmode1 .jobs-page,
   .site-mode-lightmode2 .jobs-page {
@@ -542,10 +630,14 @@
   .site-mode-lightmode1 .jobs-page .jobs-spotlight,
   .site-mode-lightmode1 .jobs-page .jobs-search-bar,
   .site-mode-lightmode1 .jobs-page .jobs-empty-state,
+  .site-mode-lightmode1 .jobs-page .jobs-listing-card,
+  .site-mode-lightmode1 .jobs-page .jobs-sidebar-card,
   .site-mode-lightmode2 .jobs-page .jobs-page-hero,
   .site-mode-lightmode2 .jobs-page .jobs-spotlight,
   .site-mode-lightmode2 .jobs-page .jobs-search-bar,
-  .site-mode-lightmode2 .jobs-page .jobs-empty-state {
+  .site-mode-lightmode2 .jobs-page .jobs-empty-state,
+  .site-mode-lightmode2 .jobs-page .jobs-listing-card,
+  .site-mode-lightmode2 .jobs-page .jobs-sidebar-card {
     box-shadow: var(--jobs-spotlight-shadow) !important;
   }
 

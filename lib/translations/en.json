@@ -675,6 +675,10 @@
       "expert_accepted": {
         "title": "Expert application accepted",
         "body": "Welcome! Complete your expert profile to appear in the network."
+      },
+      "direct_message": {
+        "title": "New message",
+        "body": "{senderName}: {preview}"
       }
     }
   },
@@ -969,16 +973,25 @@
       "score": "{{score}}/{{total}} correct ({{percent}}%)"
     }
   },
-  "aiSupport": {
-    "title": "AI Support",
-    "welcome": "Hi! I'm your AI support assistant. Ask me anything about HDP EDU in English, Vietnamese, or Korean.",
-    "placeholder": "Type your message...",
-    "typing": "AI is typing...",
-    "openChat": "Open AI support chat",
-    "errorUnavailable": "AI service is temporarily unavailable. Please try again.",
-    "errorConnection": "Cannot connect to AI service.",
-    "fallbackSorry": "Sorry, I cannot respond right now. Please contact support directly.",
-    "fallbackConnection": "Connection error. Please try again later."
+  "messenger": {
+    "title": "Chats",
+    "aiLabel": "HDP AI Support",
+    "aiWelcome": "Hi! I'm your AI support assistant. Ask me anything about HDP EDU in English, Vietnamese, or Korean.",
+    "placeholder": "Type a message...",
+    "aiTyping": "AI is typing...",
+    "openChat": "Open messenger",
+    "close": "Close messenger",
+    "back": "Back to chats",
+    "searchPlaceholder": "Search people to message...",
+    "searchMinChars": "Type at least 2 characters to search.",
+    "emptyConversations": "No conversations yet. Search for someone to start chatting.",
+    "loadingConversations": "Loading chats…",
+    "loginPrompt": "Sign in to send private messages and view your chats.",
+    "loginCta": "Sign in",
+    "aiErrorUnavailable": "AI service is temporarily unavailable. Please try again.",
+    "aiErrorConnection": "Cannot connect to AI service.",
+    "aiFallbackSorry": "Sorry, I cannot respond right now. Please contact support directly.",
+    "aiFallbackConnection": "Connection error. Please try again later."
   },
   "teacherOps": {
     "addStudent": "Add student",

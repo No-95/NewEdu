@@ -633,7 +633,8 @@
       "consultation_reminder": { "title": "Nhắc lịch tư vấn", "body": "Tư vấn \"{topic}\" bắt đầu lúc {scheduledAt}." },
       "teacher_accepted": { "title": "Đơn giáo viên được duyệt", "body": "Chào mừng! Mở bảng điều khiển giáo viên để bắt đầu." },
       "teacher_rejected": { "title": "Cập nhật đơn giáo viên", "body": "Đơn giáo viên chưa được duyệt lần này." },
-      "expert_accepted": { "title": "Đơn chuyên gia được duyệt", "body": "Hoàn thiện hồ sơ chuyên gia để xuất hiện trên mạng lưới." }
+      "expert_accepted": { "title": "Đơn chuyên gia được duyệt", "body": "Hoàn thiện hồ sơ chuyên gia để xuất hiện trên mạng lưới." },
+      "direct_message": { "title": "Tin nhắn mới", "body": "{senderName}: {preview}" }
     }
   },
   "dashboard": {
@@ -927,16 +928,25 @@
       "score": "{{score}}/{{total}} câu đúng ({{percent}}%)"
     }
   },
-  "aiSupport": {
-    "title": "Hỗ trợ AI",
-    "welcome": "Xin chào! Tôi là trợ lý hỗ trợ AI. Hãy hỏi tôi về HDP EDU bằng tiếng Việt, tiếng Anh hoặc tiếng Hàn.",
+  "messenger": {
+    "title": "Tin nhắn",
+    "aiLabel": "HDP AI Support",
+    "aiWelcome": "Xin chào! Tôi là trợ lý hỗ trợ AI. Hãy hỏi tôi về HDP EDU bằng tiếng Việt, tiếng Anh hoặc tiếng Hàn.",
     "placeholder": "Nhập tin nhắn...",
-    "typing": "AI đang trả lời...",
-    "openChat": "Mở trò chuyện hỗ trợ AI",
-    "errorUnavailable": "Dịch vụ AI tạm thời không khả dụng. Vui lòng thử lại.",
-    "errorConnection": "Không thể kết nối dịch vụ AI.",
-    "fallbackSorry": "Xin lỗi, tôi chưa thể trả lời ngay. Vui lòng liên hệ bộ phận hỗ trợ.",
-    "fallbackConnection": "Lỗi kết nối. Vui lòng thử lại sau."
+    "aiTyping": "AI đang trả lời...",
+    "openChat": "Mở tin nhắn",
+    "close": "Đóng tin nhắn",
+    "back": "Quay lại danh sách",
+    "searchPlaceholder": "Tìm người để nhắn tin...",
+    "searchMinChars": "Nhập ít nhất 2 ký tự để tìm.",
+    "emptyConversations": "Chưa có cuộc trò chuyện. Tìm ai đó để bắt đầu nhắn tin.",
+    "loadingConversations": "Đang tải tin nhắn…",
+    "loginPrompt": "Đăng nhập để gửi tin nhắn riêng và xem hộp thư.",
+    "loginCta": "Đăng nhập",
+    "aiErrorUnavailable": "Dịch vụ AI tạm thời không khả dụng. Vui lòng thử lại.",
+    "aiErrorConnection": "Không thể kết nối dịch vụ AI.",
+    "aiFallbackSorry": "Xin lỗi, tôi chưa thể trả lời ngay. Vui lòng liên hệ bộ phận hỗ trợ.",
+    "aiFallbackConnection": "Lỗi kết nối. Vui lòng thử lại sau."
   },
   "teacherOps": {
     "addStudent": "Thêm học viên",

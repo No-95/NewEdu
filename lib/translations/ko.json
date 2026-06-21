@@ -633,7 +633,8 @@
       "consultation_reminder": { "title": "상담 알림", "body": "\"{topic}\" 상담이 {scheduledAt}에 시작됩니다." },
       "teacher_accepted": { "title": "강사 신청 승인", "body": "환영합니다! 강사 대시보드에서 시작하세요." },
       "teacher_rejected": { "title": "강사 신청 업데이트", "body": "강사 신청이 이번에 승인되지 않았습니다." },
-      "expert_accepted": { "title": "전문가 신청 승인", "body": "전문가 프로필을 완성하여 네트워크에 표시하세요." }
+      "expert_accepted": { "title": "전문가 신청 승인", "body": "전문가 프로필을 완성하여 네트워크에 표시하세요." },
+      "direct_message": { "title": "새 메시지", "body": "{senderName}: {preview}" }
     }
   },
   "dashboard": {
@@ -927,16 +928,25 @@
       "score": "{{score}}/{{total}} 정답 ({{percent}}%)"
     }
   },
-  "aiSupport": {
-    "title": "AI 지원",
-    "welcome": "안녕하세요! HDP EDU AI 지원 도우미입니다. 한국어, 영어, 베트남어로 무엇이든 물어보세요.",
+  "messenger": {
+    "title": "채팅",
+    "aiLabel": "HDP AI Support",
+    "aiWelcome": "안녕하세요! HDP EDU AI 지원 도우미입니다. 한국어, 영어, 베트남어로 무엇이든 물어보세요.",
     "placeholder": "메시지를 입력하세요...",
-    "typing": "AI가 입력 중입니다...",
-    "openChat": "AI 지원 채팅 열기",
-    "errorUnavailable": "AI 서비스를 일시적으로 사용할 수 없습니다. 다시 시도해 주세요.",
-    "errorConnection": "AI 서비스에 연결할 수 없습니다.",
-    "fallbackSorry": "죄송합니다. 지금은 답변할 수 없습니다. 고객 지원팀에 문의해 주세요.",
-    "fallbackConnection": "연결 오류입니다. 나중에 다시 시도해 주세요."
+    "aiTyping": "AI가 입력 중입니다...",
+    "openChat": "메신저 열기",
+    "close": "메신저 닫기",
+    "back": "채팅 목록으로",
+    "searchPlaceholder": "메시지를 보낼 사람 검색...",
+    "searchMinChars": "검색하려면 2자 이상 입력하세요.",
+    "emptyConversations": "대화가 없습니다. 검색해서 대화를 시작하세요.",
+    "loadingConversations": "채팅 불러오는 중…",
+    "loginPrompt": "로그인하면 개인 메시지를 보내고 채팅 목록을 볼 수 있습니다.",
+    "loginCta": "로그인",
+    "aiErrorUnavailable": "AI 서비스를 일시적으로 사용할 수 없습니다. 다시 시도해 주세요.",
+    "aiErrorConnection": "AI 서비스에 연결할 수 없습니다.",
+    "aiFallbackSorry": "죄송합니다. 지금은 답변할 수 없습니다. 고객 지원팀에 문의해 주세요.",
+    "aiFallbackConnection": "연결 오류입니다. 나중에 다시 시도해 주세요."
   },
   "teacherOps": {
     "addStudent": "학습자 추가",

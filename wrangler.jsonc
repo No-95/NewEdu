@@ -6,6 +6,7 @@
   "compatibility_date": "2026-05-27",
   "vars": {
     "NEXT_PUBLIC_CONVEX_URL": "https://adept-tapir-159.convex.cloud",
+    "NEXT_PUBLIC_CONVEX_MESSAGES_URL": "https://fantastic-kookabura-624.convex.cloud",
     "NEXT_PUBLIC_APP_URL": "https://hdpedu.com"
   },
   "assets": {
