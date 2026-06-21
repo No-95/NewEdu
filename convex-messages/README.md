@@ -2,16 +2,16 @@
 
 Private messaging backend for HDP EDU.
 
-**Production URL:** `https://fantastic-kookabura-624.convex.cloud`
+**Production URL:** `https://dapper-cricket-274.convex.cloud`  
+**Dashboard:** https://dashboard.convex.dev/t/minhhoangd852/hdp-messages
 
 ## Setup
 
 ```bash
 cd convex-messages
+npm install
 npx convex dev
 ```
-
-Link to deployment `fantastic-kookabura-624` when prompted.
 
 ## Deploy
 
@@ -21,7 +21,7 @@ From repo root:
 pnpm run deploy:messages
 ```
 
-## Required environment variables (Convex dashboard)
+## Required environment variables (Convex prod dashboard)
 
 | Variable | Purpose |
 |----------|---------|

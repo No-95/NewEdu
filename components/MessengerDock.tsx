@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { MessageCircle, X } from 'lucide-react';
 import { useMutation, useQuery } from 'convex/react';
-import { api as messagesApi } from '@/convex-messages/_generated/api';
+import { api as messagesApi } from '@/convex-messages/convex/_generated/api';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { useUserEmail } from '@/hooks/useUserSession';
 import { MessagesConvexProvider } from '@/components/messages-convex-provider';

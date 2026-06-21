@@ -28,7 +28,7 @@ npx convex deploy
 
 ## 1b. Convex (private messaging — second deployment)
 
-Messaging uses a separate Convex project (`fantastic-kookabura-624`).
+Messaging uses a separate Convex project (`hdp-messages` / prod: `dapper-cricket-274`).
 
 ```bash
 pnpm run deploy:messages
@@ -45,8 +45,8 @@ npx convex deploy
 
 | Variable | Example |
 |----------|---------|
-| `NEXT_PUBLIC_CONVEX_MESSAGES_URL` | `https://fantastic-kookabura-624.convex.cloud` |
-| `CONVEX_MESSAGES_SITE_URL` | `https://fantastic-kookabura-624.convex.site` |
+| `NEXT_PUBLIC_CONVEX_MESSAGES_URL` | `https://dapper-cricket-274.convex.cloud` |
+| `CONVEX_MESSAGES_SITE_URL` | `https://dapper-cricket-274.convex.site` |
 | `MESSAGES_NOTIFY_SECRET` | shared secret on Cloudflare **and** messages Convex dashboard |
 
 Set on **messages Convex dashboard** (Settings → Environment Variables):

@@ -1,0 +1,8 @@
+{
+  "name": "hdp-messages-convex",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "convex": "^1.39.1"
+  }
+}

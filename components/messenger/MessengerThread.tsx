@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState, type WheelEvent } from 'react';
 import { ArrowLeft, Bot, Send } from 'lucide-react';
 import { useMutation, useQuery } from 'convex/react';
-import { api as messagesApi } from '@/convex-messages/_generated/api';
-import type { Id } from '@/convex-messages/_generated/dataModel';
+import { api as messagesApi } from '@/convex-messages/convex/_generated/api';
+import type { Id } from '@/convex-messages/convex/_generated/dataModel';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
