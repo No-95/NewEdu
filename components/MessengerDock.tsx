@@ -1,12 +1,16 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { MessageCircle } from 'lucide-react';
 import { useMutation, useQuery } from 'convex/react';
 import { api as messagesApi } from '@/convex-messages/convex/_generated/api';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { useUserEmail } from '@/hooks/useUserSession';
+import {
+  MESSENGER_OPEN_EVENT,
+  type OpenMessengerPayload,
+} from '@/lib/messenger/events';
 import {
   MessagesConvexProvider,
   useMessagesConvexConfigured,
@@ -59,6 +63,7 @@ function MessengerDockInner() {
 
   const ensureProfile = useMutation(messagesApi.profiles.ensureProfile);
   const getOrCreateConversation = useMutation(messagesApi.conversations.getOrCreateConversation);
+  const pendingPeerRef = useRef<SearchUserResult | null>(null);
 
   const conversations = useQuery(
     messagesApi.conversations.listConversations,
@@ -87,14 +92,6 @@ function MessengerDockInner() {
       .then(() => setProfileReady(true))
       .catch(() => setProfileReady(true));
   }, [userEmail, profileReady, ensureProfile]);
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('openMessenger') === '1') {
-      setIsOpen(true);
-      setView('inbox');
-    }
-  }, []);
 
   const openConversation = useCallback((item: ConversationItem) => {
     setActiveThread({
@@ -132,6 +129,57 @@ function MessengerDockInner() {
     },
     [userEmail, getOrCreateConversation, ensureProfile]
   );
+
+  const openChatWithPeer = useCallback(
+    (peer: SearchUserResult) => {
+      setIsOpen(true);
+      if (!userEmail) {
+        pendingPeerRef.current = peer;
+        return;
+      }
+      void startChatWithUser(peer);
+    },
+    [userEmail, startChatWithUser]
+  );
+
+  useEffect(() => {
+    if (!userEmail || !pendingPeerRef.current) return;
+    const peer = pendingPeerRef.current;
+    pendingPeerRef.current = null;
+    void startChatWithUser(peer);
+  }, [userEmail, startChatWithUser]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('openMessenger') === '1') {
+      setIsOpen(true);
+      setView('inbox');
+
+      const peerEmail = params.get('peerEmail')?.trim().toLowerCase();
+      if (peerEmail) {
+        openChatWithPeer({
+          email: peerEmail,
+          fullName: params.get('peerName') ?? undefined,
+          avatarUrl: params.get('peerAvatar') ?? undefined,
+        });
+      }
+    }
+  }, [openChatWithPeer]);
+
+  useEffect(() => {
+    const handler = (event: Event) => {
+      const detail = (event as CustomEvent<OpenMessengerPayload>).detail;
+      if (!detail?.email) return;
+      openChatWithPeer({
+        email: detail.email,
+        fullName: detail.fullName,
+        avatarUrl: detail.avatarUrl,
+      });
+    };
+
+    window.addEventListener(MESSENGER_OPEN_EVENT, handler);
+    return () => window.removeEventListener(MESSENGER_OPEN_EVENT, handler);
+  }, [openChatWithPeer]);
 
   const threadLabels = {
     back: t('messenger.back'),

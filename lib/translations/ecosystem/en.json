@@ -449,10 +449,13 @@
     "verified": "Verified",
     "actions": {
       "bookConsultation": "Book consultation",
+      "message": "Message",
+      "openingMessage": "Opening…",
       "sendRequest": "Send request",
       "viewProfile": "View profile",
       "follow": "Follow"
-    }
+    },
+    "messageFailed": "Could not open messenger for this expert. Please try again."
   },
   "expertProfile": {
     "title": "Expert profile",

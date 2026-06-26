@@ -1,14 +1,15 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useMutation, useQuery } from 'convex/react';
+import { useConvex, useMutation, useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import type { Id } from '@/convex/_generated/dataModel';
 import { AppPageShell } from '@/components/ecosystem/shared/AppPageShell';
 import { EcosystemFilterBar } from '@/components/ecosystem/shared/EcosystemFilterBar';
 import { EcosystemSection } from '@/components/ecosystem/shared/EcosystemSection';
 import { useLanguage } from '@/lib/context/LanguageContext';
+import { openMessengerWithUser } from '@/lib/messenger/events';
 import { notifyError, notifySuccess } from '@/lib/ui/notify';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -22,7 +23,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Calendar } from 'lucide-react';
+import { Calendar, MessageCircle } from 'lucide-react';
 
 function expertInitials(name: string) {
   return name
@@ -37,6 +38,7 @@ function expertInitials(name: string) {
 export function ExpertNetworkClient({ userEmail }: { userEmail?: string }) {
   const { t } = useLanguage();
   const router = useRouter();
+  const convex = useConvex();
   const experts = useQuery(api.experts.listPublishedExperts, {});
   const submitRequest = useMutation(api.experts.submitConsultationRequest);
   const [search, setSearch] = useState('');
@@ -46,6 +48,7 @@ export function ExpertNetworkClient({ userEmail }: { userEmail?: string }) {
   const [topic, setTopic] = useState('');
   const [message, setMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [messagingExpertId, setMessagingExpertId] = useState<string | null>(null);
 
   const industries = useMemo(() => {
     const set = new Set<string>();
@@ -63,6 +66,50 @@ export function ExpertNetworkClient({ userEmail }: { userEmail?: string }) {
       return matchSearch && matchIndustry;
     });
   }, [experts, search, industry]);
+
+  const openExpertMessenger = async (expertId: string) => {
+    if (!userEmail) {
+      router.push(`/auth?mode=signin&redirect=${encodeURIComponent(`/experts/network?messageExpert=${expertId}`)}`);
+      return;
+    }
+
+    setMessagingExpertId(expertId);
+    try {
+      const contact = await convex.query(api.experts.getExpertMessagingContact, {
+        requesterEmail: userEmail,
+        expertUserId: expertId,
+      });
+      if (!contact) {
+        notifyError(t('ecosystemPages.expertNetwork.messageFailed'));
+        return;
+      }
+      openMessengerWithUser({
+        email: contact.email,
+        fullName: contact.displayName,
+        avatarUrl: contact.avatarUrl,
+      });
+    } catch (err) {
+      notifyError(
+        t('ecosystemPages.expertNetwork.messageFailed'),
+        err instanceof Error ? err.message : undefined
+      );
+    } finally {
+      setMessagingExpertId(null);
+    }
+  };
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const expertId = params.get('messageExpert');
+    if (!expertId || !userEmail) return;
+
+    params.delete('messageExpert');
+    const nextQuery = params.toString();
+    router.replace(nextQuery ? `/experts/network?${nextQuery}` : '/experts/network');
+
+    void openExpertMessenger(expertId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- run once when returning from auth with messageExpert
+  }, [userEmail]);
 
   const handleConsult = async () => {
     if (!userEmail || !selectedExpertId || !topic.trim()) return;
@@ -157,6 +204,18 @@ export function ExpertNetworkClient({ userEmail }: { userEmail?: string }) {
                   ))}
                 </div>
                 <div className="mt-4 flex flex-wrap gap-2">
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="secondary"
+                    disabled={messagingExpertId === expert.id}
+                    onClick={() => void openExpertMessenger(expert.id)}
+                  >
+                    <MessageCircle className="mr-1 h-4 w-4" />
+                    {messagingExpertId === expert.id
+                      ? t('ecosystemPages.expertNetwork.actions.openingMessage')
+                      : t('ecosystemPages.expertNetwork.actions.message')}
+                  </Button>
                   <Button
                     type="button"
                     size="sm"

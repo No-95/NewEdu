@@ -459,7 +459,15 @@
     "consultationTopic": "Chủ đề",
     "consultationMessage": "Tin nhắn",
     "consultationScheduleHint": "Sau khi gửi yêu cầu, chuyên gia sẽ đề xuất ngày, giờ và link họp. Theo dõi tại Sự nghiệp → Tư vấn.",
-    "actions": { "bookConsultation": "Đặt tư vấn", "sendRequest": "Gửi yêu cầu", "viewProfile": "Xem hồ sơ", "follow": "Theo dõi" }
+    "actions": {
+      "bookConsultation": "Đặt tư vấn",
+      "message": "Nhắn tin",
+      "openingMessage": "Đang mở…",
+      "sendRequest": "Gửi yêu cầu",
+      "viewProfile": "Xem hồ sơ",
+      "follow": "Theo dõi"
+    },
+    "messageFailed": "Không thể mở tin nhắn với chuyên gia này. Vui lòng thử lại."
   },
   "expertProfile": {
     "title": "Hồ sơ chuyên gia",

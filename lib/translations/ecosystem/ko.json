@@ -459,7 +459,15 @@
     "consultationTopic": "주제",
     "consultationMessage": "메시지",
     "consultationScheduleHint": "요청을 보낸 후 전문가가 날짜, 시간, 미팅 링크를 제안합니다. 커리어 → 상담에서 확인하세요.",
-    "actions": { "bookConsultation": "상담 예약", "sendRequest": "요청 보내기", "viewProfile": "프로필 보기", "follow": "팔로우" }
+    "actions": {
+      "bookConsultation": "상담 예약",
+      "message": "메시지",
+      "openingMessage": "여는 중…",
+      "sendRequest": "요청 보내기",
+      "viewProfile": "프로필 보기",
+      "follow": "팔로우"
+    },
+    "messageFailed": "이 전문가와 메시지를 열 수 없습니다. 다시 시도해 주세요."
   },
   "expertProfile": {
     "title": "전문가 프로필",

@@ -118,6 +118,44 @@ export const listPublishedExperts = query({
   },
 });
 
+export const getExpertMessagingContact = query({
+  args: {
+    requesterEmail: v.string(),
+    expertUserId: v.string(),
+  },
+  returns: v.union(
+    v.null(),
+    v.object({
+      email: v.string(),
+      displayName: v.string(),
+      avatarUrl: v.optional(v.string()),
+    })
+  ),
+  handler: async (ctx, args) => {
+    const requester = await requireUser(ctx, args.requesterEmail);
+    const expertUserId = args.expertUserId as Id<'users'>;
+
+    if (requester._id === expertUserId) {
+      return null;
+    }
+
+    const profile = await ctx.db
+      .query('expertProfiles')
+      .withIndex('by_userId', (q) => q.eq('userId', expertUserId))
+      .first();
+    if (!profile?.published) return null;
+
+    const expertUser = await ctx.db.get(expertUserId);
+    if (!expertUser) return null;
+
+    return {
+      email: expertUser.email,
+      displayName: profile.displayName,
+      avatarUrl: expertUser.avatarUrl,
+    };
+  },
+});
+
 export const getExpertByUserId = query({
   args: { userId: v.string() },
   returns: v.union(
