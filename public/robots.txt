@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+
+# Khu vực riêng tư / không cần index
+Disallow: /api/
+Disallow: /auth/
+Disallow: /dashboard/
+Disallow: /settings/
+Disallow: /onboarding/
+Disallow: /admin/
+Disallow: /courses/classroom/
+Disallow: /expert-applicant
+Disallow: /teacher-applicant
+Disallow: /experts/profile
+Disallow: /career/profile
+Disallow: /career/applications
+Disallow: /career/saved-jobs
+Disallow: /business/recruitment/candidates/
+
+Sitemap: https://hdpedu.com/sitemap.xml

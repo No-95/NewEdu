@@ -47,6 +47,13 @@ function AuthPageContent({ initialSignIn }: { initialSignIn: boolean }) {
   const verifyOtp = useMutation(api.auth.verifyOtp);
   const createOrUpdateUser = useMutation(api.auth.createOrUpdateUser);
 
+  // Read UTM source cookie set by middleware
+  function getHdpSrcCookie(): string | undefined {
+    if (typeof document === 'undefined') return undefined;
+    const match = document.cookie.match(/(?:^|;\s*)hdp_src=([^;]+)/);
+    return match ? decodeURIComponent(match[1]) : undefined;
+  }
+
   React.useEffect(() => {
     const mode = searchParams.get('mode');
     if (mode === 'signup') {
@@ -175,6 +182,7 @@ function AuthPageContent({ initialSignIn }: { initialSignIn: boolean }) {
           phone: formData.phone,
           passwordHash,
           agreeToTerms: formData.agreeToTerms,
+          source: getHdpSrcCookie(),
         });
 
         await establishSession(formData.email);
