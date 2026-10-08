@@ -4,7 +4,7 @@ import { getConvexClient } from '@/lib/convex-server';
 const SITE_URL = 'https://hdpedu.com';
 
 /** Trim text to a safe meta length without cutting a word in half. */
-export function clampText(text: string | undefined, max: number): string {
+function clampText(text: string | undefined, max: number): string {
   const clean = (text ?? '').replace(/\s+/g, ' ').trim();
   if (clean.length <= max) return clean;
   const cut = clean.slice(0, max);
@@ -12,7 +12,7 @@ export function clampText(text: string | undefined, max: number): string {
   return `${(lastSpace > max * 0.6 ? cut.slice(0, lastSpace) : cut).trim()}…`;
 }
 
-export type SeoInput = {
+type SeoInput = {
   title: string;
   description: string;
   /** Path relative to the site root, e.g. `/jobs/abc`. */
