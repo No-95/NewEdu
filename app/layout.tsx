@@ -13,7 +13,7 @@ import { Suspense } from 'react'
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
-const GA4_ID = process.env.NEXT_PUBLIC_GA4_ID || '';
+const GA4_ID = process.env.NEXT_PUBLIC_GA4_ID || 'G-E5DZZJLMBX';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://hdpedu.com'),
