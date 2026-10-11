@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
+import Script from 'next/script'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import { LanguageProvider } from '@/lib/context/LanguageContext'
@@ -50,6 +51,20 @@ export default function RootLayout({
           </AppConvexProvider>
         </SiteModeProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
+
+        {/* Google Analytics (gtag.js) — afterInteractive by default */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-E5DZZJLMBX"
+          strategy="afterInteractive"
+        />
+        <Script id="ga-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-E5DZZJLMBX');
+          `}
+        </Script>
       </body>
     </html>
   )
