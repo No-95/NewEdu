@@ -26,10 +26,13 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Create .env.production for build
+        env:
+          NEXT_PUBLIC_GA4_ID: ${{ vars.NEXT_PUBLIC_GA4_ID || 'G-E5DZZJLMBX' }}
         run: |
           printf '%s\n' \
             'NEXT_PUBLIC_CONVEX_URL=https://adept-tapir-159.convex.cloud' \
             'NEXT_PUBLIC_APP_URL=https://hdpedu.com' \
+            "NEXT_PUBLIC_GA4_ID=${NEXT_PUBLIC_GA4_ID}" \
             > .env.production
 
       - name: Build OpenNext bundle

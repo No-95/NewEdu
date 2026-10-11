@@ -23,10 +23,13 @@ export default defineSchema({
     activeRole: v.optional(v.string()),
     emailNotificationsEnabled: v.optional(v.boolean()),
     preferredLocale: v.optional(v.union(v.literal('en'), v.literal('vi'), v.literal('ko'))),
+    source: v.optional(v.string()),
+    firstSeenAt: v.optional(v.number()),
   })
     .index('by_email', ['email'])
     .index('by_role', ['role'])
-    .index('by_hdpId', ['hdpId']),
+    .index('by_hdpId', ['hdpId'])
+    .index('by_source', ['source']),
 
   hdpIdSequences: defineTable({
     name: v.literal('default'),

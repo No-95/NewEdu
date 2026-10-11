@@ -34,7 +34,10 @@ export function CoursesCatalogClient() {
 
     if (courses && courses.length === 0) {
       hasSeededRef.current = true;
-      void seedCatalog({});
+      seedCatalog({}).catch((error) => {
+        console.error('Failed to seed course catalog:', error);
+        hasSeededRef.current = false;
+      });
     }
   }, [courses, seedCatalog]);
 

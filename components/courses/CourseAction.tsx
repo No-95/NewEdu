@@ -15,6 +15,7 @@ import { formatVndPrice } from '@/lib/currency';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { COURSE_TEXT, getCourseLanguage } from '@/lib/courses/localization';
 import { GiftBookHoverBadge } from '@/components/books/GiftBookHoverBadge';
+import { trackFunnelEvent } from '@/components/GA4Tracker';
 
 type CourseActionProps = {
   courseSlug: string;
@@ -107,6 +108,12 @@ export default function CourseAction({
       return;
     }
 
+    trackFunnelEvent('click_buy', {
+      course_id: courseSlug,
+      price,
+      currency: 'VND',
+    });
+
     setCreating(true);
     try {
       const createRes = await fetch('/api/purchase/create', {
@@ -120,6 +127,13 @@ export default function CourseAction({
       }
       const createJson = await createRes.json();
       const purchaseId = createJson.purchaseId;
+
+      trackFunnelEvent('create_order', {
+        course_id: courseSlug,
+        purchase_id: purchaseId,
+        price,
+        currency: 'VND',
+      });
 
       const payosRes = await fetch('/api/purchase/payos', {
         method: 'POST',

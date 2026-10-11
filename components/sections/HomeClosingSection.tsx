@@ -163,8 +163,8 @@ export const HomeClosingSection: React.FC<HomeClosingSectionProps> = ({
               </div>
 
               <Link
-                href="/auth"
-                className="rounded-xl bg-gradient-to-r from-primary to-secondary px-10 py-4 text-base font-bold text-primary-foreground shadow-[0_4px_24px_rgba(0,217,255,0.35)] transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,217,255,0.5)]"
+                href="/courses"
+                className="rounded-xl bg-gradient-to-r from-primary to-secondary px-10 py-4 text-base font-bold text-primary-foreground shadow-[_0_4px_24px_rgba(0,217,255,0.35)] transition-all hover:-translate-y-0.5 hover:shadow-[_0_8px_32px_rgba(0,217,255,0.5)]"
               >
                 {t('home.cta.signUpFree')}
               </Link>

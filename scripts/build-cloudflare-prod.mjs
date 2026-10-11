@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { existsSync, renameSync, rmSync } from 'node:fs';
+import { existsSync, renameSync, rmSync, writeFileSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -12,6 +12,16 @@ if (existsSync(localPath)) {
   renameSync(localPath, backupPath);
   restored = true;
   console.log('Temporarily moved .env.local aside so production build only uses .env.production');
+}
+
+// Next.js 15 no longer generates images-manifest.json, but OpenNext still expects it.
+// Create a stub so the build doesn't fail.
+const nextDir = path.join(root, '.next');
+const imagesManifestPath = path.join(nextDir, 'images-manifest.json');
+if (!existsSync(imagesManifestPath)) {
+  mkdirSync(nextDir, { recursive: true });
+  writeFileSync(imagesManifestPath, JSON.stringify({ version: 1, images: [] }, null, 2));
+  console.log('Created stub images-manifest.json for OpenNext compatibility');
 }
 
 const patchSymlink = spawnSync('node', ['scripts/patch-opennext-symlink.mjs'], {

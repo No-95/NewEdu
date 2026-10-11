@@ -57,12 +57,12 @@ export const courses: CourseMetadata[] = [
     id: FIRST_COURSE_ID,
     title: 'Cẩm nang Video: Tiếng Hàn Sản xuất',
     subtitle:
-      'Khóa học miễn phí tổng hợp 75 video hướng dẫn tiếng Hàn chuyên ngành sản xuất – từ từ vựng cơ bản đến giao tiếp thực tế tại nhà máy.',
+      'Khóa học tổng hợp 72 video hướng dẫn tiếng Hàn chuyên ngành sản xuất – từ từ vựng cơ bản đến giao tiếp thực tế tại nhà máy.',
     description:
       'Danh sach hien co 72 video HLS da xu ly va upload len Cloudflare R2 bucket hdp1stcourse.',
-    badge: '100% miễn phí',
+    badge: '399.000 ₫',
     teacherId: FIRST_COURSE_TEACHER_ID,
-    isFree: true,
+    isFree: false,
     lectures: firstCourseLectures,
   },
 ];

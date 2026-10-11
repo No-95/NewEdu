@@ -5,6 +5,60 @@ import type { Doc, Id } from './_generated/dataModel';
 import { computeCareerCompletionScoreFromProfile } from './lib/careerScore';
 import { computeSkillGaps } from './lib/skillGaps';
 
+export const getTotalUsers = query({
+  args: {},
+  handler: async (ctx) => {
+    const users = await ctx.db.query('users').collect();
+    return users.length;
+  },
+});
+
+export const getNewUsers = query({
+  args: { sinceDays: v.optional(v.number()) },
+  handler: async (ctx, args) => {
+    const sinceDays = args.sinceDays ?? 30;
+    const since = Date.now() - sinceDays * 24 * 60 * 60 * 1000;
+    const users = await ctx.db.query('users').collect();
+    return users.filter((u) => (u.createdAt ?? 0) >= since).length;
+  },
+});
+
+export const getActiveLearners = query({
+  args: { sinceDays: v.optional(v.number()) },
+  handler: async (ctx, args) => {
+    const sinceDays = args.sinceDays ?? 30;
+    const since = Date.now() - sinceDays * 24 * 60 * 60 * 1000;
+    const rows = await ctx.db.query('userCourseProgress').collect();
+    return new Set(
+      rows
+        .filter((r) => (r.lastWatchedAt ?? 0) >= since)
+        .map((r) => r.userId)
+    ).size;
+  },
+});
+
+export const getOrderSummary = query({
+  args: {},
+  handler: async (ctx) => {
+    const purchases = await ctx.db.query('purchases').collect();
+    const total = purchases.length;
+    const active = purchases.filter((p) => p.status === 'active').length;
+    const revenue = purchases
+      .filter((p) => p.status === 'active')
+      .reduce((sum, p) => sum + p.amount, 0);
+    return { total, active, revenueVnd: revenue };
+  },
+});
+
+export const getRevenueSummary = query({
+  args: {},
+  handler: async (ctx) => {
+    const transactions = await ctx.db.query('transactions').collect();
+    const total = transactions.reduce((sum, t) => sum + t.amount, 0);
+    return { totalVnd: total };
+  },
+});
+
 async function requireUser(ctx: QueryCtx, email: string) {
   const user = await ctx.db
     .query('users')
@@ -75,6 +129,125 @@ async function getCourseTitleMap(ctx: QueryCtx) {
   }
   return { courses, byId, bySlug };
 }
+
+const SOURCE_COUNT = v.array(v.object({ source: v.string(), count: v.number() }));
+
+async function computeSourceBreakdown(
+  ctx: QueryCtx,
+  args: { fromTs?: number; toTs?: number }
+) {
+  const now = Date.now();
+  const fromTs = args.fromTs ?? 0;
+  const toTs = args.toTs ?? now;
+
+  const allUsers = await ctx.db.query('users').collect();
+  const usersInRange = allUsers.filter(
+    (u) => (u.createdAt ?? 0) >= fromTs && (u.createdAt ?? 0) <= toTs
+  );
+
+  // 1. registrationsBySource
+  const regMap = new Map<string, number>();
+  for (const u of usersInRange) {
+    const s = u.source ?? '(direct)';
+    regMap.set(s, (regMap.get(s) ?? 0) + 1);
+  }
+  const registrations = [...regMap.entries()].map(([source, count]) => ({ source, count }));
+
+  // Load all progress once: reused for activity (in range) and returning (max watch).
+  const allProgress = await ctx.db.query('userCourseProgress').collect();
+
+  // 2. activityBySource — distinct users with a watch inside the range
+  const activeUserIds = new Set<string>();
+  const maxWatchedByUser = new Map<string, number>();
+  for (const p of allProgress) {
+    const uid = p.userId.toString();
+    const ts = p.lastWatchedAt ?? 0;
+    if (ts > (maxWatchedByUser.get(uid) ?? 0)) maxWatchedByUser.set(uid, ts);
+    if (ts >= fromTs && ts <= toTs) activeUserIds.add(uid);
+  }
+  const actMap = new Map<string, number>();
+  for (const u of allUsers) {
+    if (!activeUserIds.has(u._id.toString())) continue;
+    const s = u.source ?? '(direct)';
+    actMap.set(s, (actMap.get(s) ?? 0) + 1);
+  }
+  const activity = [...actMap.entries()].map(([source, count]) => ({ source, count }));
+
+  // 3. purchasesBySource — active purchases in range
+  const purchasesInRange = await ctx.db
+    .query('purchases')
+    .filter((q) => q.and(q.gte(q.field('createdAt'), fromTs), q.lte(q.field('createdAt'), toTs)))
+    .collect();
+  const activePurchases = purchasesInRange.filter((p) => p.status === 'active');
+  // purchases.userId holds the users document _id (string), NOT the email.
+  const usersById = new Map<string, Doc<'users'>>();
+  for (const u of allUsers) {
+    usersById.set(u._id.toString(), u);
+  }
+  const purMap = new Map<string, number>();
+  for (const p of activePurchases) {
+    const u = usersById.get(p.userId);
+    const s = u ? (u.source ?? '(direct)') : '(unknown)';
+    purMap.set(s, (purMap.get(s) ?? 0) + 1);
+  }
+  const purchases = [...purMap.entries()].map(([source, count]) => ({ source, count }));
+
+  // 4. returningBySource — user watched >= 7 days after firstSeenAt
+  const retMap = new Map<string, number>();
+  const weekMs = 7 * 24 * 60 * 60 * 1000;
+  for (const u of allUsers) {
+    if (!u.firstSeenAt || !u.source) continue;
+    const maxWatched = maxWatchedByUser.get(u._id.toString());
+    if (!maxWatched) continue;
+    if (maxWatched >= u.firstSeenAt + weekMs) {
+      retMap.set(u.source, (retMap.get(u.source) ?? 0) + 1);
+    }
+  }
+  const returning = [...retMap.entries()].map(([source, count]) => ({ source, count }));
+
+  return { registrations, activity, purchases, returning, totalRegistrations: usersInRange.length };
+}
+
+/** Đăng ký mới theo nguồn (users.source). */
+export const registrationsBySource = query({
+  args: { fromTs: v.optional(v.number()), toTs: v.optional(v.number()) },
+  returns: SOURCE_COUNT,
+  handler: async (ctx, args) => (await computeSourceBreakdown(ctx, args)).registrations,
+});
+
+/** Người có hoạt động học theo nguồn (userCourseProgress.lastWatchedAt trong khoảng). */
+export const activityBySource = query({
+  args: { fromTs: v.optional(v.number()), toTs: v.optional(v.number()) },
+  returns: SOURCE_COUNT,
+  handler: async (ctx, args) => (await computeSourceBreakdown(ctx, args)).activity,
+});
+
+/** Lượt mua đã kích hoạt theo nguồn (purchases.status === 'active'). */
+export const purchasesBySource = query({
+  args: { fromTs: v.optional(v.number()), toTs: v.optional(v.number()) },
+  returns: SOURCE_COUNT,
+  handler: async (ctx, args) => (await computeSourceBreakdown(ctx, args)).purchases,
+});
+
+/** Người quay lại (xem lại ≥ 7 ngày sau lần đầu) theo nguồn. */
+export const returningBySource = query({
+  args: { fromTs: v.optional(v.number()), toTs: v.optional(v.number()) },
+  returns: SOURCE_COUNT,
+  handler: async (ctx, args) => (await computeSourceBreakdown(ctx, args)).returning,
+});
+
+/** Báo cáo tổng hợp 4 chỉ số theo nguồn (một lượt đọc, phục vụ dashboard). */
+export const getSourceReport = query({
+  args: { fromTs: v.optional(v.number()), toTs: v.optional(v.number()) },
+  returns: v.object({
+    registrations: SOURCE_COUNT,
+    activity: SOURCE_COUNT,
+    purchases: SOURCE_COUNT,
+    returning: SOURCE_COUNT,
+    totalRegistrations: v.number(),
+  }),
+  handler: async (ctx, args) => computeSourceBreakdown(ctx, args),
+});
 
 export const getLearnerDashboard = query({
   args: { email: v.string() },

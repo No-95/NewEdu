@@ -54,6 +54,22 @@ const AUTH_REQUIRED_PATHS = [
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // UTM tracking: set hdp_src cookie from URL params (30 days)
+  const utmSource = request.nextUrl.searchParams.get('utm_source');
+  const utmMedium = request.nextUrl.searchParams.get('utm_medium');
+  if (utmSource) {
+    const sourceValue = utmMedium ? `${utmSource}:${utmMedium}` : utmSource;
+    const response = NextResponse.next();
+    response.cookies.set('hdp_src', sourceValue, {
+      maxAge: 30 * 24 * 60 * 60,
+      path: '/',
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+    });
+    return response;
+  }
+
   const email = request.cookies.get('user_email')?.value;
 
   if (pathname.startsWith('/api')) {
@@ -147,6 +163,7 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
+    '/',
     '/courses/:path*',
     '/dashboard/:path*',
     '/community/:path*',

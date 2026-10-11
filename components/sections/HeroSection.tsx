@@ -22,12 +22,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ pageNumber, totalPages
   ];
 
   const metrics = [
-    { value: '50.000+', label: t('home.trust.communityMembers') },
-    { value: '10.000+', label: t('home.trust.learnersWorkers') },
-    { value: '500+', label: t('home.trust.teachersExperts') },
-    { value: '1.000+', label: t('home.trust.partnerBusinesses') },
-    { value: '10.000+', label: t('home.trust.jobOpportunities') },
-    { value: '100.000+', label: t('home.trust.learningResources') },
+    { value: '72', label: 'Bài giảng video' },
+    { value: '15', label: 'Unit bài học' },
+    { value: '399k', label: 'Khoá tiếng Hàn sản xuất' },
+    { value: '225k', label: 'Sách tiếng Hàn sản xuất' },
   ];
 
   return (
@@ -45,13 +43,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ pageNumber, totalPages
         <div className="relative z-10 flex min-h-0 flex-1 items-center overflow-y-auto">
           <div className="grid w-full lg:grid-cols-2 gap-12 items-center">
           <div className="animate-slide-up flex flex-col items-start text-left w-full space-y-6">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-none tracking-tight whitespace-nowrap">
-              {t('home.hero.badge')}
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-none tracking-tight">
+              Tiếng Hàn Sản Xuất
             </h1>
 
             <div className="w-fit">
-              <p className="text-sm font-medium text-muted-foreground whitespace-nowrap sm:text-base md:text-lg lg:text-xl">
-                {t('home.hero.tagline')}
+              <p className="text-sm font-medium text-muted-foreground sm:text-base md:text-lg lg:text-xl">
+                Học tiếng Hàn cho công nhân, quản lý nhà máy
               </p>
 
               <HomeCard
@@ -59,26 +57,26 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ pageNumber, totalPages
                 className="mt-4 box-border w-full space-y-4 !p-5 md:!p-6"
               >
                 <p className="text-base leading-relaxed text-muted-foreground md:text-lg">
-                  {t('home.hero.description1')}
+                  Khoá video 72 bài giảng, 15 unit — học từ zero đến giao tiếp được với sếp Hàn trong nhà máy.
                 </p>
                 <p className="text-base leading-relaxed text-muted-foreground md:text-lg">
-                  {t('home.hero.description2')}
+                  Sách "Tiếng Hàn Sản xuất" — từ vựng thực tế cho công xưởng, dây chuyền sản xuất.
                 </p>
               </HomeCard>
             </div>
 
             <div className="relative z-20 flex flex-col sm:flex-row gap-4">
               <Link
-                href="/auth"
+                href="/courses/cam-nang-video-tieng-han-san-xuat"
                 className="px-8 py-3.5 bg-primary text-primary-foreground text-base font-semibold rounded-lg hover:shadow-glow-cyan transition-all duration-300"
               >
-                {t('home.hero.startNow')}
+                Học thử miễn phí
               </Link>
               <Link
                 href="/courses"
                 className="px-8 py-3.5 border border-border text-foreground text-base font-semibold rounded-lg hover:bg-muted/50 transition-all duration-300"
               >
-                {t('home.hero.exploreEcosystem')}
+                Xem khoá học
               </Link>
             </div>
           </div>
@@ -108,7 +106,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ pageNumber, totalPages
         </div>
 
         <div className="relative z-10 mt-2 w-full shrink-0 border-t border-border/40 pt-3 pb-16">
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
             {metrics.map((metric, index) => (
               <HomeCard key={index} variant="stat" className="!px-2 !py-2 md:!px-3 md:!py-2.5">
                 <div className="text-base font-bold leading-none text-primary md:text-lg">{metric.value}</div>

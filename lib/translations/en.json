@@ -370,7 +370,21 @@
     "notProvidedYet": "Not provided yet",
     "formCompletion": "Form completion",
     "completed": "completed",
-    "recentSubmissions": "Recent Submissions"
+    "recentSubmissions": "Recent Submissions",
+    "faqs": [
+      {
+        "q": "HDP EDU teaches what kind of Korean?",
+        "a": "We focus on Korean for manufacturing, factory, and workplace — 72 lessons across 15 units."
+      },
+      {
+        "q": "How much does the video course cost?",
+        "a": "399,000 VND for the full video course."
+      },
+      {
+        "q": "Is the textbook included?",
+        "a": "Yes — the textbook \"Tiếng Hàn Sản xuất\" is 225,000 VND and available separately."
+      }
+    ]
   },
   "auth": {
     "welcomeBack": "Welcome Back",
@@ -394,6 +408,18 @@
     "progressTracking": "Progress tracking"
   },
   "home": {
+    "testimonials": {
+      "eyebrow": "WHAT LEARNERS SAY",
+      "title": "HOW LEARNERS CHANGED",
+      "subtitle": "Real feedback from workers and professionals who used HDP EDU's manufacturing Korean course.",
+      "reviews": "reviews",
+      "verifiedLearners": "from verified learners",
+      "verifiedBadge": "Verified",
+      "slideLabel": "Go to review",
+      "prev": "Previous review",
+      "next": "Next review",
+      "disclaimer": "Feedback from beta learners. Names and roles shown with consent."
+    },
     "hero": {
       "badge": "HDP EDU ECOSYSTEM",
       "tagline": "Learning • Careers • Business • Experts • Community",

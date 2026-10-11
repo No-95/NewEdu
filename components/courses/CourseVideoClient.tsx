@@ -24,6 +24,7 @@ import {
 } from '@/lib/courses/localization';
 import { compareVideoFolderNames, parseVideoFolderName } from '@/lib/courses/outline';
 import { formatVndPrice } from '@/lib/currency';
+import { trackFunnelEvent } from '@/components/GA4Tracker';
 
 interface CourseVideoClientProps {
   courseSlug: string;
@@ -68,6 +69,17 @@ export function CourseVideoClient({ courseSlug, videoId }: CourseVideoClientProp
     markLastWatched(courseSlug, videoId);
     syncToServer(videoId);
   }, [userEmail, courseSlug, videoId, result, syncToServer]);
+
+  // Track view_trial khi user xem được video
+  useEffect(() => {
+    if (!canWatch || !lecture) return;
+    trackFunnelEvent('view_trial', {
+      course_id: videoCourse.slug,
+      video_id: lecture.videoFolderName,
+      unit,
+      lecture: lectureNumber,
+    });
+  }, [canWatch, lecture, videoCourse.slug, unit, lectureNumber]);
 
   if (!result) {
     return (

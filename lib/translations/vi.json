@@ -370,7 +370,21 @@
     "notProvidedYet": "Chưa cung cấp",
     "formCompletion": "Tiến độ biểu mẫu",
     "completed": "hoàn thành",
-    "recentSubmissions": "Gửi gần đây"
+    "recentSubmissions": "Gửi gần đây",
+    "faqs": [
+      {
+        "q": "HDP EDU dạy tiếng Hàn loại nào?",
+        "a": "Chuyên tiếng Hàn sản xuất, công xưởng, nhà máy — 72 bài giảng, 15 unit."
+      },
+      {
+        "q": "Khoá học video giá bao nhiêu?",
+        "a": "399.000₫ cho khoá video đầy đủ."
+      },
+      {
+        "q": "Sách giáo trình có kèm không?",
+        "a": "Có — sách \"Tiếng Hàn Sản xuất\" 225.000₫, mua riêng."
+      }
+    ]
   },
   "auth": {
     "welcomeBack": "Chào Mừng Trở Lại",
@@ -394,6 +408,18 @@
     "progressTracking": "Theo dõi tiến độ"
   },
   "home": {
+    "testimonials": {
+      "eyebrow": "HỌC VIÊN NÓI GÌ",
+      "title": "HỌC VIÊN ĐÃ THAY ĐỔI THẾ NÀO",
+      "subtitle": "Phản hồi thật từ người học và người đi làm đã dùng khoá tiếng Hàn sản xuất của HDP EDU.",
+      "reviews": "đánh giá",
+      "verifiedLearners": "từ học viên đã xác minh",
+      "verifiedBadge": "Đã xác minh",
+      "slideLabel": "Tới đánh giá",
+      "prev": "Đánh giá trước",
+      "next": "Đánh giá tiếp theo",
+      "disclaimer": "Phản hồi từ học viên beta. Tên và chức danh hiển thị theo thoả thuận."
+    },
     "hero": {
       "badge": "HDP EDU ECOSYSTEM",
       "tagline": "Học tập • Nghề nghiệp • Doanh nghiệp • Chuyên gia • Cộng đồng",

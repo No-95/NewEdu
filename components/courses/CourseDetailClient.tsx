@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useQuery } from 'convex/react';
@@ -14,6 +15,7 @@ import { useUserEmail } from '@/hooks/useUserSession';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { COURSE_TEXT, formatCourseTemplate, getCourseLanguage } from '@/lib/courses/localization';
 import { formatVndPrice } from '@/lib/currency';
+import { trackFunnelEvent } from '@/components/GA4Tracker';
 
 interface CourseDetailClientProps {
   courseSlug: string;
@@ -58,6 +60,16 @@ export function CourseDetailClient({ courseSlug }: CourseDetailClientProps) {
   const serverProgress = progressRows?.find((row) => row.courseSlug === courseSlug);
   const localProgress = readProgress(courseSlug);
   const resumeVideoId = serverProgress?.lastVideoId ?? localProgress.lastVideoId;
+
+  // Track pay_success khi quay lại từ cổng thanh toán với paid=1 và đã có quyền
+  useEffect(() => {
+    if (paidStatus !== '1' || !hasAccess || syncingPayment) return;
+    trackFunnelEvent('pay_success', {
+      course_id: courseSlug,
+      price: coursePrice,
+      currency: 'VND',
+    });
+  }, [paidStatus, hasAccess, syncingPayment, courseSlug, coursePrice]);
 
   return (
     <div className="min-h-screen bg-background">

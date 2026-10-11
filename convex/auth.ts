@@ -152,6 +152,7 @@ export const createOrUpdateUser = mutation({
     phone: v.optional(v.string()),
     passwordHash: v.optional(v.string()),
     agreeToTerms: v.boolean(),
+    source: v.optional(v.string()),
   },
   returns: v.object({ userId: v.string(), isNewUser: v.boolean() }),
   handler: async (ctx, args) => {
@@ -187,6 +188,8 @@ export const createOrUpdateUser = mutation({
       avatarUrl: undefined,
       balance: 0,
       onboardingRequired: true,
+      source: args.source,
+      firstSeenAt: now,
       createdAt: now,
       updatedAt: now,
     });

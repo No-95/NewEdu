@@ -394,6 +394,18 @@
     "progressTracking": "진도 추적"
   },
   "home": {
+    "testimonials": {
+      "eyebrow": "학습자 후기",
+      "title": "학습자는 어떻게 달라졌나",
+      "subtitle": "HDP EDU 제조업 한국어 과정을 이용한 직장인과 학습자의 실제 후기입니다.",
+      "reviews": "개의 후기",
+      "verifiedLearners": "인증된 학습자",
+      "verifiedBadge": "인증됨",
+      "slideLabel": "후기로 이동",
+      "prev": "이전 후기",
+      "next": "다음 후기",
+      "disclaimer": "베타 학습자의 후기입니다. 이름과 직책은 동의 하에 표시됩니다."
+    },
     "hero": {
       "badge": "HDP EDU ECOSYSTEM",
       "tagline": "학습 • 경력 • 기업 • 전문가 • 커뮤니티",
