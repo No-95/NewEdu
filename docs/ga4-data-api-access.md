@@ -130,6 +130,24 @@ Sau đó tạo **binding** cho agent **Dữ liệu & Vận hành** (`d-li-u-v-n-
 
 > Chọn `access.*` nếu agent chỉ cần đọc lúc cần. Chọn `env.*` nếu muốn giá trị tự có mặt trong mọi lần chạy.
 
+### Binding thứ hai (khuyến nghị) — để nghiệm thu chạy được
+
+Tiêu chí nghiệm thu của HDP-13 đòi **bằng chứng thô** từ `runReport`. Chỉ agent có binding
+mới đọc được key, nên nếu chỉ bind cho Dữ liệu & Vận hành thì bước §5 phải do agent đó chạy
+và dán kết quả — chậm hơn một vòng.
+
+Thêm một binding nữa cùng secret, cùng config path, cho **Kỹ sư Nền tảng**
+(`k-s-n-n-t-ng`). Khi đó Kỹ sư Nền tảng tự chạy §5 và dán output thô vào HDP-13 ngay.
+
+> Đây **không phải** quyền thừa: binding này chỉ đọc, chỉ dùng để chạy phép thử nghiệm thu.
+> Nếu bạn muốn tối thiểu quyền, bỏ qua bước này — HDP-13 sẽ khép lại bằng kết quả của
+> Dữ liệu & Vận hành thay vì của Kỹ sư Nền tảng.
+
+**Lưu ý về `self_and_reports`:** agent chỉ đề xuất được binding cho **chính mình** hoặc
+**cấp dưới trực tiếp** của mình. Dữ liệu & Vận hành là **ngang cấp** với Kỹ sư Nền tảng
+(cả hai đều báo cáo CEO), nên Kỹ sư Nền tảng **không thể** tự đề xuất binding này.
+Đây là lý do bước §4 bắt buộc phải do chủ sở hữu làm.
+
 **Tiêu chí nghiệm thu của HDP-13** chính là endpoint này:
 
 ```bash
