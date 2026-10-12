@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import { LanguageProvider } from '@/lib/context/LanguageContext'
 import { AppConvexProvider } from '@/components/convex-provider'
@@ -136,7 +135,6 @@ export default function RootLayout({
             </LanguageProvider>
           </AppConvexProvider>
         </SiteModeProvider>
-        {process.env.NODE_ENV === 'production' && <Analytics />}
         <Suspense fallback={null}>
           <GA4Tracker />
         </Suspense>
