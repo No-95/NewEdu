@@ -16,6 +16,7 @@ import {
   useMessagesConvexConfigured,
 } from '@/components/messages-convex-provider';
 import { Button } from '@/components/ui/button';
+import { trackGenerateLead } from '@/components/GA4Tracker';
 import { MessengerInbox, type ConversationItem } from '@/components/messenger/MessengerInbox';
 import { MessengerThread } from '@/components/messenger/MessengerThread';
 import { MessengerFloatingShell } from '@/components/messenger/MessengerFloatingShell';
@@ -39,7 +40,10 @@ function MessengerDockOffline() {
   return (
     <MessengerFloatingShell
       isOpen={isOpen}
-      onOpen={() => setIsOpen(true)}
+      onOpen={() => {
+        setIsOpen(true);
+        trackGenerateLead('messenger_dock', { logged_in: false, surface: 'offline' });
+      }}
       onClose={() => setIsOpen(false)}
       openChatLabel={t('messenger.openChat')}
       closeLabel={t('messenger.close')}
@@ -198,7 +202,15 @@ function MessengerDockInner() {
   return (
     <MessengerFloatingShell
       isOpen={isOpen}
-      onOpen={() => setIsOpen(true)}
+      onOpen={() => {
+        setIsOpen(true);
+        // A visitor with no session opening the dock has no other way to be
+        // reached by the team yet — count that as a lead. Logged-in users are
+        // already known contacts, so they are not a new lead.
+        if (!userEmail) {
+          trackGenerateLead('messenger_dock', { logged_in: false, surface: 'online' });
+        }
+      }}
       onClose={() => setIsOpen(false)}
       badge={userEmail ? badge : 0}
       openChatLabel={t('messenger.openChat')}

@@ -8,6 +8,7 @@ import { ParticleBackground } from '@/components/DarkmodeParticleBackground';
 import { ClientOnly } from '@/lib/hooks/useClientOnly';
 import { useLanguage } from '@/lib/context/LanguageContext';
 import { api } from '@/convex/_generated/api';
+import { trackGenerateLead } from '@/components/GA4Tracker';
 
 type ContactForm = {
   fullName: string;
@@ -67,6 +68,7 @@ function ContactUsContent() {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await submitContactSubmission(form);
+    trackGenerateLead('contact_form', { form_name: 'contact_us' });
     setSubmittedMessage(t('contactUsPage.submitSuccess'));
     setForm(initialForm);
   };

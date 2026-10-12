@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Header } from '@/components/Header';
 import { ParticleBackground } from '@/components/DarkmodeParticleBackground';
 import { useLanguage } from '@/lib/context/LanguageContext';
+import { trackGenerateLead } from '@/components/GA4Tracker';
 
 type FormState = {
   fullName: string;
@@ -60,6 +61,7 @@ export default function BooksPurchasePage() {
       }
 
       setSubmitted(true);
+      trackGenerateLead('book_order', { form_name: 'books_purchase' });
       setForm(INITIAL_FORM);
     } catch (err) {
       setError(err instanceof Error ? err.message : t('booksPage.purchase.submitError'));

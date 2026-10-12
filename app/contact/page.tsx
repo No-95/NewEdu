@@ -5,6 +5,7 @@ import { useLanguage } from '@/lib/context/LanguageContext';
 import { Header } from '@/components/Header';
 import { ParticleBackground } from '@/components/DarkmodeParticleBackground';
 import { ClientOnly } from '@/lib/hooks/useClientOnly';
+import { trackGenerateLead } from '@/components/GA4Tracker';
 
 function ContactContent() {
   const { t, language } = useLanguage();
@@ -32,6 +33,7 @@ function ContactContent() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Gửi thất bại');
+      trackGenerateLead('contact_form', { form_name: 'contact' });
       setStatus('ok');
       setForm({ name: '', email: '', message: '' });
     } catch (err: unknown) {
