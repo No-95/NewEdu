@@ -14,6 +14,9 @@
     "deploy:prod": "pnpm run build:cloudflare && opennextjs-cloudflare deploy -- --keep-vars",
     "deploy:messages": "cd convex-messages && npx convex deploy",
     "deploy:messages:fantastic": "node scripts/deploy-messages-fantastic.mjs",
+    "ga4:selftest": "node scripts/ga4-data-api.mjs selftest",
+    "ga4:whoami": "node scripts/ga4-data-api.mjs whoami",
+    "ga4:resolve-property": "node scripts/ga4-data-api.mjs resolve-property --measurement-id G-E5DZZJLMBX",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview"
   },
   "dependencies": {
