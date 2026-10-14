@@ -17,6 +17,8 @@
     "ga4:selftest": "node scripts/ga4-data-api.mjs selftest",
     "ga4:whoami": "node scripts/ga4-data-api.mjs whoami",
     "ga4:resolve-property": "node scripts/ga4-data-api.mjs resolve-property --measurement-id G-E5DZZJLMBX",
+    "inbox:read": "node scripts/read-cs-inbox.mjs",
+    "inbox:check": "node scripts/read-cs-inbox.mjs --json",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview"
   },
   "dependencies": {
@@ -61,6 +63,7 @@
     "embla-carousel-react": "8.6.0",
     "eslint-config-next": "15.5.6",
     "hls.js": "^1.6.16",
+    "imapflow": "2.4.2",
     "input-otp": "1.4.2",
     "lucide-react": "^0.564.0",
     "motion": "^12.40.0",

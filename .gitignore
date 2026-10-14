@@ -9,6 +9,9 @@ __v0_jsx-dev-runtime.ts
 # Environment variables
 .env*.local
 
+# cs@hdpedu.com inbound reader state (HDP-16) — holds reply content + seen ids
+.cs-inbox/
+
 # Common ignores
 node_modules
 .next/
