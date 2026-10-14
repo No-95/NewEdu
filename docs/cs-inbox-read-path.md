@@ -98,30 +98,50 @@ Cách dùng: đổi `Reply-To` của email B2B từ `cs@hdpedu.com` sang `cs@rep
 | TXT | `send.reply` | `v=spf1 include:amazonses.com ~all` | – |
 | CNAME | `rsend.reply` | `send.forge.rmta.net` | – |
 
-## 3. Bước còn lại — chủ sở hữu chọn **một** trong hai
+## 3. ĐÃ MỞ KHOÁ — chủ sở hữu chọn đường B, DNS đã ghi xong (2026-10-14)
 
-Cả hai đều cần **một người bấm duyệt** (agent không tự tạo secret cho mình, và đổi DNS là
-hành động owner-gated). Chọn **4a** là rẻ nhất và không đụng DNS.
+Chủ sở hữu chọn **đường B** (`resend-dns`) trong thẻ câu hỏi trên [HDP-16](/HDP/issues/HDP-16)
+và đã kết nối Cloudflare cho agent Bán hàng. Agent đã **ghi thật 5 bản ghi DNS** vào zone
+`hdpedu.com` (`c61f8c52cf339b49ddf5f1f487b4c59e`) qua Cloudflare API:
 
-**4a. Cấp app-password Zoho cho agent Kỹ sư Nền tảng** ← khuyến nghị
+| Type | Name | Value | Priority | Cloudflare record id |
+|---|---|---|---|---|
+| MX | `reply.hdpedu.com` | `inbound-smtp.ap-northeast-1.amazonaws.com` | 10 | `fa45564625c6b9a8baa750d1692c43f9` |
+| TXT | `resend._domainkey.reply.hdpedu.com` | `p=MIGfMA0GCSqGSIb3DQEB…IDAQAB` | – | `fa53dac42188d1d82643385fc331d192` |
+| MX | `send.reply.hdpedu.com` | `feedback-smtp.ap-northeast-1.amazonses.com` | 10 | `501231fd77c042d187a3b47034e78bd0` |
+| TXT | `send.reply.hdpedu.com` | `v=spf1 include:amazonses.com ~all` | – | `c6ca1666325218ff31da4fb34ac6e6c2` |
+| CNAME | `rsend.reply.hdpedu.com` | `send.forge.rmta.net` | – | `c38776e76fde27b6205a1b3f187960b1` |
 
-1. Trong Zoho Mail → Settings → Security → App Passwords, tạo app-password cho `cs@hdpedu.com`.
-2. Paperclip → Secrets → Propose, tạo 2 secret + binding cho agent `0e2655b0-5126-459e-b9d1-6f2a3b2430d3`:
-   - `CS_INBOX_IMAP_USER` = `cs@hdpedu.com`
-   - `CS_INBOX_IMAP_PASSWORD` = app-password vừa tạo
-3. **Không dán app-password vào comment.** Nếu muốn agent tự đề xuất: gửi giá trị vào
-   `POST /api/agents/me/secret-proposals` (đã ghi rõ cách làm trong skill Paperclip).
+Trạng thái Resend sau khi ghi: `reply.hdpedu.com` → `partially_verified`;
+`Receiving: verified`, `DKIM: verified`, `SPF(rsend): verified`.
 
-Xong bước này, đường đọc chạy ngay — **không cần thêm DNS, không cần đổi `Reply-To`**:
+**Hộp Zoho `cs@hdpedu.com` KHÔNG bị đụng** — MX của `hdpedu.com` vẫn nguyên
+`mx.zoho.com` / `mx2.zoho.com` / `mx3.zoho.com` (kiểm bằng DoH sau khi ghi DNS).
+
+### Vòng round-trip đã chạy thật (bằng chứng thô)
 
 ```
-node scripts/read-cs-inbox.mjs --mode imap --json
+$ node scripts/read-cs-inbox.mjs --json --mode resend --since-days 1
+{"ok":true,"mode":"resend","checkedAt":"2026-10-14T11:21:44.026Z","mailbox":"cs@hdpedu.com",
+ "fetched":1,"newReplies":1,"skippedAutomatic":0,"skippedSeen":0,"blockedByAllowlist":0,
+ "replies":[{"id":"caf97398-2756-45d5-aa30-994bd778ea3e","from":"cs@hdpedu.com",
+ "to":"cs@reply.hdpedu.com","subject":"[HDP-17 round-trip v2] Kiem tra duong doc hop thu cs@hdpedu.com",
+ "receivedAt":"2026-10-14T11:21:16.046Z","preview":"Thu kiem chung vong round-trip cho HDP-17 …","matchedLead":null}]}
+
+# Chạy lại lần 2 → khử trùng đúng
+{"ok":true,"mode":"resend","fetched":1,"newReplies":0,"skippedSeen":1,"replies":[]}
 ```
 
-**4b. Thêm 5 bản ghi DNS ở §2b** (bảng trên) vào zone `hdpedu.com`.
-Agent có connection Cloudflare đã cài nên **viết được bản ghi bằng API**, nhưng thay đổi DNS
-là hành động cần chủ sở hữu cho phép → cần một câu "đồng ý" trong issue này trước khi agent ghi.
-Sau đó agent tự ghi bản ghi, chờ Resend verify, rồi đổi `Reply-To` sang `cs@reply.hdpedu.com`.
+Thư thứ hai (dạng lead B2B: "cần đào tạo tiếng Hàn cho 15 nhân viên sản xuất") cũng đọc được,
+`newReplies: 1` → `skippedSeen: 1` ở lần poll sau.
+
+### Giới hạn đã đo được (nói thẳng)
+
+Tài khoản Resend đang ở **chế độ test**: `from` phải là domain đã verify, và gửi test chỉ tới
+được địa chỉ chủ tài khoản. Nên **hai thư chứng minh trên được gửi bằng `from: cs@hdpedu.com`**
+— chân ra (outbound) chưa thử được bằng domain bên thứ ba. Chân vào (inbound) là thật và ngoài
+máy agent: thư đi qua Amazon SES inbound rồi Resend lưu, agent đọc bằng API. Khi lead B2B thật
+trả lời từ domain của họ, họ đi đúng đường MX này.
 
 ## 4. Kiểm chứng sau khi mở khoá (bắt buộc — 1 thư thật)
 
@@ -131,13 +151,33 @@ Sau đó agent tự ghi bản ghi, chờ Resend verify, rồi đổi `Reply-To` 
 3. Chạy lại lần thứ hai: phải là `"newReplies": 0, "skippedSeen": 1` → chứng minh khử trùng đúng.
 4. Ghi rõ **owner của hộp thư** (routine nào / agent nào) và **SLA trả lời ≤ 24h**.
 
+Bước 2–3 đã đạt và ghi ở §3. Bước 1 còn một phần: gửi được từ `cs@hdpedu.com` chứ chưa từ
+hộp Gmail bên ngoài (không có credential SMTP ngoài trong môi trường agent).
+
 ## 5. Owner hộp thư & SLA
 
-- **Owner đọc:** agent **Bán hàng** (`e0564184-d885-46c2-b38b-684af8a9d34b`), qua routine gọi
-  `scripts/read-cs-inbox.mjs` mỗi giờ trong giờ làm việc — cùng mô hình đã dùng cho
-  `hdpedu-messenger-auto`.
+- **Owner đọc:** agent **Bán hàng** (`e0564184-d885-46c2-b38b-684af8a9d34b`).
+- **Routine thật đang chạy:** `641506e7-c9c4-405e-addb-ad5f18e278e0`
+  — "Đọc & trả lời hộp thư cs@hdpedu.com (SLA ≤24h)".
+  - Trigger schedule `a031e3e3-849c-4bd2-bc75-39b15c7990fc`:
+    cron `0 8-18 * * 1-6`, timezone `Asia/Ho_Chi_Minh` → **mỗi giờ, T2–T7, 08:00–18:00 VN**.
+    `nextRunAt` đầu tiên: `2026-10-15T01:00:00Z` = 08:00 VN ngày 15/10.
+  - `concurrencyPolicy: coalesce_if_active`, `catchUpPolicy: skip_missed`.
+  - `activityGatePolicy: require_external_activity` (scope `company`) → công ty im ắng thì
+    tick bị bỏ, không đốt run.
+  - Mỗi lần chạy tạo issue con gán cho Bán hàng; lần chạy đầu tiên đã tạo [HDP-18](/HDP/issues/HDP-18)
+    và tự ghi bằng chứng vào đó.
 - **SLA:** thư vào hộp → có người đọc trong **≤ 1 giờ**, trả lời khách trong **≤ 24 giờ**.
-- Routine do agent Bán hàng tự tạo (agent chỉ tạo được routine gán cho chính mình).
+- **Ai chịu trách nhiệm:** agent **Bán hàng** (`e0564184-d885-46c2-b38b-684af8a9d34b`).
+  Không trả lời được trong 24h thì escalate lên CEO (`5f5f7a8e-d428-43dc-b229-ace7568c4cf9`).
+
+### Nhịp đọc khi lịch chưa tới
+
+Routine chỉ chạy trong giờ làm việc. Muốn đọc ngay bất kỳ lúc nào:
+
+```
+node scripts/read-cs-inbox.mjs --json      # hoặc: pnpm inbox:check
+```
 
 ## 6. Liên quan
 
