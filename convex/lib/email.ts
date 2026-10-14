@@ -34,7 +34,12 @@ export function wrapNotificationEmail(args: {
   `;
 }
 
-export async function sendEmail(args: { to: string; subject: string; html: string }) {
+export async function sendEmail(args: {
+  to: string;
+  subject: string;
+  html: string;
+  replyTo?: string;
+}) {
   const resendApiKey = process.env.RESEND_API_KEY;
   if (!resendApiKey) {
     console.error('RESEND_API_KEY is missing — email not sent.');
@@ -42,18 +47,26 @@ export async function sendEmail(args: { to: string; subject: string; html: strin
   }
 
   const from = process.env.RESEND_FROM_EMAIL || 'HDP EDU <onboarding@resend.dev>';
+  // Reply-To: keep the readable From as cs@hdpedu.com but route replies
+  // to the address that actually gets read (cs@reply.hdpedu.com) — HDP-19.
+  const replyTo = args.replyTo?.trim() || process.env.RESEND_REPLY_TO_EMAIL?.trim() || '';
+  const body: Record<string, unknown> = {
+    from,
+    to: args.to.trim(),
+    subject: args.subject,
+    html: args.html,
+  };
+  if (replyTo) {
+    body.reply_to = replyTo;
+  }
+
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${resendApiKey}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      from,
-      to: args.to.trim(),
-      subject: args.subject,
-      html: args.html,
-    }),
+    body: JSON.stringify(body),
   });
 
   if (!response.ok) {
