@@ -233,7 +233,10 @@ async function main() {
   }
 
   const allowed = messages.filter((m) => isAllowedSender(m.from, allowlist));
-  const { replies, seenIds, skippedAutomatic, skippedSeen } = selectNewReplies(allowed, state.seenIds);
+  const { replies, seenIds, skippedAutomatic, skippedSeen, skippedSelfSent } = selectNewReplies(
+    allowed,
+    state.seenIds,
+  );
   const withLead = replies.map((reply) => ({ ...reply, matchedLead: matchLead(reply.from, leads) }));
 
   if (!args.dryRun) {
@@ -253,6 +256,7 @@ async function main() {
     newReplies: withLead.length,
     skippedAutomatic,
     skippedSeen,
+    skippedSelfSent,
     blockedByAllowlist: messages.length - allowed.length,
     replies: withLead,
   };
@@ -261,7 +265,9 @@ async function main() {
     process.stdout.write(`${JSON.stringify(result)}\n`);
   } else {
     process.stdout.write(`Hộp ${result.mailbox} — chế độ ${mode}\n`);
-    process.stdout.write(`Lấy ${result.fetched} thư · mới ${result.newReplies} · tự động ${skippedAutomatic} · đã đọc ${skippedSeen}\n\n`);
+    process.stdout.write(
+      `Lấy ${result.fetched} thư · mới ${result.newReplies} · tự động ${skippedAutomatic} · thư của chính mình ${skippedSelfSent} · đã đọc ${skippedSeen}\n\n`,
+    );
     if (!withLead.length) {
       process.stdout.write('Không có thư trả lời mới.\n');
     } else {

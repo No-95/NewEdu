@@ -32,6 +32,31 @@ export function normalizeAddress(raw) {
   return address[0].toLowerCase().replace(/[.,;:]+$/, '');
 }
 
+/**
+ * Domains that are HDP EDU's own sending/receiving identities. Mail from these
+ * is never a customer reply: it is our own outbound (or a test echo of it)
+ * landing back in the inbound mailbox. A subdomain such as `reply.hdpedu.com`
+ * is covered by the suffix check.
+ */
+export const DEFAULT_SELF_DOMAINS = ['hdpedu.com'];
+
+/**
+ * True when the sender belongs to one of our own domains. Without this filter
+ * the reader counts its own test/echo mail as a new customer reply, which is a
+ * false positive that corrupts the sales reply queue.
+ */
+export function isSelfSent(fromAddress, selfDomains = DEFAULT_SELF_DOMAINS) {
+  const address = normalizeAddress(fromAddress);
+  if (!address) return false;
+  const domain = addressDomain(address);
+  if (!domain) return false;
+  return selfDomains.some((entry) => {
+    const self = String(entry).trim().toLowerCase().replace(/^@/, '');
+    if (!self) return false;
+    return domain === self || domain.endsWith(`.${self}`);
+  });
+}
+
 /** The domain part of a normalised address, or null. */
 export function addressDomain(address) {
   if (!address) return null;
@@ -113,9 +138,11 @@ export function toInboundReply(message, options = {}) {
  */
 export function selectNewReplies(messages, seenIds = [], options = {}) {
   const seen = new Set(seenIds.map(String));
+  const selfDomains = options.selfDomains || DEFAULT_SELF_DOMAINS;
   const accepted = [];
   let skippedAutomatic = 0;
   let skippedSeen = 0;
+  let skippedSelfSent = 0;
 
   for (const message of messages) {
     if (seen.has(String(message.id))) {
@@ -124,6 +151,12 @@ export function selectNewReplies(messages, seenIds = [], options = {}) {
     }
     if (isAutomaticMessage(message)) {
       skippedAutomatic += 1;
+      continue;
+    }
+    // Thư do chính HDP EDU gửi (kể cả thư kiểm chứng round-trip) rơi lại hộp vào
+    // KHÔNG phải khách trả lời. Đếm riêng để nhật ký routine nói đúng sự thật.
+    if (isSelfSent(message.from, selfDomains)) {
+      skippedSelfSent += 1;
       continue;
     }
     accepted.push(toInboundReply(message, options));
@@ -142,6 +175,7 @@ export function selectNewReplies(messages, seenIds = [], options = {}) {
     seenIds: [...new Set([...seen, ...messages.map((m) => String(m.id))])],
     skippedAutomatic,
     skippedSeen,
+    skippedSelfSent,
   };
 }
 

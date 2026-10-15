@@ -8,6 +8,7 @@ import {
   matchLead,
   formatReplyMarkdown,
   isAllowedSender,
+  isSelfSent,
   toIsoOrNull,
 } from '../scripts/lib/cs-inbox.mjs';
 
@@ -133,6 +134,53 @@ describe('cs-inbox previewText + formatReplyMarkdown (HDP-16)', () => {
     expect(md).toContain('Re: Đào tạo');
     expect(md).toContain('ILJIN');
     expect(md).toContain('Xin chào');
+  });
+});
+
+describe('cs-inbox isSelfSent — thư của chính HDP EDU không phải khách trả lời (HDP-20)', () => {
+  it('nhận diện domain gốc và mọi domain con của chính mình', () => {
+    expect(isSelfSent('cs@hdpedu.com')).toBe(true);
+    expect(isSelfSent('cs@reply.hdpedu.com')).toBe(true);
+    expect(isSelfSent('HDP EDU <bounce@send.reply.hdpedu.com>')).toBe(true);
+  });
+
+  it('không nhận diện nhầm khách thật hoặc domain na ná', () => {
+    expect(isSelfSent('seungbeom@iljin.co.kr')).toBe(false);
+    expect(isSelfSent('a@hdpedu.com.evil.com')).toBe(false);
+    expect(isSelfSent('a@not-hdpedu.com')).toBe(false);
+    expect(isSelfSent(null)).toBe(false);
+  });
+
+  it('tôn trọng danh sách domain tuỳ chỉnh', () => {
+    expect(isSelfSent('a@hdpedu.com', ['other.com'])).toBe(false);
+    expect(isSelfSent('a@other.com', ['@other.com'])).toBe(true);
+  });
+});
+
+describe('cs-inbox selectNewReplies — loại thư tự gửi khỏi hàng đợi khách (HDP-20)', () => {
+  it('không đếm thư round-trip của chính mình là "thư mới"', () => {
+    const out = selectNewReplies([
+      {
+        id: 'self-1',
+        from: 'cs@hdpedu.com',
+        receivedAt: '2026-10-14T11:21:16Z',
+        subject: '[HDP-17 round-trip v2] Kiem tra duong doc',
+        body: 'Thu kiem chung vong round-trip',
+      },
+    ]);
+    expect(out.replies).toHaveLength(0);
+    expect(out.skippedSelfSent).toBe(1);
+    // vẫn ghi nhớ id để lần poll sau không lặp lại
+    expect(out.seenIds).toContain('self-1');
+  });
+
+  it('vẫn giữ khách thật khi trộn lẫn thư tự gửi', () => {
+    const out = selectNewReplies([
+      { id: 'self-1', from: 'cs@hdpedu.com', receivedAt: '2026-10-14T11:21:16Z', body: 'test' },
+      { id: 'cust-1', from: 'seungbeom@iljin.co.kr', receivedAt: '2026-10-14T11:23:32Z', body: 'Cần đào tạo' },
+    ]);
+    expect(out.replies.map((r) => r.id)).toEqual(['cust-1']);
+    expect(out.skippedSelfSent).toBe(1);
   });
 });
 
