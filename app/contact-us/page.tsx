@@ -247,9 +247,6 @@ function ContactUsContent() {
                   <div className="space-y-3">
                     {recentSubmissions.map((entry) => (
                       <div key={entry._id} className="rounded-lg border border-border/50 bg-muted/30 p-3">
-                        <p className="font-medium text-sm">{entry.fullName}</p>
-                        <p className="text-xs text-muted-foreground">{entry.email}</p>
-                        <p className="text-xs text-muted-foreground">{entry.phone}</p>
                         <p className="text-xs text-muted-foreground mt-2 line-clamp-2">{entry.feedback}</p>
                       </div>
                     ))}

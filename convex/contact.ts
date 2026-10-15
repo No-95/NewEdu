@@ -37,7 +37,6 @@ export const listContactSubmissionsByEmail = query({
   returns: v.array(
     v.object({
       id: v.string(),
-      fullName: v.string(),
       feedback: v.string(),
       status: v.string(),
       createdAt: v.number(),
@@ -54,7 +53,6 @@ export const listContactSubmissionsByEmail = query({
       })
       .map((entry) => ({
         id: entry._id.toString(),
-        fullName: entry.fullName,
         feedback: entry.feedback,
         status: entry.status,
         createdAt: entry.createdAt,
@@ -69,15 +67,8 @@ export const listRecentContactSubmissions = query({
   returns: v.array(
     v.object({
       _id: v.string(),
-      fullName: v.string(),
-      email: v.string(),
-      phone: v.string(),
-      organization: v.optional(v.string()),
-      role: v.optional(v.string()),
       feedback: v.string(),
-      status: v.string(),
       createdAt: v.number(),
-      updatedAt: v.number(),
     })
   ),
   handler: async (ctx, args) => {
@@ -86,15 +77,8 @@ export const listRecentContactSubmissions = query({
 
     return submissions.map((submission) => ({
       _id: submission._id.toString(),
-      fullName: submission.fullName,
-      email: submission.email,
-      phone: submission.phone,
-      organization: submission.organization,
-      role: submission.role,
       feedback: submission.feedback,
-      status: submission.status,
       createdAt: submission.createdAt,
-      updatedAt: submission.updatedAt,
     }));
   },
 });
